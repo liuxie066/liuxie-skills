@@ -1,0 +1,23 @@
+{
+  "skill_name": "devflow",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "在 options-monitor 里为新的候选策略评分机制走完整设计开发流程：先 brainstorm，落设计文档，并行让多个 agent 提升方案，通过 planreview 后实现，最后 deepreview。",
+      "expected_output": "使用 ponytail 约束范围；用 om-doc-hygiene 找到并更新唯一文档 owner；三个只读 subagents 独立评审同一快照；planreview 通过后才实现；deepreview findings 修复并复审。",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "已有 docs/ARCHITECTURE.md 中的一节设计，请不要新建文档。改进这份设计并完成实现和审查。",
+      "expected_output": "复用现有设计 owner，不创建平行版本；并行设计评审后更新原文档；执行 planreview、implementation 和 deepreview，保留提交、发布与部署边界。",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "在一个非 options-monitor 仓库里，从一个架构想法推进到已审查实现，项目没有 om-doc-hygiene。",
+      "expected_output": "遵循目标仓库文档约定并披露 om-doc-hygiene 不可用；其余并行设计评审、planreview、最小实现和 deepreview 流程保持不变。",
+      "files": []
+    }
+  ]
+}
