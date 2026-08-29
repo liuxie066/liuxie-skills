@@ -4,25 +4,31 @@
     {
       "id": 1,
       "prompt": "在 options-monitor 里为新的候选策略评分机制走完整设计开发流程：先 brainstorm，落设计文档，并行让多个 agent 提升方案，通过 planreview 后实现，最后 deepreview。",
-      "expected_output": "使用 ponytail 约束范围；Brainstorm 完成后先报告并等待用户确认，不自动落文档；此后每个节点同样等待明确确认，才依次使用 om-doc-hygiene、三个只读 subagents、planreview、implementation 和 deepreview。",
+      "expected_output": "使用 ponytail 约束范围；Brainstorm 完成后先报告并等待用户确认，不自动落文档；用户确认后使用 om-doc-hygiene 保存设计，并直接启动三个只读 subagents，无需在两者之间再次确认；Parallel Design Panel 结束及后续节点仍等待明确确认，但最终 Implementation 和 validation 完成后直接启动 deepreview。",
       "files": []
     },
     {
       "id": 2,
       "prompt": "已有 docs/ARCHITECTURE.md 中的一节设计，请不要新建文档。改进这份设计并完成实现和审查。",
-      "expected_output": "复用现有设计 owner，不创建平行版本；每次更新、并行设计评审、planreview、implementation 和 deepreview 之间都停在 awaiting_user_confirmation；保留提交、发布与部署边界。",
+      "expected_output": "复用现有设计 owner，不创建平行版本；设计保存后直接启动并行设计评审，二者之间不等待确认；Parallel Design Panel 结束及进入 implementation 前停在 awaiting_user_confirmation，最终实现和验证完成后直接启动 deepreview；保留提交、发布与部署边界。",
       "files": []
     },
     {
       "id": 3,
       "prompt": "在一个非 options-monitor 仓库里，从一个架构想法推进到已审查实现，项目没有 om-doc-hygiene。",
-      "expected_output": "遵循目标仓库文档约定并披露 om-doc-hygiene 不可用；每个节点完成后报告结果、下一节点和风险，等待用户明确确认后才继续。",
+      "expected_output": "遵循目标仓库文档约定并披露 om-doc-hygiene 不可用；保存设计后直接启动 Parallel Design Panel，最终实现和验证完成后直接启动 deepreview；其余节点完成后报告结果、下一节点和风险，等待用户明确确认后才继续。",
       "files": []
     },
     {
       "id": 4,
       "prompt": "这个方案 planreview 已经 pass，继续走完整研发流程。",
-      "expected_output": "报告 planreview artifact、结论和 residual risks，并停在 awaiting_user_confirmation；此前的‘走完整研发流程’不是 Implementation 授权，必须再次询问用户是否进入实现。",
+      "expected_output": "先只读完成 Workspace Isolation Check，再报告 planreview artifact、结论、residual risks 和 workspace 决策，并停在 awaiting_user_confirmation；此前的‘走完整研发流程’不是 Implementation 授权，必须再次询问用户是否进入实现。",
+      "files": []
+    },
+    {
+      "id": 5,
+      "prompt": "planreview 已通过，但当前 main 有其他任务的未提交改动，同时另一个 agent 也在开发。准备进入实现。",
+      "expected_output": "在请求 Implementation 授权前只读检查 status、worktree、base 和项目约定；不触碰脏 main，不自动 stash 或 reset。若没有匹配的现有专用 worktree，则拟定从已验证 base 新建隔离 worktree，并把 workspace 决策随 planreview 结果交给用户确认；获准后才创建，且 implementation、validation、deepreview 使用同一 worktree 和 review base。",
       "files": []
     }
   ]

@@ -1,6 +1,6 @@
 ---
 name: devflow
-description: "从模糊需求推进到已审查实现的人工确认式开发工作流。用户要求 brainstorm、保存设计、并行多视角改进、实现和 review，或说‘走完整研发流程’时使用；全程应用 ponytail，以 om-doc-hygiene、独立 subagents、planreview 和 deepreview 推进，但每个节点完成后必须等待用户明确确认，禁止自动进入下一环节。"
+description: "从模糊需求推进到已审查实现的人工确认式开发工作流。用户要求 brainstorm、保存设计、并行多视角改进、实现和 review，或说‘走完整研发流程’时使用；全程应用 ponytail，以 om-doc-hygiene、独立 subagents、planreview 和 deepreview 推进；Save Design 自动衔接 Parallel Design Panel，最终 Implementation 自动衔接 Deepreview，其余节点之间必须等待用户明确确认。"
 ---
 
 # Devflow
@@ -11,7 +11,6 @@ description: "从模糊需求推进到已审查实现的人工确认式开发工
 Brainstorm
 -> [Human Confirm]
 -> Save Design
--> [Human Confirm]
 -> Parallel Design Panel
 -> [Human Confirm]
 -> Improve Design
@@ -19,7 +18,6 @@ Brainstorm
 -> Planreview
 -> [Human Confirm]
 -> Implementation
--> [Human Confirm]
 -> Deepreview
 -> [Human Confirm]
 -> Closeout
@@ -34,13 +32,13 @@ Brainstorm
 - 先读适用的 `AGENTS.md`、相关源码、测试、配置和现有文档，再提出设计。
 - 源码、配置和测试事实优先于过时文档；发现冲突时修正文档，不让实现迎合错误文档。
 - 同一事实只保留一个当前 owner。更新同一设计文档，不创建 `v2`、`final`、`revised` 等平行副本。
-- 每个节点只执行当前节点范围；完成后必须暂停并等待用户明确确认，不能自动进入下一节点。
-- review finding、测试通过、artifact 已生成或用户此前要求“走完整流程”都不构成下一节点授权。
+- Save Design 完成后自动启动 Parallel Design Panel；最终 Implementation 和 validation 完成后自动启动 Deepreview。除此之外，每个节点只执行当前节点范围，完成后必须暂停并等待用户明确确认。
+- 除上述两处自动衔接外，review finding、测试通过、artifact 已生成或用户此前要求“走完整流程”都不构成下一节点授权。
 - 不自动 commit、push、merge、发布、部署或修改生产状态；这些边界需要用户分别授权。
 
 ## Human Confirmation Gate
 
-每个节点结束时：
+除 `Save Design -> Parallel Design Panel` 和 `Implementation -> Deepreview` 外，每个节点结束时：
 
 1. 报告当前节点、产物路径、关键决策或 findings、实际验证和未决风险；
 2. 说明下一节点及其将执行的动作；
@@ -87,7 +85,7 @@ Brainstorm
 
 记录最终 `design_doc` 路径，后续所有评审使用这一个文件。
 
-报告文档路径、owner、写入内容和检查结果后进入 `awaiting_user_confirmation`。用户确认后，才启动 Parallel Design Panel。
+报告文档路径、owner、写入内容和检查结果后，直接启动 Parallel Design Panel，无需等待用户确认。
 
 ## 3. Parallel Design Panel
 
@@ -132,9 +130,26 @@ current-state 文档，而不是评审会话记录。
 `planreview` 只负责 adversarial review；设计修改仍由主 agent 完成，并继续遵守 `$om-doc-hygiene`。
 未经通过的设计不得进入 Implementation。
 
-报告 planreview artifact、结论和 residual risks 后进入 `awaiting_user_confirmation`。用户明确批准实现后，才进入 Implementation。
+请求 Implementation 授权前，先做只读的 Workspace Isolation Check：
+
+1. 读取项目 worktree 约定、`git status --short --branch`、`git worktree list --porcelain` 和预期 base；
+2. 已处于本任务专用 worktree 时直接复用，不创建嵌套 worktree；
+3. 已有 base 和任务范围匹配的专用 worktree 时优先复用；
+4. 当前 checkout 仅包含本任务改动且不与其他工作共享时继续使用；
+5. 当前 checkout 位于共享或受保护分支、包含无关改动，或并行实现可能冲突时，拟定从已验证 base 创建隔离 worktree；
+6. base、worktree owner 或未提交改动归属不清时保持 `awaiting_user_confirmation`，不得猜测。
+
+此检查只产生 `implementation_workspace`、`review_base` 和拟议动作，不创建 worktree、不切分支、不 stash、不移动文件。
+报告 planreview artifact、结论、residual risks 和 workspace 决策后进入 `awaiting_user_confirmation`。用户明确批准实现后，才进入 Implementation。
 
 ## 6. Implementation
+
+进入 Implementation 后先执行已批准的 workspace 决策，不再增加确认门：
+
+- 复用当前或现有专用 worktree；只有只读检查判定需要隔离时才新建；
+- 不自动 stash、reset、移动或清理无关改动；若需迁移，只迁移已核验的本任务文件，并确保目标 worktree 可读取同一个 `design_doc`；
+- 实际 base 漂移、目标 worktree 被占用或批准条件不再成立时立即暂停；
+- Implementation、validation 和 Deepreview 使用同一 `implementation_workspace` 和 `review_base`。
 
 按冻结设计的 slices 实现，每次只做当前 slice：
 
@@ -144,8 +159,8 @@ current-state 文档，而不是评审会话记录。
 - 运行能证明当前 slice 的最小测试，再运行项目要求的完整 validation；
 - 实现事实改变设计时，先更新 `design_doc`；若涉及契约或架构变化，返回 Planreview Gate。
 
-每个 slice 完成后报告 changed files、验证和偏差，并进入 `awaiting_user_confirmation`；用户确认后才能进入下一 slice。
-最终 slice 完成后也必须等待用户确认，不能自动调用 `$deepreview`。
+每个非最终 slice 完成后报告 changed files、验证和偏差，并进入 `awaiting_user_confirmation`；用户确认后才能进入下一 slice。
+最终 slice 和项目要求的 validation 完成后，报告 changed files、验证和偏差，然后直接调用 `$deepreview`，无需等待用户确认。
 
 ## 7. Deepreview Gate
 
@@ -171,7 +186,7 @@ current-state 文档，而不是评审会话记录。
 
 ## Additional Stop Conditions
 
-除每个节点强制执行的 Human Confirmation Gate 外，以下情况也必须暂停：
+除 `Save Design -> Parallel Design Panel` 和 `Implementation -> Deepreview` 两处自动衔接外，以下情况也必须暂停：
 
 - 需要用户在会显著改变行为或范围的方案间选择；
 - 权威事实、文件 owner 或目标 base 无法确定；
