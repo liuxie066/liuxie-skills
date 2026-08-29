@@ -1,6 +1,6 @@
 ---
 name: devflow
-description: "从模糊需求推进到已审查实现的轻量开发工作流。用户要求 brainstorm、保存设计、并行多视角改进、实现和 review，或说‘走完整设计开发流程’时使用；全程应用 ponytail，在 options-monitor 中用 om-doc-hygiene 维护唯一设计真源，使用独立 subagents 并行挑战设计，以 planreview 作为实现前 gate，并用 deepreview 闭环实现问题。"
+description: "从模糊需求推进到已审查实现的人工确认式开发工作流。用户要求 brainstorm、保存设计、并行多视角改进、实现和 review，或说‘走完整研发流程’时使用；全程应用 ponytail，以 om-doc-hygiene、独立 subagents、planreview 和 deepreview 推进，但每个节点完成后必须等待用户明确确认，禁止自动进入下一环节。"
 ---
 
 # Devflow
@@ -9,13 +9,21 @@ description: "从模糊需求推进到已审查实现的轻量开发工作流。
 
 ```text
 Brainstorm
+-> [Human Confirm]
 -> Save Design
+-> [Human Confirm]
 -> Parallel Design Panel
+-> [Human Confirm]
 -> Improve Design
+-> [Human Confirm]
 -> Planreview
+-> [Human Confirm]
 -> Implementation
+-> [Human Confirm]
 -> Deepreview
+-> [Human Confirm]
 -> Closeout
+-> [Human Confirm Completion]
 ```
 
 这是一个轻量编排 skill。复用现有 skills，不复制它们的内部规则，也不替代项目 `AGENTS.md`。
@@ -26,8 +34,23 @@ Brainstorm
 - 先读适用的 `AGENTS.md`、相关源码、测试、配置和现有文档，再提出设计。
 - 源码、配置和测试事实优先于过时文档；发现冲突时修正文档，不让实现迎合错误文档。
 - 同一事实只保留一个当前 owner。更新同一设计文档，不创建 `v2`、`final`、`revised` 等平行副本。
-- 普通 finding 自动进入修复与复审循环；只有下方 stop condition 才暂停询问用户。
+- 每个节点只执行当前节点范围；完成后必须暂停并等待用户明确确认，不能自动进入下一节点。
+- review finding、测试通过、artifact 已生成或用户此前要求“走完整流程”都不构成下一节点授权。
 - 不自动 commit、push、merge、发布、部署或修改生产状态；这些边界需要用户分别授权。
+
+## Human Confirmation Gate
+
+每个节点结束时：
+
+1. 报告当前节点、产物路径、关键决策或 findings、实际验证和未决风险；
+2. 说明下一节点及其将执行的动作；
+3. 将状态标记为 `awaiting_user_confirmation`；
+4. 明确询问用户是否进入下一节点，然后停止。
+
+只有用户在看到本节点结果后明确回复“继续”“确认”“进入下一环节”或同等含义，才可推进。用户要求修改时留在当前节点，
+修改完成后重新经过确认 gate。等待期间不得预启动下一节点的 subagents、编辑下一节点文件、调用下一节点 skill 或把下一节点写成已开始。
+
+上下文恢复时先确认最后一个已获用户批准的节点；证据不清时保持 `awaiting_user_confirmation`，不要猜测。
 
 ## 1. Brainstorm
 
@@ -39,7 +62,7 @@ Brainstorm
 - 候选方案及主要 trade-offs。
 
 只有存在真实取舍时才列多个方案，通常不超过三个。推荐满足目标的最小方案，并说明为什么更复杂方案暂时不需要。
-如果方案选择会改变产品行为、公共契约、数据模型或运维边界，先让用户确认；否则继续。
+输出推荐方案和取舍后进入 `awaiting_user_confirmation`。用户确认选定方案后，才进入 Save Design。
 
 ## 2. Save Design
 
@@ -64,6 +87,8 @@ Brainstorm
 
 记录最终 `design_doc` 路径，后续所有评审使用这一个文件。
 
+报告文档路径、owner、写入内容和检查结果后进入 `awaiting_user_confirmation`。用户确认后，才启动 Parallel Design Panel。
+
 ## 3. Parallel Design Panel
 
 设计首次落盘后，同时派发三个只读 subagents。三者读取同一个 `design_doc` 快照，不互相读取结论，也不得编辑文件：
@@ -85,6 +110,8 @@ Brainstorm
 
 如果当前环境没有 subagent 能力，按三个视角分别审查并明确披露独立性降低；不要假装执行了并行评审。
 
+汇总建议、证据和拟议裁决后进入 `awaiting_user_confirmation`。用户确认 accepted 建议后，才进入 Improve Design；此节点不得直接改设计文档。
+
 ## 4. Improve Design
 
 把 accepted 建议合并回同一个 `design_doc`。在 `options-monitor` 中再次应用 `$om-doc-hygiene`，确保改写后仍是
@@ -92,16 +119,20 @@ current-state 文档，而不是评审会话记录。
 
 结构性改动发生后，可以再做一次只针对改动区域的并行复核。没有新证据时不要无限循环。
 
+报告设计变更和剩余风险后进入 `awaiting_user_confirmation`。用户确认后，才调用 `$planreview`。
+
 ## 5. Planreview Gate
 
 对最终 `design_doc` 调用 `$planreview`。
 
-- `fail`：裁决 findings，更新同一个设计文档，然后重新运行 `$planreview`。
+- `fail`：报告 findings 和拟议修复，等待用户确认后再回到 Improve Design；不得自动修改或 re-review。
 - `pass-with-risks`：仅当每个 residual risk 都有明确 owner、影响和后续去向时通过。
-- `pass`：冻结设计，进入实现。
+- `pass`：设计可冻结，但仍须等待用户确认后才能进入实现。
 
 `planreview` 只负责 adversarial review；设计修改仍由主 agent 完成，并继续遵守 `$om-doc-hygiene`。
 未经通过的设计不得进入 Implementation。
+
+报告 planreview artifact、结论和 residual risks 后进入 `awaiting_user_confirmation`。用户明确批准实现后，才进入 Implementation。
 
 ## 6. Implementation
 
@@ -113,12 +144,15 @@ current-state 文档，而不是评审会话记录。
 - 运行能证明当前 slice 的最小测试，再运行项目要求的完整 validation；
 - 实现事实改变设计时，先更新 `design_doc`；若涉及契约或架构变化，返回 Planreview Gate。
 
+每个 slice 完成后报告 changed files、验证和偏差，并进入 `awaiting_user_confirmation`；用户确认后才能进入下一 slice。
+最终 slice 完成后也必须等待用户确认，不能自动调用 `$deepreview`。
+
 ## 7. Deepreview Gate
 
 实现和 validation 完成后，对正确 base 下的全部当前改动调用 `$deepreview`。
 
-- 裁决每个 finding；accepted findings 做 root-cause fix 并运行相关验证。
-- 重新调用 `$deepreview`，直到没有未修复的 accepted blocking finding。
+- 裁决每个 finding 并提出 root-cause fix；等待用户确认后才修复和 re-review。
+- re-review 通过后仍须等待用户确认，不能自动进入 Closeout。
 - finding 若要求改变已冻结的架构、契约、schema 或产品行为，先回到 Improve Design 和 Planreview Gate。
 - 实现导致 living docs 变化时，在 `options-monitor` 中用 `$om-doc-hygiene` 更新同一个 owner。
 
@@ -133,9 +167,11 @@ current-state 文档，而不是评审会话记录。
 - residual risks、owner 和下一步；
 - 未执行的 commit / push / merge / release / deploy 边界。
 
-## Stop Conditions
+报告完成后进入 `awaiting_user_confirmation`。只有用户明确回复“完成”或同等含义，才把 workflow 标记为 completed。
 
-仅在以下情况暂停：
+## Additional Stop Conditions
+
+除每个节点强制执行的 Human Confirmation Gate 外，以下情况也必须暂停：
 
 - 需要用户在会显著改变行为或范围的方案间选择；
 - 权威事实、文件 owner 或目标 base 无法确定；

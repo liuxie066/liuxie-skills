@@ -6,7 +6,7 @@ Reusable Codex skills by liuxie.
 
 | Skill | Purpose |
 | --- | --- |
-| [`devflow`](skills/devflow/) | Move a development task from brainstorming and a durable design through independent design critique, plan review, implementation, and deep code review. |
+| [`devflow`](skills/devflow/) | Move a development task through brainstorming, a durable design, independent critique, plan review, implementation, and deep code review, with explicit human confirmation between every stage. |
 
 ## Install
 
