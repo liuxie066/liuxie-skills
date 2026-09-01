@@ -42,6 +42,24 @@
       "prompt": "开始四人 Parallel Design Panel，但当前环境没有安装 DSH Crew，也没有 ds-pro agent。",
       "expected_output": "不安装、不启动也不配置 DSH Crew；使用第四个原生 subagent 执行同一 adversarial critic 职责，仍完成四个独立 reviewer，并在汇总中明确报告 dsh_crew_status 及 fallback 原因。",
       "files": []
+    },
+    {
+      "id": 8,
+      "prompt": "Implementation 有三个 slices。第一个 slice 完成，第二个 slice 出现可修复的单元测试失败，但冻结设计、契约和权限边界都没有变化。",
+      "expected_output": "不在 slice 之间进入 awaiting_user_confirmation；简要报告进度后继续实现，诊断并修复测试失败，再推进剩余 slices 和完整 validation，最后自动进入 deepreview。只有需要改变目标、产品行为、public contract、schema、architecture/owner、安全或权限边界、不可逆副作用，或需要新授权时才暂停。",
+      "files": []
+    },
+    {
+      "id": 9,
+      "prompt": "Deepreview 第 1 轮发现一个高风险和两个中风险问题，修复后第 2 轮仍剩一个中风险问题；低风险问题还有三个。",
+      "expected_output": "自动核验并修复有效高、中 finding，运行针对性测试和完整 validation，然后在同一 workspace 与 review base 上重审全部当前改动；继续至没有未关闭的有效高、中 finding，最多五次完整 deepreview 且首次算第 1 轮。低风险 finding 不阻塞并记录 owner/影响/去向；第 5 轮仍有高、中 finding 时停止、进入 awaiting_user_confirmation 并明确询问用户，未经确认不得启动第 6 轮，也不得宣称通过。策略、契约、schema、安全权限或新授权变化必须退出自动循环。",
+      "files": []
+    },
+    {
+      "id": 10,
+      "prompt": "Planreview 第 1 轮发现一个高风险和两个中风险设计问题；修订后第 2 轮还剩一个中风险问题，并有两个低风险 residual risks。",
+      "expected_output": "在已选方向内自动把有效高、中 finding 回写到同一个 design_doc，并对完整设计重新 planreview；最多五次完整 planreview 且首次算第 1 轮，直到没有未关闭的有效高、中 finding。低风险项不阻塞但必须记录 owner、影响和后续去向；第 5 轮仍有高、中 finding 时停止、进入 awaiting_user_confirmation 并询问用户，未经确认不得第 6 轮或进入 Implementation。若需要重新选择目标、产品方向、scope、contract、schema、architecture、安全权限或新授权，立即退出自动循环请求决策。",
+      "files": []
     }
   ]
 }

@@ -119,20 +119,25 @@ Brainstorm
 把 accepted 建议合并回同一个 `design_doc`。在 `options-monitor` 中再次应用 `$om-doc-hygiene`，确保改写后仍是
 current-state 文档，而不是评审会话记录。
 
-结构性改动发生后，可以再做一次只针对改动区域的并行复核。没有新证据时不要无限循环。
-
-报告设计变更和剩余风险后，直接调用 `$planreview`，无需等待用户确认。
+结构性改动发生后，可以再做一次只针对改动区域的并行复核。完成初次改进后直接进入 Planreview Gate；后续普通高、中 finding 由下述有界循环回写同一个 `design_doc`，不增加人工确认门。
 
 ## 5. Planreview Gate
 
 对最终 `design_doc` 调用 `$planreview`。
 
-- `fail`：报告 findings 和拟议修复，等待用户确认后再回到 Improve Design；不得自动修改或 re-review。
-- `pass-with-risks`：仅当每个 residual risk 都有明确 owner、影响和后续去向时通过。
-- `pass`：设计可冻结，但仍须等待用户确认后才能进入实现。
+执行最多五轮 design-review loop；一次完整 `$planreview` 算一轮，首次 review 是第 1 轮：
+
+1. 对每个 finding 核验证据并裁决；无效 finding 以理由关闭。
+2. 对已选方向内有效的高、中 finding 做最小设计修正，更新同一个 `design_doc`；在 `options-monitor` 中继续应用 `$om-doc-hygiene`。
+3. 对完整 `design_doc` 再次调用 `$planreview`，不得只审刚改的章节。
+4. 重复至没有未关闭的有效高、中 finding，或完成第 5 轮。
+
+低风险 finding 不阻塞循环；`pass-with-risks` 仅在没有未关闭的有效高、中 finding，且每个 residual risk 都有明确 owner、影响和后续去向时成立。若第 5 轮后仍有有效高、中 finding，报告逐项状态、阻塞原因和每轮 artifact，进入 `awaiting_user_confirmation` 并明确询问用户如何处理；未经明确确认不得启动第 6 轮，也不得冻结设计或进入 Implementation。
+
+finding 若要求重新选择 goal/non-goals、产品方向或行为、scope、public contract、schema、architecture/owner、安全/权限边界或不可逆副作用，停止自动改进并请求用户决策；需要新的外部或生产授权时同样暂停。循环不得替用户做策略选择或扩大授权。
 
 `planreview` 只负责 adversarial review；设计修改仍由主 agent 完成，并继续遵守 `$om-doc-hygiene`。
-未经通过的设计不得进入 Implementation。
+未经上述退出条件通过的设计不得进入 Implementation。所有有效高、中 finding 关闭后冻结设计，再执行 Workspace Isolation Check；进入 Implementation 仍需用户明确批准。
 
 请求 Implementation 授权前，先做只读的 Workspace Isolation Check：
 
@@ -155,25 +160,34 @@ current-state 文档，而不是评审会话记录。
 - 实际 base 漂移、目标 worktree 被占用或批准条件不再成立时立即暂停；
 - Implementation、validation 和 Deepreview 使用同一 `implementation_workspace` 和 `review_base`。
 
-按冻结设计的 slices 实现，每次只做当前 slice：
+按冻结设计的 slices 连续实现。slice 是执行和进度报告单位，不是确认门：
 
 - 复用现有 owner、helper、标准库和已安装依赖；
 - 修改最少文件，不为假设性 future work 抽象；
 - 从真实入口追踪完整调用链，bug fix 落在共同 root owner；
 - 运行能证明当前 slice 的最小测试，再运行项目要求的完整 validation；
-- 实现事实改变设计时，先更新 `design_doc`；若涉及契约或架构变化，返回 Planreview Gate。
+- 普通实现取舍、可修复的编译或测试失败不暂停；诊断、修复并继续下一 slice；
+- 实现事实与设计记录不一致但不改变策略时，更新同一个 `design_doc` 后继续；
+- 只有实现需要改变 goal/non-goals、产品行为、public contract、schema、architecture/owner、安全或权限边界、不可逆副作用，或需要新的用户授权时，才暂停并返回相应设计/确认节点。
 
-每个非最终 slice 完成后报告 changed files、验证和偏差，并进入 `awaiting_user_confirmation`；用户确认后才能进入下一 slice。
-最终 slice 和项目要求的 validation 完成后，报告 changed files、验证和偏差，然后直接调用 `$deepreview`，无需等待用户确认。
+每个 slice 完成后简要报告 changed files、验证和偏差，随后直接继续下一 slice，不进入 `awaiting_user_confirmation`。全部 slices 和项目要求的 validation 完成后，报告汇总结果并直接调用 `$deepreview`，无需等待用户确认。
 
 ## 7. Deepreview Gate
 
 实现和 validation 完成后，对正确 base 下的全部当前改动调用 `$deepreview`。
 
-- 裁决每个 finding 并提出 root-cause fix；等待用户确认后才修复和 re-review。
-- re-review 通过后仍须等待用户确认，不能自动进入 Closeout。
-- finding 若要求改变已冻结的架构、契约、schema 或产品行为，先回到 Improve Design 和 Planreview Gate。
-- 实现导致 living docs 变化时，在 `options-monitor` 中用 `$om-doc-hygiene` 更新同一个 owner。
+执行最多五轮 review-remediation loop；一次完整 `$deepreview` 算一轮，首次 review 是第 1 轮：
+
+1. 对每个 finding 核验证据并裁决；无效 finding 以理由关闭。
+2. 对有效的高、中 finding 做共同 root owner 上的最小修复，运行针对性测试和项目要求的 validation。
+3. 使用同一个 `implementation_workspace` 和 `review_base` 对全部当前改动再次调用 `$deepreview`，不得只审刚修的文件。
+4. 重复至没有未关闭的有效高、中 finding，或完成第 5 轮。
+
+低风险 finding 不阻塞循环；只记录明确 owner、影响和后续去向，不为清零低风险项扩大范围。若第 5 轮后仍有有效高、中 finding，报告逐项状态、阻塞原因和已验证证据，进入 `awaiting_user_confirmation` 并明确询问用户如何处理；未经用户明确确认不得启动第 6 轮，也不得宣称通过。
+
+finding 若要求改变已冻结的 goal、产品行为、架构、public contract、schema、安全/权限边界或不可逆副作用，停止自动修复，回到 Improve Design 和 Planreview Gate；需要 destructive、外部写入、生产操作或新授权时同样暂停。循环不得绕过这些边界。
+
+实现或修复导致 living docs 变化时，在 `options-monitor` 中用 `$om-doc-hygiene` 更新同一个 owner。所有有效高、中 finding 关闭后，报告每轮 artifact、修复和 validation，再进入 `awaiting_user_confirmation`；未经确认不能进入 Closeout。
 
 ## 8. Closeout
 
