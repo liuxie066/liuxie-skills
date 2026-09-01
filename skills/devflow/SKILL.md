@@ -1,6 +1,6 @@
 ---
 name: devflow
-description: "从模糊需求推进到已审查实现的人工确认式开发工作流。用户要求 brainstorm、保存设计、并行多视角改进、实现和 review，或说‘走完整研发流程’时使用；全程应用 ponytail，以 om-doc-hygiene、独立 subagents、planreview 和 deepreview 推进；Save Design 自动衔接 Parallel Design Panel，最终 Implementation 自动衔接 Deepreview，其余节点之间必须等待用户明确确认。"
+description: "从模糊需求推进到已审查实现的人工确认式开发工作流。用户要求 brainstorm、保存设计、并行多视角改进、实现和 review，或说‘走完整研发流程’时使用；全程应用 ponytail，以 om-doc-hygiene、独立 subagents、planreview 和 deepreview 推进；Save Design 自动衔接 Parallel Design Panel，Improve Design 自动衔接 Planreview，最终 Implementation 自动衔接 Deepreview，其余节点之间必须等待用户明确确认。"
 ---
 
 # Devflow
@@ -14,7 +14,6 @@ Brainstorm
 -> Parallel Design Panel
 -> [Human Confirm]
 -> Improve Design
--> [Human Confirm]
 -> Planreview
 -> [Human Confirm]
 -> Implementation
@@ -32,13 +31,13 @@ Brainstorm
 - 先读适用的 `AGENTS.md`、相关源码、测试、配置和现有文档，再提出设计。
 - 源码、配置和测试事实优先于过时文档；发现冲突时修正文档，不让实现迎合错误文档。
 - 同一事实只保留一个当前 owner。更新同一设计文档，不创建 `v2`、`final`、`revised` 等平行副本。
-- Save Design 完成后自动启动 Parallel Design Panel；最终 Implementation 和 validation 完成后自动启动 Deepreview。除此之外，每个节点只执行当前节点范围，完成后必须暂停并等待用户明确确认。
-- 除上述两处自动衔接外，review finding、测试通过、artifact 已生成或用户此前要求“走完整流程”都不构成下一节点授权。
+- Save Design 完成后自动启动 Parallel Design Panel；Improve Design 完成后自动启动 Planreview；最终 Implementation 和 validation 完成后自动启动 Deepreview。除此之外，每个节点只执行当前节点范围，完成后必须暂停并等待用户明确确认。
+- 除上述三处自动衔接外，review finding、测试通过、artifact 已生成或用户此前要求“走完整流程”都不构成下一节点授权。
 - 不自动 commit、push、merge、发布、部署或修改生产状态；这些边界需要用户分别授权。
 
 ## Human Confirmation Gate
 
-除 `Save Design -> Parallel Design Panel` 和 `Implementation -> Deepreview` 外，每个节点结束时：
+除 `Save Design -> Parallel Design Panel`、`Improve Design -> Planreview` 和 `Implementation -> Deepreview` 外，每个节点结束时：
 
 1. 报告当前节点、产物路径、关键决策或 findings、实际验证和未决风险；
 2. 说明下一节点及其将执行的动作；
@@ -117,7 +116,7 @@ current-state 文档，而不是评审会话记录。
 
 结构性改动发生后，可以再做一次只针对改动区域的并行复核。没有新证据时不要无限循环。
 
-报告设计变更和剩余风险后进入 `awaiting_user_confirmation`。用户确认后，才调用 `$planreview`。
+报告设计变更和剩余风险后，直接调用 `$planreview`，无需等待用户确认。
 
 ## 5. Planreview Gate
 
@@ -186,7 +185,7 @@ current-state 文档，而不是评审会话记录。
 
 ## Additional Stop Conditions
 
-除 `Save Design -> Parallel Design Panel` 和 `Implementation -> Deepreview` 两处自动衔接外，以下情况也必须暂停：
+除 `Save Design -> Parallel Design Panel`、`Improve Design -> Planreview` 和 `Implementation -> Deepreview` 三处自动衔接外，以下情况也必须暂停：
 
 - 需要用户在会显著改变行为或范围的方案间选择；
 - 权威事实、文件 owner 或目标 base 无法确定；
