@@ -4,7 +4,7 @@
     {
       "id": 1,
       "prompt": "在 options-monitor 里为新的候选策略评分机制走完整设计开发流程：先 brainstorm，落设计文档，并行让多个 agent 提升方案，通过 planreview 后实现，最后 deepreview。",
-      "expected_output": "使用 ponytail 约束范围；Brainstorm 完成后先报告并等待用户确认，不自动落文档；用户确认后使用 om-doc-hygiene 保存设计，并直接启动三个只读 subagents；Parallel Design Panel 结束后等待确认，Improve Design 完成后直接启动 planreview，最终 Implementation 和 validation 完成后直接启动 deepreview。",
+      "expected_output": "使用 ponytail 约束范围；Brainstorm 完成后先报告并等待用户确认，不自动落文档；用户确认后使用 om-doc-hygiene 保存设计，并直接启动四个独立只读 reviewers，其中第四个在可用时使用 DSH Crew ds-pro；Parallel Design Panel 结束后等待确认，Improve Design 完成后直接启动 planreview，最终 Implementation 和 validation 完成后直接启动 deepreview。",
       "files": []
     },
     {
@@ -29,6 +29,18 @@
       "id": 5,
       "prompt": "planreview 已通过，但当前 main 有其他任务的未提交改动，同时另一个 agent 也在开发。准备进入实现。",
       "expected_output": "在请求 Implementation 授权前只读检查 status、worktree、base 和项目约定；不触碰脏 main，不自动 stash 或 reset。若没有匹配的现有专用 worktree，则拟定从已验证 base 新建隔离 worktree，并把 workspace 决策随 planreview 结果交给用户确认；获准后才创建，且 implementation、validation、deepreview 使用同一 worktree 和 review base。",
+      "files": []
+    },
+    {
+      "id": 6,
+      "prompt": "设计文档已经保存，开始 Parallel Design Panel；当前 DSH Crew 可用，但并发容量只能同时运行三个 reviewer。",
+      "expected_output": "完成四人评审而不是缩减人数：前三个 reviewer 覆盖 architecture、failure/safety、simplicity/delivery，第四个使用 DSH Crew ds-pro 做跨视角 adversarial critique；并发不足时分批运行，所有 reviewer 只读取同一原始 design_doc 快照且互不读取结论；DSH brief 自包含、只读并禁止 commit/push。",
+      "files": []
+    },
+    {
+      "id": 7,
+      "prompt": "开始四人 Parallel Design Panel，但当前环境没有安装 DSH Crew，也没有 ds-pro agent。",
+      "expected_output": "不安装、不启动也不配置 DSH Crew；使用第四个原生 subagent 执行同一 adversarial critic 职责，仍完成四个独立 reviewer，并在汇总中明确报告 dsh_crew_status 及 fallback 原因。",
       "files": []
     }
   ]

@@ -6,7 +6,7 @@ Reusable Codex skills by liuxie.
 
 | Skill | Purpose |
 | --- | --- |
-| [`devflow`](skills/devflow/) | Move a development task through brainstorming, a durable design, independent critique, plan review, implementation, and deep code review, with explicit human confirmation between every stage. |
+| [`devflow`](skills/devflow/) | Move a development task through brainstorming, a durable design, four independent design critiques, plan review, implementation, and deep code review, with human-gated transitions. |
 
 ## Install
 
@@ -22,7 +22,7 @@ Then invoke it in Codex:
 $devflow <task>
 ```
 
-`devflow` composes the companion skills `ponytail`, `planreview`, and `deepreview`. In an `options-monitor` repository it can also use the optional project skill `om-doc-hygiene`; elsewhere it follows that repository's documentation conventions.
+`devflow` composes the companion skills `ponytail`, `planreview`, and `deepreview`. Its four-person design panel uses DSH Crew `ds-pro` for the fourth reviewer when available and falls back to a native subagent otherwise. In an `options-monitor` repository it can also use the optional project skill `om-doc-hygiene`; elsewhere it follows that repository's documentation conventions.
 
 ## License
 

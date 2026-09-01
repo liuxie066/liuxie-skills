@@ -1,6 +1,6 @@
 ---
 name: devflow
-description: "从模糊需求推进到已审查实现的人工确认式开发工作流。用户要求 brainstorm、保存设计、并行多视角改进、实现和 review，或说‘走完整研发流程’时使用；全程应用 ponytail，以 om-doc-hygiene、独立 subagents、planreview 和 deepreview 推进；Save Design 自动衔接 Parallel Design Panel，Improve Design 自动衔接 Planreview，最终 Implementation 自动衔接 Deepreview，其余节点之间必须等待用户明确确认。"
+description: "从模糊需求推进到已审查实现的人工确认式开发工作流。用户要求 brainstorm、保存设计、并行多视角改进、实现和 review，或说‘走完整研发流程’时使用；全程应用 ponytail，以 om-doc-hygiene、四个独立 reviewers（含可用时的 DSH Crew）、planreview 和 deepreview 推进；Save Design 自动衔接 Parallel Design Panel，Improve Design 自动衔接 Planreview，最终 Implementation 自动衔接 Deepreview，其余节点之间必须等待用户明确确认。"
 ---
 
 # Devflow
@@ -88,13 +88,18 @@ Brainstorm
 
 ## 3. Parallel Design Panel
 
-设计首次落盘后，同时派发三个只读 subagents。三者读取同一个 `design_doc` 快照，不互相读取结论，也不得编辑文件：
+设计首次落盘后，派发四个只读 reviewers。四者读取同一个 `design_doc` 快照，不互相读取结论，也不得编辑文件：
 
 1. **Architecture / ownership**：检查边界、耦合、真源、契约和现有模式复用。
 2. **Failure / safety**：检查错误路径、状态机、并发、恢复、数据完整性、安全和运维风险。
 3. **Simplicity / delivery**：检查过度设计、scope creep、slice 粒度、测试缺口和更小可行方案。
+4. **DSH Crew adversarial critic**：使用 `ds-pro` 从跨视角寻找错误假设、反例、遗漏约束和前三个 reviewer 都可能忽略的风险。
 
-每个 subagent 只返回：
+第四个 reviewer 启动前先检查当前环境是否提供可调用的 DSH Crew `ds-pro`。可用时，其 brief 必须自包含：给出 `design_doc` 和仓库绝对路径、只读边界、验收标准、禁止修改/commit/push，并要求区分直接证据与假设。设计判断使用 `ds-pro`，不为节省成本降为 `ds-flash`。
+
+容量允许时四者并行；并发槽不足时可分批，但后启动者仍只接收同一原始快照，不得看到先完成者的结论。DSH Crew 未安装、未暴露 `ds-pro`、被禁用或 dispatch 失败时，用第四个原生 subagent 执行同一职责，不减少 reviewer 数量；不得为运行本节点自动安装、启动或配置 DSH Crew。汇总时报告 `dsh_crew_status` 为 `used` 或具体 fallback 原因。
+
+每个 reviewer 只返回：
 
 - 建议修改的文档位置；
 - 可失败的具体场景；
@@ -103,9 +108,9 @@ Brainstorm
 - 未覆盖区域。
 
 主 agent 对输出去重、核验证据并裁决为 `accepted`、`rejected-with-reason`、
-`deferred-with-owner` 或 `needs-more-evidence`。不要把三份输出直接拼进设计文档。
+`deferred-with-owner` 或 `needs-more-evidence`。不要把四份输出直接拼进设计文档。
 
-如果当前环境没有 subagent 能力，按三个视角分别审查并明确披露独立性降低；不要假装执行了并行评审。
+如果当前环境没有 subagent 能力，按四个视角分别审查并明确披露独立性降低；不要假装执行了并行评审。
 
 汇总建议、证据和拟议裁决后进入 `awaiting_user_confirmation`。用户确认 accepted 建议后，才进入 Improve Design；此节点不得直接改设计文档。
 
