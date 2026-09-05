@@ -13,7 +13,8 @@ Reusable Codex skills by liuxie.
 From this repository:
 
 ```bash
-cp -R skills/devflow ~/.agents/skills/
+mkdir -p ~/.codex/skills
+cp -R skills/devflow ~/.codex/skills/
 ```
 
 Then invoke it in Codex:
@@ -22,7 +23,7 @@ Then invoke it in Codex:
 $devflow <task>
 ```
 
-`devflow` composes the companion skills `ponytail`, `planreview`, and `deepreview`. Its four-person design panel uses DSH Crew `ds-pro` for the fourth reviewer when available and falls back to a native subagent otherwise. In an `options-monitor` repository it can also use the optional project skill `om-doc-hygiene`; elsewhere it follows that repository's documentation conventions.
+`devflow` works standalone and uses `ponytail`, `planreview`, `deepreview`, and the project-specific `om-doc-hygiene` when they are discoverable. Missing companion skills use disclosed native fallbacks. Its four-person design panel uses a DSH Crew pro worker (`tier=pro`) when available and falls back to a native subagent otherwise.
 
 ## License
 

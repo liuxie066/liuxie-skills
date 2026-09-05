@@ -15,8 +15,8 @@
     },
     {
       "id": 3,
-      "prompt": "在一个非 options-monitor 仓库里，从一个架构想法推进到已审查实现，项目没有 om-doc-hygiene。",
-      "expected_output": "遵循目标仓库文档约定并披露 om-doc-hygiene 不可用；保存设计后直接启动 Parallel Design Panel，Improve Design 完成后直接启动 planreview，最终实现和验证完成后直接启动 deepreview；其余节点完成后报告结果、下一节点和风险，等待用户明确确认后才继续。",
+      "prompt": "在一个非 options-monitor 仓库里，从一个架构想法推进到已审查实现；当前没有 ponytail、planreview、deepreview 和 om-doc-hygiene。",
+      "expected_output": "启动时不自动安装或配置 companion skills，报告 ponytail、planreview、deepreview status=fallback:unavailable，om-doc-hygiene_status=not-applicable。直接应用 devflow 的最小范围规则；由主 agent 对完整设计执行同等 adversarial plan review，并对 review_base 下全部当前改动执行 evidence-based deep review，产出相同 Gate 要求的 artifacts、findings 和 verdict；遵循目标仓库约定完成 owner-first 文档更新。所有确认门、五轮预算、fail-closed 和自动衔接规则保持不变。",
       "files": []
     },
     {
@@ -46,19 +46,19 @@
     {
       "id": 8,
       "prompt": "Implementation 有三个 slices。第一个 slice 完成，第二个 slice 出现可修复的单元测试失败，但冻结设计、契约和权限边界都没有变化。",
-      "expected_output": "不在 slice 之间进入 awaiting_user_confirmation；简要报告进度后继续实现，诊断并修复测试失败，再推进剩余 slices 和完整 validation，最后自动进入 deepreview。只有需要改变目标、产品行为、public contract、schema、architecture/owner、安全或权限边界、不可逆副作用，或需要新授权时才暂停。",
+      "expected_output": "不在 slice 之间进入 awaiting_user_confirmation；每个 slice 运行最小针对性测试，诊断并修复测试失败后继续。全部 slices 完成后对最终内容运行一次项目要求的完整 validation；同一内容版本不重复运行，相关源码、测试、配置或依赖改变时重新运行。最后自动进入 deepreview。只有需要改变目标、产品行为、public contract、schema、architecture/owner、安全或权限边界、不可逆副作用，或需要新授权时才暂停。",
       "files": []
     },
     {
       "id": 9,
-      "prompt": "Deepreview 第 1 轮发现一个高风险和两个中风险问题，修复后第 2 轮仍剩一个中风险问题；低风险问题还有三个。",
-      "expected_output": "自动核验并修复有效高、中 finding，运行针对性测试和完整 validation，然后在同一 workspace 与 review base 上重审全部当前改动；继续至没有未关闭的有效高、中 finding，最多五次完整 deepreview 且首次算第 1 轮。低风险 finding 不阻塞并记录 owner/影响/去向；第 5 轮仍有高、中 finding 时停止、进入 awaiting_user_confirmation 并明确询问用户，未经确认不得启动第 6 轮，也不得宣称通过。策略、契约、schema、安全权限或新授权变化必须退出自动循环。",
+      "prompt": "Deepreview 第 1 轮发现一个严重、一个高风险和两个中风险问题，修复后第 2 轮仍剩一个中风险问题；低风险问题还有三个。",
+      "expected_output": "自动核验并修复所有 blocking finding（严重、高、中），运行针对性测试和完整 validation，然后在同一 workspace 与 review base 上重审全部当前改动；每次调用尝试占一轮预算，继续至获得可用 verdict 且没有 blocking finding，最多五次。低风险 finding 不阻塞并记录 owner/影响/去向；第 5 轮仍有 blocking finding 或没有可用 verdict 时停止、进入 awaiting_user_confirmation 并明确询问用户，未经确认不得启动第 6 轮，也不得宣称通过。策略、契约、schema、安全权限或新授权变化必须退出自动循环。",
       "files": []
     },
     {
       "id": 10,
-      "prompt": "Planreview 第 1 轮发现一个高风险和两个中风险设计问题；修订后第 2 轮还剩一个中风险问题，并有两个低风险 residual risks。",
-      "expected_output": "在已选方向内自动把有效高、中 finding 回写到同一个 design_doc，并对完整设计重新 planreview；最多五次完整 planreview 且首次算第 1 轮，直到没有未关闭的有效高、中 finding。低风险项不阻塞但必须记录 owner、影响和后续去向；第 5 轮仍有高、中 finding 时停止、进入 awaiting_user_confirmation 并询问用户，未经确认不得第 6 轮或进入 Implementation。若需要重新选择目标、产品方向、scope、contract、schema、architecture、安全权限或新授权，立即退出自动循环请求决策。",
+      "prompt": "Planreview 第 1 轮发现一个严重、一个高风险和两个中风险设计问题；修订后第 2 轮还剩一个中风险问题，并有两个低风险 residual risks。",
+      "expected_output": "在已选方向内自动把 blocking finding（严重、高、中）回写到同一个 design_doc，并对完整设计重新 planreview；每次调用尝试占一轮预算，最多五次，直到获得可用 verdict 且没有 blocking finding。低风险项不阻塞但必须记录 owner、影响和后续去向；第 5 轮仍有 blocking finding 或没有可用 verdict 时停止、进入 awaiting_user_confirmation 并询问用户，未经确认不得第 6 轮或进入 Implementation。若需要重新选择目标、产品方向、scope、contract、schema、architecture、安全权限或新授权，立即退出自动循环请求决策。",
       "files": []
     },
     {
@@ -76,13 +76,19 @@
     {
       "id": 13,
       "prompt": "Implementation 已获批准并有两个冻结 slices：A 在现有纯函数中增加一个明确分支和对应单元测试；B 修改账户账本 schema、并发写入和 migration。当前可使用 gpt-5.6-luna max，请继续实现。",
-      "expected_output": "模型路由不增加确认门。仅把行为、owner、验收和测试命令都明确且可独立验证的 slice A 委派给原生 gpt-5.6-luna subagent，并设置 reasoning_effort=max；brief 包含 design_doc、workspace、review base、slice、文件 ownership、validation 和禁止扩大范围或 commit/push 等边界。涉及 schema、并发、migration 和数据完整性的 slice B 由主 agent 实现。主 agent 核对 Luna 的实际 diff 和测试证据；若未通过或触及排除边界立即收回处理。两个 slices 均执行相同完整 validation，并自动进入 Deepreview。",
+      "expected_output": "模型路由不增加确认门。仅把行为、owner、验收和测试命令都明确且可独立验证的 slice A 委派给原生 gpt-5.6-luna subagent，并设置 reasoning_effort=max；brief 包含 design_doc、workspace、review base、slice、文件 ownership、validation 和禁止扩大范围或 commit/push 等边界。涉及 schema、并发、migration 和数据完整性的 slice B 由主 agent 实现。主 agent 核对 Luna 的实际 diff 和测试证据；若未通过或触及排除边界立即收回处理。各 slice 运行针对性测试，最终内容运行一次项目要求的完整 validation，并自动进入 Deepreview。",
       "files": []
     },
     {
       "id": 14,
-      "prompt": "Implementation 已获批准，当前 slice 只需新增单账户只读查询。实现时发现邻近缓存代码可重构、日志格式可统一，reviewer 还建议顺便增加监控告警；这些都不是 approved success signal 所需。继续实现。",
-      "expected_output": "进入实现时用冻结 design_doc、implementation_workspace 和当前 Git 状态记录 implementation_baseline，不新建状态文件；slice 开始前明确 success signal、交付行为、expected owners/files 和 validation。每项修改只允许归类为 planned 或有具体 failure path 的 required-correctness/safety；不纳入缓存重构、日志统一或监控告警。slice 完成后用 Git diff 对照 baseline 检查 changed files 和新增行为，仅移除明确属于本 agent 的越界改动，有价值建议记为 deferred-with-owner；归属不明或必须改变 scope contract 时暂停。review finding 本身不构成扩展授权；scope 干净时继续下一 slice，不增加确认门。",
+      "prompt": "Implementation 已获批准，开始前已有 staged、unstaged 和 untracked 文件；当前 slice 只需新增单账户只读查询。实现时又产生了越界的 untracked debug 文件，reviewer 还建议顺便重构缓存并增加监控告警。继续实现。",
+      "expected_output": "进入实现时记录冻结 design_doc、workspace、review_base、HEAD、git status，以及每个既有 staged index、unstaged working-tree 和 untracked 内容各自的 hash 和 size，不新建 repository 状态文件；slice 开始前明确 success signal、交付行为、expected owners/files 和 validation。slice 后检查 git diff --cached、git diff 和 git ls-files --others --exclude-standard 返回文件的实际内容，识别新增的越界 debug 文件且不误删开始前已有改动。每项修改只允许归类为 planned 或有具体 failure path 的 required-correctness/safety；缓存重构和监控告警记为 deferred-with-owner。仅移除明确属于本 agent 的越界改动；归属不明或必须改变 scope contract 时暂停。",
+      "files": []
+    },
+    {
+      "id": 15,
+      "prompt": "一个 review 调用失败；另一个输出因截断缺少 scope 和最终 verdict；第三个声称 pass，却同时列出一个未关闭的严重 finding。可以继续下一节点吗？这些失败尝试如何计入最多五轮？",
+      "expected_output": "三种结果都标记为 review-unusable，不能解释为无 finding、pass、pass-with-risks 或节点完成。Panel 中不可用 reviewer 不计入四人覆盖，最多重试一次或使用同职责只读 fallback，仍不可用则报告 coverage gap 并停在当前 Gate。Planreview/Deepreview 的每次调用尝试都占一轮预算，只能在剩余预算内补证据后重审；第 5 轮仍无可用 verdict 或仍有严重、高、中 blocking finding 时进入 awaiting_user_confirmation，未经确认不得进入下一节点或启动第 6 轮。",
       "files": []
     }
   ]
