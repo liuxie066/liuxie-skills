@@ -169,6 +169,24 @@ finding 若要求重新选择 goal/non-goals、产品方向或行为、scope、p
 - 实际 base 漂移、目标 worktree 被占用或批准条件不再成立时立即暂停；
 - Implementation、validation 和 Deepreview 使用同一 `implementation_workspace` 和 `review_base`。
 
+### Implementation Scope Drift Guard
+
+进入 Implementation 时，以冻结的 `design_doc`、`implementation_workspace` 和当前 Git 状态记录
+`implementation_baseline`，不创建新的状态文件。
+
+每个 slice 开始前明确对应的 approved success signal、本 slice 交付的行为、expected owners / files 和 validation 命令。
+每项实际修改必须归类为：
+
+- `planned`：冻结设计已经要求；
+- `required-correctness/safety`：不修改就会使 approved behavior 错误或不安全，且能给出具体 failure path 和对应 success signal。
+
+邻近 cleanup、风格调整、顺手重构、future-proofing、额外监控以及 reviewer 建议本身，都不构成
+`required-correctness/safety`。
+
+每个 slice 完成后，使用 Git diff 对照 `implementation_baseline` 检查实际 changed files 和新增行为。无法映射到上述两类的修改不得进入下一 slice：仅属于本 agent 的改动应移除；有价值的发现记录为 `deferred-with-owner`；归属不明或确需改变 scope contract 时暂停并请求用户确认。
+
+Review finding 不是扩大实现范围的授权。只有阻塞 approved success signal 或证明当前实现存在 correctness/safety 缺陷的 finding 才能进入当前修复循环。
+
 ### Implementation Model Routing
 
 模型路由不增加人工确认门；主 agent 始终负责设计一致性、集成、validation 和 Deepreview。

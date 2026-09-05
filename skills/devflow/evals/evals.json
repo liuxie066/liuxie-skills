@@ -78,6 +78,12 @@
       "prompt": "Implementation 已获批准并有两个冻结 slices：A 在现有纯函数中增加一个明确分支和对应单元测试；B 修改账户账本 schema、并发写入和 migration。当前可使用 gpt-5.6-luna max，请继续实现。",
       "expected_output": "模型路由不增加确认门。仅把行为、owner、验收和测试命令都明确且可独立验证的 slice A 委派给原生 gpt-5.6-luna subagent，并设置 reasoning_effort=max；brief 包含 design_doc、workspace、review base、slice、文件 ownership、validation 和禁止扩大范围或 commit/push 等边界。涉及 schema、并发、migration 和数据完整性的 slice B 由主 agent 实现。主 agent 核对 Luna 的实际 diff 和测试证据；若未通过或触及排除边界立即收回处理。两个 slices 均执行相同完整 validation，并自动进入 Deepreview。",
       "files": []
+    },
+    {
+      "id": 14,
+      "prompt": "Implementation 已获批准，当前 slice 只需新增单账户只读查询。实现时发现邻近缓存代码可重构、日志格式可统一，reviewer 还建议顺便增加监控告警；这些都不是 approved success signal 所需。继续实现。",
+      "expected_output": "进入实现时用冻结 design_doc、implementation_workspace 和当前 Git 状态记录 implementation_baseline，不新建状态文件；slice 开始前明确 success signal、交付行为、expected owners/files 和 validation。每项修改只允许归类为 planned 或有具体 failure path 的 required-correctness/safety；不纳入缓存重构、日志统一或监控告警。slice 完成后用 Git diff 对照 baseline 检查 changed files 和新增行为，仅移除明确属于本 agent 的越界改动，有价值建议记为 deferred-with-owner；归属不明或必须改变 scope contract 时暂停。review finding 本身不构成扩展授权；scope 干净时继续下一 slice，不增加确认门。",
+      "files": []
     }
   ]
 }
