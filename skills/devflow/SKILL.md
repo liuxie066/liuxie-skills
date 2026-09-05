@@ -31,6 +31,7 @@ Brainstorm
 - 先读适用的 `AGENTS.md`、相关源码、测试、配置和现有文档，再提出设计。
 - 源码、配置和测试事实优先于过时文档；发现冲突时修正文档，不让实现迎合错误文档。
 - 同一事实只保留一个当前 owner。更新同一设计文档，不创建 `v2`、`final`、`revised` 等平行副本。
+- 用户确认 Brainstorm 后，确认的 goal、non-goals、scope 和 success signals 形成 binding scope contract。后续 design decision、slice 和 validation 必须映射到该 contract 或实现它所必需的 correctness/safety 条件；其它 finding 只能 `deferred-with-owner`，或在确需改变 contract 时暂停并请求用户重新确认，不得在 Improve Design、Planreview 或 Implementation 中自动扩大范围。
 - Save Design 完成后自动启动 Parallel Design Panel；Improve Design 完成后自动启动 Planreview；最终 Implementation 和 validation 完成后自动启动 Deepreview。除此之外，每个节点只执行当前节点范围，完成后必须暂停并等待用户明确确认。
 - 除上述三处自动衔接外，review finding、测试通过、artifact 已生成或用户此前要求“走完整流程”都不构成下一节点授权。
 - 不自动 commit、push、merge、发布、部署或修改生产状态；这些边界需要用户分别授权。
@@ -82,6 +83,8 @@ Brainstorm
 - validation plan；
 - risks and open questions。
 
+implementation slice 必须是可独立验证的行为增量，不按文件、模块或 owner 机械拆分；默认不超过 3 个，超过时先尝试合并，并在 `design_doc` 说明无法合并的原因。
+
 记录最终 `design_doc` 路径，后续所有评审使用这一个文件。
 
 报告文档路径、owner、写入内容和检查结果后，直接启动 Parallel Design Panel，无需等待用户确认。
@@ -93,11 +96,15 @@ Brainstorm
 1. **Architecture / ownership**：检查边界、耦合、真源、契约和现有模式复用。
 2. **Failure / safety**：检查错误路径、状态机、并发、恢复、数据完整性、安全和运维风险。
 3. **Simplicity / delivery**：检查过度设计、scope creep、slice 粒度、测试缺口和更小可行方案。
-4. **DSH Crew adversarial critic**：使用 `ds-pro` 从跨视角寻找错误假设、反例、遗漏约束和前三个 reviewer 都可能忽略的风险。
+4. **DSH Crew adversarial critic**：由主会话直接调用 DSH Crew worker，从跨视角寻找错误假设、反例、遗漏约束和前三个 reviewer 都可能忽略的风险。
 
-第四个 reviewer 启动前先检查当前环境是否提供可调用的 DSH Crew `ds-pro`。可用时，其 brief 必须自包含：给出 `design_doc` 和仓库绝对路径、只读边界、验收标准、禁止修改/commit/push，并要求区分直接证据与假设。设计判断使用 `ds-pro`，不为节省成本降为 `ds-flash`。
+第四个 reviewer 启动前先检查当前主会话是否提供全局 DSH Crew `dsh_spawn_worker` 或 `dsh_run_worker`。可用时必须由主会话直接调用，设置 `tier=pro`；可并行时优先 `dsh_spawn_worker`，分批执行时可用 `dsh_run_worker`，只读并行任务才可设置 `allow_concurrent_cwd=true`。使用 spawn 后必须通过 `dsh_worker_result` 取得最终结果，不得把 job id 或运行状态当成 review。不得先 spawn `ds-pro` / `ds-flash` Codex subagent 代为调用；当前 Codex 子代理不继承主会话的 DSH Crew MCP tools。
 
-容量允许时四者并行；并发槽不足时可分批，但后启动者仍只接收同一原始快照，不得看到先完成者的结论。DSH Crew 未安装、未暴露 `ds-pro`、被禁用或 dispatch 失败时，用第四个原生 subagent 执行同一职责，不减少 reviewer 数量；不得为运行本节点自动安装、启动或配置 DSH Crew。汇总时报告 `dsh_crew_status` 为 `used` 或具体 fallback 原因。
+DSH brief 必须自包含：给出 `design_doc` 和仓库绝对路径、只读边界、验收标准、禁止修改/commit/push，并要求区分直接证据与假设。设计判断固定使用 `tier=pro`，不为节省成本降为 `tier=flash`。
+
+容量允许时四者并行；并发槽不足时可分批，但后启动者仍只接收同一原始快照，不得看到先完成者的结论。DSH Crew 未安装、未向主会话暴露上述 tools、被禁用、dispatch 失败或结果读取失败时，用第四个原生 subagent 执行同一职责，不减少 reviewer 数量；不得为运行本节点自动安装、启动或配置 DSH Crew。
+
+汇总时报告 `dsh_crew_status=used|fallback:<reason>`、`reviewer_backend`、`reviewer_model` 和 `independence`。`reviewer_model` 只记录实际结果中可验证的模型身份，否则写 `unknown`；只有证据表明 reviewer 与主 agent 属于不同模型家族时，`independence` 才能写 `verified`，否则写 `unverified`，原生 fallback 写 `native-fallback`。
 
 每个 reviewer 只返回：
 
@@ -124,6 +131,8 @@ current-state 文档，而不是评审会话记录。
 ## 5. Planreview Gate
 
 对最终 `design_doc` 调用 `$planreview`。
+
+要求 `planreview` 检查每个 design decision、slice 和 validation 的 goal alignment，以及 slice 是否按可验证行为切分、是否可以合并；不得把 contract 外的改进机会升级为当前实现要求。
 
 执行最多五轮 design-review loop；一次完整 `$planreview` 算一轮，首次 review 是第 1 轮：
 
@@ -159,6 +168,25 @@ finding 若要求重新选择 goal/non-goals、产品方向或行为、scope、p
 - 不自动 stash、reset、移动或清理无关改动；若需迁移，只迁移已核验的本任务文件，并确保目标 worktree 可读取同一个 `design_doc`；
 - 实际 base 漂移、目标 worktree 被占用或批准条件不再成立时立即暂停；
 - Implementation、validation 和 Deepreview 使用同一 `implementation_workspace` 和 `review_base`。
+
+### Implementation Model Routing
+
+模型路由不增加人工确认门；主 agent 始终负责设计一致性、集成、validation 和 Deepreview。
+
+Implementation slice 同时满足以下条件时，若当前原生 subagent 支持目标模型，优先使用
+`model=gpt-5.6-luna`、`reasoning_effort=max`：
+
+- 冻结设计已经明确行为和实现方向，不需要 worker 做新的设计决策；
+- scope、owner、验收标准和测试命令清晰；
+- 改动局部、可独立验证，失败后可以安全回退；
+- 不涉及 public contract、schema、architecture/owner、权限/安全、并发/状态机、migration、数据完整性或不可逆副作用。
+
+委派 brief 必须包含 `design_doc`、workspace、review base、slice 范围、预期行为、文件 ownership 和 validation 命令，
+说明 worker 不是唯一改动者、不得回退他人修改，并禁止扩大范围、commit、push、merge、release 或 deploy。
+
+主 agent 必须核对实际 diff 和测试证据。Luna 结果未通过验收、需要跨越上述边界或出现新的策略性选择时，立即收回主 agent
+处理，不让 worker 自主扩大范围。目标模型或 subagent 不可用时直接由主 agent 实现，不阻塞流程。所有改动仍进入相同的完整
+validation 和 Deepreview；不得因为使用 Luna 降低验收标准。
 
 按冻结设计的 slices 连续实现。slice 是执行和进度报告单位，不是确认门：
 
