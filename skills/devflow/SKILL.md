@@ -63,7 +63,34 @@ Parallel Design Panel 只有在四个所需 reviewer 均返回可用结果时才
 只有用户在看到本节点结果后明确回复“继续”“确认”“进入下一环节”或同等含义，才可推进。用户要求修改时留在当前节点，
 修改完成后重新经过确认 gate。等待期间不得预启动下一节点的 subagents、编辑下一节点文件、调用下一节点 skill 或把下一节点写成已开始。
 
-上下文恢复时先确认最后一个已获用户批准的节点；证据不清时保持 `awaiting_user_confirmation`，不要猜测。
+上下文恢复时先按 Progress Checkpoint 恢复最后一个已获用户批准的节点；证据不清时保持 `awaiting_user_confirmation`，不要猜测。
+
+## Progress Checkpoint
+
+由主 agent 在已有 `control_doc` 或 workflow/review artifact 中维护一个简短的 `Devflow Progress` 块，并在交接摘要中给出其路径。选定位置后更新同一块，不复制历史日志或完整 findings；尚无合适 artifact 时先保留在交接摘要，首个合适 artifact 生成后迁入，不另建状态文件，也不写入设计真源。
+
+只在节点/评审轮次边界、明确暂停或授权变化时更新，记录：
+
+- 当前节点、状态和 `next_action`；下一动作必须是尚未完成的动作，等待批准的动作不能记成已授权；
+- 已批准的 scope / success signals 和用户确认依据的引用；
+- `design_doc`、workspace、`review_base` 和本次证据对应的内容版本（含未提交改动）；
+- Planreview / Deepreview 各自已占用的轮次、进行中任务的 handle / job id（如有）、artifact / validation 证据路径；
+- 未关闭 finding / blocker 的引用及 owner。
+
+review 调用前登记该次轮次和 `in-flight`，返回后更新结果；失败尝试同样占预算。恢复时先读 checkpoint，核对授权依据、相关内容版本和证据，再只读取下一动作所需材料；已完成且证据仍有效的节点和 validation 不重跑，review 轮次不归零。未完成调用先查询原任务状态，不重复派发；发现内容变化或证据不足时只重验受影响部分，但完整 review 的范围要求不变。
+
+## Agent Handoff
+
+所有原生 subagent 和 DSH Crew 派发统一使用当前节点所需的最小自包含 brief：
+
+- 当前节点/职责、已批准目标、非目标、success signals 和本次范围；
+- `design_doc`、workspace、review base / 快照，以及所需文件和证据的可访问路径；
+- 文件 ownership / 只读边界、required validation、完成条件及需要停下交还主 agent 的条件；
+- 本节点要求的返回格式、artifact 路径（如需产出），以及禁止越界和未经授权的 commit / push / merge / release / deploy。
+
+不附整段会话历史、重复设计全文、无关阶段报告或重复日志。原生派发支持历史继承控制时，默认不继承完整会话（如 `fork_turns="none"`），由自包含 brief 补齐必要约束。需要写文件的 worker 必须知道还有其他改动者，不得回退他人修改。路径不可访问时补齐必要原文；材料不足不得猜测。
+
+返回摘要只给 status / verdict、关键 findings / blockers、validation 摘要和 artifact / evidence 路径；完整 findings 和证据保留在本节点要求的 artifact 中，只读 Panel 无 artifact 时仍按下文格式返回完整 findings。只精简交接文本，不缩减评审范围，不以摘要代替完整设计/改动重审；Panel reviewer 仍互不读取结论。主 agent 读取所需 artifact 和真实 diff/证据后裁决。
 
 ## 1. Brainstorm
 
@@ -216,8 +243,7 @@ Implementation slice 同时满足以下条件时，若当前原生 subagent 支�
 - 改动局部、可独立验证，失败后可以安全回退；
 - 不涉及 public contract、schema、architecture/owner、权限/安全、并发/状态机、migration、数据完整性或不可逆副作用。
 
-委派 brief 必须包含 `design_doc`、workspace、review base、slice 范围、预期行为、文件 ownership 和 validation 命令，
-说明 worker 不是唯一改动者、不得回退他人修改，并禁止扩大范围、commit、push、merge、release 或 deploy。
+Implementation 委派沿用 Agent Handoff，并明确本 slice 的预期行为。
 
 主 agent 必须核对实际 diff 和测试证据。Luna 结果未通过验收、需要跨越上述边界或出现新的策略性选择时，立即收回主 agent
 处理，不让 worker 自主扩大范围。目标模型或 subagent 不可用时直接由主 agent 实现，不阻塞流程。所有改动仍进入相同的完整

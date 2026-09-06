@@ -90,6 +90,18 @@
       "prompt": "一个 review 调用失败；另一个输出因截断缺少 scope 和最终 verdict；第三个声称 pass，却同时列出一个未关闭的严重 finding。可以继续下一节点吗？这些失败尝试如何计入最多五轮？",
       "expected_output": "三种结果都标记为 review-unusable，不能解释为无 finding、pass、pass-with-risks 或节点完成。Panel 中不可用 reviewer 不计入四人覆盖，最多重试一次或使用同职责只读 fallback，仍不可用则报告 coverage gap 并停在当前 Gate。Planreview/Deepreview 的每次调用尝试都占一轮预算，只能在剩余预算内补证据后重审；第 5 轮仍无可用 verdict 或仍有严重、高、中 blocking finding 时进入 awaiting_user_confirmation，未经确认不得进入下一节点或启动第 6 轮。",
       "files": []
+    },
+    {
+      "id": 16,
+      "prompt": "上下文压缩后继续 devflow。已有 workflow artifact 的 Devflow Progress 记录：Implementation 已获用户批准，全部 slices 和最终 validation 已完成，内容版本未变；Deepreview 第 1 次调用失败，第 2 次已派发且为 in-flight，任务 id 和证据路径已记录。请继续。另一个任务还停在 Brainstorm，尚未生成任何 artifact，它如何保存进度？",
+      "expected_output": "先读取 checkpoint 并核对授权依据、相关内容版本和实际证据，只加载下一动作所需材料；不重跑已完成的设计、实现或相同内容的 validation，不把 review 轮次归零，也不重复派发 in-flight 第 2 次调用，而是查询原任务。已有两次尝试占预算，第 2 次完成后才决定是否使用剩余三次。主 agent 在已有记录中更新同一进度块和下一未完成动作，不追加完整历史。没有 artifact 的 Brainstorm 先在交接摘要保留 checkpoint，首个合适 artifact 生成后迁入，不另建状态文件或写入设计真源；不得把等待批准的下一节点当成已授权。",
+      "files": []
+    },
+    {
+      "id": 17,
+      "prompt": "准备派发一个已批准的局部 Implementation slice 和四个只读 Panel reviewers。历史对话很长，包含过去几轮评审和测试日志；worker 能读取共享仓库。请说明派发内容和返回要求。如果 DSH worker 读不到 design_doc 路径该怎么办？",
+      "expected_output": "每个任务只接收当前节点的目标/非目标/success signals、职责与范围、design_doc/workspace/review base或快照、必要文件和证据路径、ownership/只读边界、validation、停止条件、返回/artifact要求和操作权限边界。原生派发支持时使用 fork_turns=none 或等价方式避免继承完整会话，brief 补齐必要约束；Implementation worker 被告知保留其他改动者内容。不得附整段历史、无关阶段报告或重复日志。返回会话用摘要和证据路径，完整 findings 保留在所需 artifact；只读 Panel 返回规定的完整 findings，不互读结论或写文件。路径不可访问时提供必要原文，不让 worker 猜测。精简文本不改变四人覆盖、完整评审范围和主 agent 对实际 diff/证据的裁决义务。",
+      "files": []
     }
   ]
 }
