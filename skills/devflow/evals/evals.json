@@ -4,19 +4,19 @@
     {
       "id": 1,
       "prompt": "在 options-monitor 里为新的候选策略评分机制走完整设计开发流程：先 brainstorm，落设计文档，并行让多个 agent 提升方案，通过 planreview 后实现，最后 deepreview。",
-      "expected_output": "使用 ponytail 约束范围；Brainstorm 完成后先报告并等待用户确认，不自动落文档；用户确认后使用 om-doc-hygiene 保存设计，并直接启动四个独立只读 reviewers，其中第四个在可用时由主会话直接调用 DSH Crew pro worker；Parallel Design Panel 结束后等待确认，Improve Design 完成后直接启动 planreview，最终 Implementation 和 validation 完成后直接启动 deepreview。",
+      "expected_output": "使用 ponytail 约束范围；Brainstorm 完成后先报告并等待用户确认，不自动落文档；用户确认后使用 om-doc-hygiene 保存设计，并直接启动四个独立只读 reviewers，其中第四个在可用时由主会话直接调用 DSH Crew pro worker；Parallel Design Panel 结束后等待确认，Improve Design 完成后直接启动 planreview，最终 Implementation 和 validation 完成后直接启动 deepreview；Deepreview 通过后自动进入 Closeout，Closeout 报告后仅等待最终完成确认。",
       "files": []
     },
     {
       "id": 2,
       "prompt": "已有 docs/ARCHITECTURE.md 中的一节设计，请不要新建文档。改进这份设计并完成实现和审查。",
-      "expected_output": "复用现有设计 owner，不创建平行版本；设计保存后直接启动并行设计评审，Improve Design 完成后直接启动 planreview；Parallel Design Panel 结束及进入 implementation 前停在 awaiting_user_confirmation，最终实现和验证完成后直接启动 deepreview；保留提交、发布与部署边界。",
+      "expected_output": "复用现有设计 owner，不创建平行版本；设计保存后直接启动并行设计评审，Improve Design 完成后直接启动 planreview；Parallel Design Panel 结束及进入 implementation 前停在 awaiting_user_confirmation，最终实现和验证完成后直接启动 deepreview；Deepreview 通过后自动进入 Closeout，Closeout 报告后才等待最终完成确认；保留提交、发布与部署边界。",
       "files": []
     },
     {
       "id": 3,
       "prompt": "在一个非 options-monitor 仓库里，从一个架构想法推进到已审查实现；当前没有 ponytail、planreview、deepreview 和 om-doc-hygiene。",
-      "expected_output": "启动时不自动安装或配置 companion skills，报告 ponytail、planreview、deepreview status=fallback:unavailable，om-doc-hygiene_status=not-applicable。直接应用 devflow 的最小范围规则；由主 agent 对完整设计执行同等 adversarial plan review，并对 review_base 下全部当前改动执行 evidence-based deep review，产出相同 Gate 要求的 artifacts、findings 和 verdict；遵循目标仓库约定完成 owner-first 文档更新。所有确认门、五轮预算、fail-closed 和自动衔接规则保持不变。",
+      "expected_output": "启动时不自动安装或配置 companion skills，报告 ponytail、planreview、deepreview status=fallback:unavailable，om-doc-hygiene_status=not-applicable。直接应用 devflow 的最小范围规则；由主 agent 对完整设计执行同等 adversarial plan review，并对 review_base 下全部当前改动执行 evidence-based deep review，产出相同 Gate 要求的 artifacts、findings 和 verdict；Deepreview 通过后自动进入 Closeout，Closeout 报告后才等待最终完成确认；遵循目标仓库约定完成 owner-first 文档更新。其它确认门、五轮预算和 fail-closed 规则保持不变。",
       "files": []
     },
     {
@@ -101,6 +101,12 @@
       "id": 17,
       "prompt": "准备派发一个已批准的局部 Implementation slice 和四个只读 Panel reviewers。历史对话很长，包含过去几轮评审和测试日志；worker 能读取共享仓库。请说明派发内容和返回要求。如果 DSH worker 读不到 design_doc 路径该怎么办？",
       "expected_output": "每个任务只接收当前节点的目标/非目标/success signals、职责与范围、design_doc/workspace/review base或快照、必要文件和证据路径、ownership/只读边界、validation、停止条件、返回/artifact要求和操作权限边界。原生派发支持时使用 fork_turns=none 或等价方式避免继承完整会话，brief 补齐必要约束；Implementation worker 被告知保留其他改动者内容。不得附整段历史、无关阶段报告或重复日志。返回会话用摘要和证据路径，完整 findings 保留在所需 artifact；只读 Panel 返回规定的完整 findings，不互读结论或写文件。路径不可访问时提供必要原文，不让 worker 猜测。精简文本不改变四人覆盖、完整评审范围和主 agent 对实际 diff/证据的裁决义务。",
+      "files": []
+    },
+    {
+      "id": 18,
+      "prompt": "Deepreview 已完成第 2 轮，artifact 和 verdict 可用，没有严重、高或中 finding，但仍有两个低风险 residual risks，均有 owner 和后续去向。当前应如何推进？",
+      "expected_output": "确认 Deepreview 通过；低风险 residual risks 保留 owner、影响和后续去向。自动进入 Closeout，生成最终报告；Closeout 报告后才进入 awaiting_user_confirmation，等待用户明确回复完成，不在 Deepreview 通过后增加单独确认门。",
       "files": []
     }
   ]

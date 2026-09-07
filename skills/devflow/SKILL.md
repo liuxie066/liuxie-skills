@@ -1,6 +1,6 @@
 ---
 name: devflow
-description: "从模糊需求推进到已审查实现的人工确认式开发工作流。用于 brainstorm、保存设计、并行多视角改进、plan review、实现和 deep code review，或用户要求‘走完整研发流程’时；自动衔接设计保存后的并行评审、设计改进后的 Planreview 和实现后的 Deepreview，其余阶段等待用户明确确认。"
+description: "从模糊需求推进到已审查实现的人工确认式开发工作流。用于 brainstorm、保存设计、并行多视角改进、plan review、实现和 deep code review，或用户要求‘走完整研发流程’时；自动衔接设计保存后的并行评审、设计改进后的 Planreview、实现后的 Deepreview，以及 Deepreview 通过后的 Closeout，其余阶段等待用户明确确认。"
 ---
 
 # Devflow
@@ -18,7 +18,6 @@ Brainstorm
 -> [Human Confirm]
 -> Implementation
 -> Deepreview
--> [Human Confirm]
 -> Closeout
 -> [Human Confirm Completion]
 ```
@@ -41,8 +40,8 @@ Brainstorm 前一次性检查 `$ponytail`、`$planreview`、`$deepreview`，在 
 - 源码、配置和测试事实优先于过时文档；发现冲突时修正文档，不让实现迎合错误文档。
 - 同一事实只保留一个当前 owner。更新同一设计文档，不创建 `v2`、`final`、`revised` 等平行副本。
 - 用户确认 Brainstorm 后，确认的 goal、non-goals、scope 和 success signals 形成 binding scope contract。后续 design decision、slice 和 validation 必须映射到该 contract 或实现它所必需的 correctness/safety 条件；其它 finding 只能 `deferred-with-owner`，或在确需改变 contract 时暂停并请求用户重新确认，不得在 Improve Design、Planreview 或 Implementation 中自动扩大范围。
-- Save Design 完成后自动启动 Parallel Design Panel；Improve Design 完成后自动启动 Planreview；最终 Implementation 和 validation 完成后自动启动 Deepreview。除此之外，每个节点只执行当前节点范围，完成后必须暂停并等待用户明确确认。
-- 除上述三处自动衔接外，review finding、测试通过、artifact 已生成或用户此前要求“走完整流程”都不构成下一节点授权。
+- Save Design 完成后自动启动 Parallel Design Panel；Improve Design 完成后自动启动 Planreview；最终 Implementation 和 validation 完成后自动启动 Deepreview；Deepreview 通过后自动进入 Closeout。除此之外，每个节点只执行当前节点范围，完成后必须暂停并等待用户明确确认。
+- 除上述四处自动衔接外，review finding、测试通过、artifact 已生成或用户此前要求“走完整流程”都不构成下一节点授权。
 - 不自动 commit、push、merge、发布、部署或修改生产状态；这些边界需要用户分别授权。
 
 ## Review Completion Rule
@@ -53,7 +52,7 @@ Parallel Design Panel 只有在四个所需 reviewer 均返回可用结果时才
 
 ## Human Confirmation Gate
 
-除 `Save Design -> Parallel Design Panel`、`Improve Design -> Planreview` 和 `Implementation -> Deepreview` 外，每个节点结束时：
+除 `Save Design -> Parallel Design Panel`、`Improve Design -> Planreview`、`Implementation -> Deepreview` 和通过后的 `Deepreview -> Closeout` 外，每个节点结束时：
 
 1. 报告当前节点、产物路径、关键决策或 findings、实际验证和未决风险；
 2. 说明下一节点及其将执行的动作；
@@ -276,7 +275,7 @@ validation 和 Deepreview；不得因为使用 Luna 降低验收标准。
 
 finding 若要求改变已冻结的 goal、产品行为、架构、public contract、schema、安全/权限边界或不可逆副作用，停止自动修复，回到 Improve Design 和 Planreview Gate；需要 destructive、外部写入、生产操作或新授权时同样暂停。循环不得绕过这些边界。
 
-实现或修复导致 living docs 变化时，在 `options-monitor` 中用可用的 `$om-doc-hygiene` 更新同一个 owner，fallback 时遵循目标仓库文档约定。所有 blocking finding 关闭后，报告每轮 artifact、修复和 validation，再进入 `awaiting_user_confirmation`；未经确认不能进入 Closeout。
+实现或修复导致 living docs 变化时，在 `options-monitor` 中用可用的 `$om-doc-hygiene` 更新同一个 owner，fallback 时遵循目标仓库文档约定。所有 blocking finding 关闭并获得可用 verdict 后，报告每轮 artifact、修复和 validation，随后直接进入 Closeout，无需增加确认门。
 
 ## 8. Closeout
 
@@ -293,7 +292,7 @@ finding 若要求改变已冻结的 goal、产品行为、架构、public contra
 
 ## Additional Stop Conditions
 
-除 `Save Design -> Parallel Design Panel`、`Improve Design -> Planreview` 和 `Implementation -> Deepreview` 三处自动衔接外，以下情况也必须暂停：
+除 `Save Design -> Parallel Design Panel`、`Improve Design -> Planreview`、`Implementation -> Deepreview` 和通过后的 `Deepreview -> Closeout` 四处自动衔接外，以下情况也必须暂停：
 
 - 需要用户在会显著改变行为或范围的方案间选择；
 - 权威事实、文件 owner 或目标 base 无法确定；
