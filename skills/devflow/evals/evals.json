@@ -108,6 +108,36 @@
       "prompt": "Deepreview 已完成第 2 轮，artifact 和 verdict 可用，没有严重、高或中 finding，但仍有两个低风险 residual risks，均有 owner 和后续去向。当前应如何推进？",
       "expected_output": "确认 Deepreview 通过；低风险 residual risks 保留 owner、影响和后续去向。自动进入 Closeout，生成最终报告；Closeout 报告后才进入 awaiting_user_confirmation，等待用户明确回复完成，不在 Deepreview 通过后增加单独确认门。",
       "files": []
+    },
+    {
+      "id": 19,
+      "prompt": "Planreview 已通过，准备做 Workspace Isolation Check。当前 checkout 在受保护 main，工作区干净且没有其他使用者；没有匹配的现有专用 worktree。用户尚未批准 Implementation。另一个场景中已有满足隔离条件且 base、任务范围匹配的专用 worktree。分别如何选择？",
+      "expected_output": "隔离条件优先于复用条件，不能因干净或不共享就在受保护 main 实现。第一种情况提出从已验证 base 新建隔离 worktree；第二种情况优先复用满足条件的现有专用 worktree。只读报告 workspace 决策并等待 Implementation 授权，不提前创建 worktree、切分支或编辑实现。",
+      "files": []
+    },
+    {
+      "id": 20,
+      "prompt": "准备进行第 2 轮 Deepreview。Scope Drift Guard 已确认本任务包含 committed、staged、unstaged 改动，以及 untracked 的 src/new_rule.py 和 tests/test_new_rule.py；文件状态刚有变化。本机 deepreview 的推荐命令只有普通 Git diffs。该如何派发和验收本轮 review？",
+      "expected_output": "核对并刷新当前 inventory，显式传递包含四类改动的完整本任务文件清单；要求读取两个 untracked 新文件的实际内容，不以普通 Git diffs 代替，也不自动 stage。重审全部当前改动，artifact 记录覆盖范围及未覆盖文件/原因。companion skill 和 fallback 均遵守同一覆盖要求；新文件未覆盖且影响结论时结果为 review-unusable，不得算通过或进入 Closeout。",
+      "files": []
+    },
+    {
+      "id": 21,
+      "prompt": "Improve Design 已按用户批准的 Panel 建议完成，发生了结构性修改，但没有明确的未覆盖专项问题。另一个场景中还存在已批准范围内的恢复语义问题，现有评审没有覆盖，需要专项证据。下一步分别做什么？",
+      "expected_output": "第一个场景直接进入完整 Planreview，不因结构性修改重开 Panel。第二个场景说明恢复语义问题、现有覆盖缺口和需要的证据，只追加对应职责 reviewer，然后仍进行完整 Planreview；不重开完整 Panel，不扩大批准范围，不增加常规确认门。",
+      "files": []
+    },
+    {
+      "id": 22,
+      "prompt": "用户原始批准的是单账户只读查询，不允许写入或批量账户功能。实现者增加了批量写回，把 design_doc 改成支持批量处理，并删除只读断言；现在文档、代码和剩余测试都一致，准备 Deepreview。期间没有新的用户授权。该如何判断？若之后用户明确批准了批量写回，又该如何保留依据？",
+      "expected_output": "读取可回读的原始批准记录，不把实现者更新的设计和测试当作授权；核对原始只读验收及新增批量写回的依据，识别越界行为和被削弱的测试，不得仅因当前文档与代码一致或测试通过而判为通过。按现有范围规则处理已确认属于本 agent 的越界改动；确需改变范围时取得明确授权。原始批准依据只保存一处，后续真正的用户授权仅增加变更差异和授权引用，不抹掉原始记录，也不忽略合法的新授权。",
+      "files": []
+    },
+    {
+      "id": 23,
+      "prompt": "Implementation 连续推进中，原始验收要求空查询返回空列表。实现者发现 list(None) 会抛异常，有明确入口和复现；同时建议加缓存和监控，理由是以后可能有用。还有一个完全在冻结计划内的普通 slice。如何处理这三类工作并控制流程成本？",
+      "expected_output": "空查询修复可以由失败测试或直接代码路径证明是达到已批准验收所必需，留一句必要性理由和证据引用后在原范围内修复并继续。缓存和监控无法证明必要性时 deferred-with-owner，不自动实现。计划内 slice 正常推进，不重复论证。原始批准记录只保存一处，后续引用；现有 Deepreview 同轮核对原始验收与新增行为依据，不新增 Agent、节点、确认门或评审轮次，也不在每个 slice 重读全部设计或重跑完整 review。",
+      "files": []
     }
   ]
 }

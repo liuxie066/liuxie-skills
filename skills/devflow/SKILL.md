@@ -71,7 +71,7 @@ Parallel Design Panel 只有在四个所需 reviewer 均返回可用结果时才
 只在节点/评审轮次边界、明确暂停或授权变化时更新，记录：
 
 - 当前节点、状态和 `next_action`；下一动作必须是尚未完成的动作，等待批准的动作不能记成已授权；
-- 已批准的 scope / success signals 和用户确认依据的引用；
+- 原始批准的 goal / non-goals / scope / success signals 及可回读的确认原文引用，只保存一处；后续明确授权的变更记录差异和授权依据，不以最新版设计覆盖原始批准记录，slice 和交接只引用该记录；
 - `design_doc`、workspace、`review_base` 和本次证据对应的内容版本（含未提交改动）；
 - Planreview / Deepreview 各自已占用的轮次、进行中任务的 handle / job id（如有）、artifact / validation 证据路径；
 - 未关闭 finding / blocker 的引用及 owner。
@@ -168,7 +168,7 @@ DSH brief 必须自包含：给出 `design_doc` 和仓库绝对路径、只读�
 
 把 accepted 建议合并回同一个 `design_doc`。在 `options-monitor` 中再次应用可用的 `$om-doc-hygiene`；fallback 时遵循目标仓库文档约定，确保改写后仍是 current-state 文档，而不是评审会话记录。
 
-结构性改动发生后，可以再做一次只针对改动区域的并行复核。完成初次改进后直接进入 Planreview Gate；后续普通 blocking finding 由下述有界循环回写同一个 `design_doc`，不增加人工确认门。
+完成初次改进后默认直接进入 Planreview Gate；结构性改动本身不触发额外并行复核。只有存在明确且尚未覆盖的专项问题时，才追加对应职责的 reviewer，并说明问题、现有覆盖缺口及预期证据；不得重开完整 Panel，专项复核也不替代完整 Planreview。后续普通 blocking finding 由下述有界循环回写同一个 `design_doc`，不增加人工确认门。
 
 ## 5. Planreview Gate
 
@@ -191,6 +191,8 @@ Planreview Gate 只负责 adversarial review；设计修改仍由主 agent 完�
 未经上述退出条件通过的设计不得进入 Implementation。所有 blocking finding 关闭后冻结设计，再执行 Workspace Isolation Check；进入 Implementation 仍需用户明确批准。
 
 请求 Implementation 授权前，先做只读的 Workspace Isolation Check：
+
+共享或受保护分支、无关改动及并行冲突的隔离条件优先于任何复用条件；当前或已有专用 worktree 也必须满足隔离条件，干净的受保护 `main` 不例外。满足条件的现有专用 worktree 仍优先于新建。
 
 1. 读取项目 worktree 约定、`git status --short --branch`、`git worktree list --porcelain` 和预期 base；
 2. 已处于本任务专用 worktree 时直接复用，不创建嵌套 worktree；
@@ -219,7 +221,7 @@ Planreview Gate 只负责 adversarial review；设计修改仍由主 agent 完�
 每项实际修改必须归类为：
 
 - `planned`：冻结设计已经要求；
-- `required-correctness/safety`：不修改就会使 approved behavior 错误或不安全，且能给出具体 failure path 和对应 success signal。
+- `required-correctness/safety`：能回答“不做这项额外改动，哪项已批准验收会失败，或已批准行为会在哪条具体路径上不安全？”，并有失败测试或直接代码路径支持。只对额外改动在现有记录中留一句必要性理由及证据引用；正常计划内改动不重复论证。
 
 邻近 cleanup、风格调整、顺手重构、future-proofing、额外监控以及 reviewer 建议本身，都不构成
 `required-correctness/safety`。
@@ -255,7 +257,7 @@ validation 和 Deepreview；不得因为使用 Luna 降低验收标准。
 - 从真实入口追踪完整调用链，bug fix 落在共同 root owner；
 - 每个 slice 只运行能证明当前行为的最小针对性测试；全部 slices 完成后，对最终内容运行一次项目要求的完整 validation；
 - 普通实现取舍、可修复的编译或测试失败不暂停；诊断、修复并继续下一 slice；
-- 实现事实与设计记录不一致但不改变策略时，更新同一个 `design_doc` 后继续；
+- 实现事实与设计记录不一致但不改变策略时，可在同一个 `design_doc` 补充事实和实现细节后继续；不得为迁就实现改写已批准目标、非目标或验收标准，也不得削弱测试掩盖偏离。真正的范围变更须有明确用户授权并记入原始批准记录的变更依据；
 - 只有实现需要改变 goal/non-goals、产品行为、public contract、schema、architecture/owner、安全或权限边界、不可逆副作用，或需要新的用户授权时，才暂停并返回相应设计/确认节点。
 
 相同内容版本已经通过的 validation 不重复运行；相关源码、测试、配置或依赖改变后才重新运行。每个 slice 完成后简要报告 changed files、验证和偏差，随后直接继续下一 slice，不进入 `awaiting_user_confirmation`。全部 slices 和项目要求的 validation 完成后，报告汇总结果并直接调用 `$deepreview`，无需等待用户确认。
@@ -263,6 +265,10 @@ validation 和 Deepreview；不得因为使用 Luna 降低验收标准。
 ## 7. Deepreview Gate
 
 实现和 validation 完成后，对正确 base 下的全部当前改动调用可用的 `$deepreview`；fallback 时由主 agent 执行 Capability Check 中定义的同等 review。
+
+每轮 review 复用并核对 Scope Drift Guard 的当前 inventory，向 reviewer 显式传递本任务的完整文件清单，包括已提交差异、staged、unstaged 和 untracked 新文件；与实际状态不符时先刷新。要求逐个读取纳入范围的新文件实际内容，不能用普通 `git diff` 代替。artifact 必须记录覆盖范围和未覆盖文件/原因；有影响结论的覆盖缺口时标记为 `review-unusable`。此要求同样适用于 companion skill 和 fallback，不靠自动 stage 新文件补齐范围。
+
+同一轮 review 必须读取原始批准记录及后续明确授权的变更，核对每项验收的实现/测试证据，以及新增行为的授权或必要性证据；不能仅凭最新版设计与代码一致就通过。结果复用现有 artifact 和 Closeout 引用，不另开评审、不在每个 slice 重读设计全文或重跑完整 review。
 
 执行最多五次 review-remediation attempt；每次调用尝试占用一轮预算，首次调用是第 1 轮。`review-unusable` 只能在剩余预算内补足证据后重审，不得进入 finding remediation：
 
