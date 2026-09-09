@@ -20,3 +20,4 @@ prdflow
 py-perf-analyzer
 screenshot
 show-me
+diagram-design

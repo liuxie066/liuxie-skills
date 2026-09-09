@@ -31,6 +31,12 @@
       "pluginId": null
     },
     {
+      "name": "diagram-design",
+      "path": "/Users/liuxie/.agents/skills/diagram-design/SKILL.md",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
       "name": "documents:documents",
       "path": "/Users/liuxie/.codex/plugins/cache/openai-primary-runtime/documents/26.904.11930/skills/documents/SKILL.md",
       "enabled": true,
@@ -317,5 +323,23 @@
     "github_download_executed": false,
     "evidence_directory": "/Users/liuxie/.codex/skill-backups/global-distribution-20260909-082445"
   },
-  "verification_history_note": "Other verification objects retain pre-distribution historical evidence; global_distribution_verification describes the current topology."
+  "verification_history_note": "Other verification objects retain their historical evidence; diagram_design_verification records the latest installation and discovery.",
+  "diagram_design_verification": {
+    "verified_at": "2026-09-09T21:50:05",
+    "skill": "diagram-design",
+    "source_count": 25,
+    "global_count": 22,
+    "manual_count": 14,
+    "automatic_count": 8,
+    "format_validation": "pass",
+    "upstream_216_file_hash_verification": "pass",
+    "global_copy_content_and_permissions": "pass",
+    "native_discovery": "pass",
+    "native_discovery_errors": [],
+    "manual_policy": true,
+    "explicit_load": "pass",
+    "upstream_scripts_executed": false,
+    "diagram_workflow_executed": false,
+    "report": "/Users/liuxie/.codex/skill-backups/install-diagram-design-20260909-214837/load-result.txt"
+  }
 }
