@@ -1,4 +1,5 @@
 ---
+disable-model-invocation: true
 name: gateflow
 description: "单个 work unit 的 gated 开发流程。用于 feature、issue、bug fix、migration、refactor、schema/public contract change 或 architecture-sensitive task；可选接收 design document；先读代码并从第一性原理确认目标/非目标，经用户确认后按 plan、review、implementation、review、deepreview、draft PR 和 final closeout gate 自动推进到 final closeout pass。"
 ---

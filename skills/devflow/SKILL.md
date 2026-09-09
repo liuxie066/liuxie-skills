@@ -1,4 +1,5 @@
 ---
+disable-model-invocation: true
 name: devflow
 description: "从模糊需求推进到已审查实现的人工确认式开发工作流。用于 brainstorm、保存设计、并行多视角改进、plan review、实现和 deep code review，或用户要求‘走完整研发流程’时；自动衔接设计保存后的并行评审、设计改进后的 Planreview、实现后的 Deepreview，以及 Deepreview 通过后的 Closeout，其余阶段等待用户明确确认。"
 ---

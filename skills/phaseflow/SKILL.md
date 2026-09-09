@@ -1,4 +1,5 @@
 ---
+disable-model-invocation: true
 name: phaseflow
 description: "项目分步总控。基于 design_doc 和 control_doc 推进 phase/work unit；phase = work unit，每个 phase 可是 feature、issue 或 bug fix；总控读取 Gateflow 的 Gate Order 和 Gate State Machine，自己完成 preflight 和 goal confirmation，然后按固定 gate 顺序派发 Agent 完成具体 plan/implementation/review/fix，裁决结果、更新 control_doc、追踪 residual risk。"
 ---

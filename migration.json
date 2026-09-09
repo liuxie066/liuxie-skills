@@ -36,27 +36,28 @@
     "show-me": "/Users/liuxie/.agents/skills/show-me",
     "create-skill": "/Volumes/liuxie的硬盘/workspace/agent-skills/skills/create-skill",
     "baoyu-design": "https://github.com/JimLiu/baoyu-design/tree/026d4ea012bdd5cada72ac8cc13f21ba4edf2245/skills/baoyu-design",
-    "diagram-design": "https://github.com/cathrynlavery/diagram-design/tree/dcd9317ed9ec7477b20005544f36e3313664d815/skills/diagram-design"
+    "diagram-design": "https://github.com/cathrynlavery/diagram-design/tree/dcd9317ed9ec7477b20005544f36e3313664d815/skills/diagram-design",
+    "wait-what": "https://github.com/mattpocock/skills/tree/3cca18b368ae95cdbdebbff572ccafa662551015/skills/productivity/wait-what"
   },
   "files": {
     "deepreview/SKILL.md": "cd76556e5ef4d60243bdc15cd565b22df77472038a687fb92b210c94bbe1997b",
     "screenshot/SKILL.md": "081935a6a163277537d46365f49d6b4a3cb40b4748347e7e88759c5927fa8cf5",
     "screenshot/LICENSE.txt": "4dd13869245e356246a5b770723247bbb80a8f07a181d1d3d873a1734297cdb9",
     "planreview/SKILL.md": "aa5878d7e84023516882dbb9ec200bbec9cc0034296ea2e811fa1e8d71535402",
-    "hatch-pet/SKILL.md": "7ab0f01e8561085d1b494a6ca74abed766c655da8ec98284fb38a362c19d6871",
+    "hatch-pet/SKILL.md": "72bd0587b440143caaf1c6e5b86825141545b2462e4427f3ee7f89ecd96b6c3f",
     "hatch-pet/LICENSE.txt": "4dd13869245e356246a5b770723247bbb80a8f07a181d1d3d873a1734297cdb9",
     "ponytail/SKILL.md": "1316a2f3f95741d2300b116fe0c2d81ce4a9568656ed0a62643f54aaf09957f2",
     "pdf/SKILL.md": "d108cf2b36355ab37eb5962933f4d09785ec002f3105c506129320209306b9d2",
     "pdf/LICENSE.txt": "4dd13869245e356246a5b770723247bbb80a8f07a181d1d3d873a1734297cdb9",
-    "find-skills/SKILL.md": "c00eeea0e13e74fe4a9d84ba0a8542205a1b736d65f13134fe1a6647eb14976f",
+    "find-skills/SKILL.md": "ed3825d7e6ffe18004c48f6a618616c6f6efbf4fe254649e5658d05081cf5fc0",
     "playwright/NOTICE.txt": "417d5d3372914ecfd9fe102ac1d7dc2119253209f9718d6c222f616876c1904b",
     "playwright/SKILL.md": "0ffaabcc8e0990627c4725f18bf1c7955534a796c1c199e872909de2013ce6a8",
     "playwright/LICENSE.txt": "9a7110fc2d2f964038e5dc49128f908f29f47a574c961cba16085914e879cbda",
-    "phaseflow/SKILL.md": "1ceb94c469a7bff670deb531f18adae815078103241c878b142a86cceef142a1",
-    "prdflow/SKILL.md": "dc17d6e9246d74b35a69d620f29567251dbb6fd9531edad5c8658246c8c65536",
-    "herdr/SKILL.md": "237ad2ab2d8123e2bb37956d3a41eed141f2d22a7c36e415b7876c0397679099",
-    "eli5/SKILL.md": "3bb95cd13852051c5a1862e8b94da1de7cfba7415d418ab0ca4d762527d1b9a5",
-    "gateflow/SKILL.md": "05b41c97a4e5c5664d2b4c36b69afa3eda5558884dc5854d760d0293e562335a",
+    "phaseflow/SKILL.md": "879d546c2a2d5b428bcea1056250774f2e58a2d87cfc3f48b28bc08b480763f0",
+    "prdflow/SKILL.md": "a96f728d9158f02a5fdb050353b9e74012ba1dae6a6cb30d471adf4b4c54f40c",
+    "herdr/SKILL.md": "3438157bcab39f08624b361cce4995e73e6b227d4dd909b0c1f54a669934546f",
+    "eli5/SKILL.md": "b077ab37758ab840146ac8aac39f5b07616b06bc535cc3a6438bcb57301366f8",
+    "gateflow/SKILL.md": "f640791f2f065cb112cfd7079c8c9f3d13c16e7ebe7560be228093b29698c3f7",
     "gh-fix-ci/SKILL.md": "7b326b4a2f0f5f85122144628ec02077e48841e0e0e82efce88b3415bcfb7c26",
     "gh-fix-ci/LICENSE.txt": "4dd13869245e356246a5b770723247bbb80a8f07a181d1d3d873a1734297cdb9",
     "ima-skill/SKILL.md": "7982bb243fe8b01fc1e9ab3e40c3d096e334c5169d4258d64d49f86a72d2e84c",
@@ -64,12 +65,12 @@
     "ima-skill/meta.json": "e67163e272e5c4a25467db7654feddfb47134a891e2e494415f0fbbb9d129d6f",
     "doc/SKILL.md": "0a635585817d1ac96e8e512114d08258b70f9e54ce0052078a258291ac13a8ed",
     "doc/LICENSE.txt": "4dd13869245e356246a5b770723247bbb80a8f07a181d1d3d873a1734297cdb9",
-    "devflow/SKILL.md": "2b1c3826fb5532acdac27daa60e2b62c71eb7aaa58322ebee6551dc8575977e7",
-    "kimi-webbridge/SKILL.md": "432ed1aa6489ac512ef69dcbfd77cffbf459a0dd5a66d778e8d7d1228b584aa0",
+    "devflow/SKILL.md": "f99ef0ecb52eade5931611a08b3c22146353a51c39445a8229cb34a0b827bc21",
+    "kimi-webbridge/SKILL.md": "db1d82b37962a5a7756ca862bc0bea211c6bba46c3608b157a135386d4e9be6f",
     "py-perf-analyzer/README.md": "e3b5a592e5a3b25a639a6656f4102ecae855a7488c3d590ddf6e93b5c28fe49c",
     "py-perf-analyzer/SKILL.md": "26ee753a53de4c321016254dd761ff4d95f2cd9ee925d05115a5e56484ac1efa",
-    "show-me/SKILL.md": "bea6da70a58096730b9aeb0bae293ddf4726103a98efc9ce13c481619942a810",
-    "grilling/SKILL.md": "fa5c1e5ee76b1c8f1ae56101f52c9e239de75d5c578adc61227b92d10b7e52ef",
+    "show-me/SKILL.md": "770dbb67ea9b400c5b3ba25ec64a73a936b078810b1e49227ea01e322321bf5f",
+    "grilling/SKILL.md": "266c75700376170b1c647c0e6edd81049fd4d0637818d93f11541e2c529ebb0e",
     "gh-address-comments/SKILL.md": "77389eefd3fb6584210668ca8e43f4b8de87e7722ddd953474bc9e24cdfaaedd",
     "gh-address-comments/LICENSE.txt": "58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd",
     "deepreview/agents/openai.yaml": "4a0541d136e56977b994b378c3ca4ad022c5ea79f41ca7b6a837301f808edb19",
@@ -104,8 +105,8 @@
     "playwright/assets/playwright-small.svg": "f1d213c0f76735d8272c3d3e9fbf71fe7b894e2d1588907044c780f2c33a9732",
     "playwright/assets/playwright.png": "521669f088c838196c6c852ccc9abdd7234d8f37fc9a8a7a9af7db2d50193381",
     "phaseflow/agents/openai.yaml": "182e29b1a9624b93912cbce8c643d249fbf0aaef6da94838bdc0a2ba8e815c71",
-    "prdflow/evals/evals.json": "c1fe4b55da20f41c2b6fa62f4ae38a4b39ea51596faeb647629d7658d81495c1",
-    "prdflow/references/delivery.md": "bfb23f341f65319d92f737ee1474bd5e7c5b9ee0294bda98513893036ef0421a",
+    "prdflow/evals/evals.json": "57a36cd0250ff57163ae5cae5a960983744bd610de46f985eef006336f7f95e6",
+    "prdflow/references/delivery.md": "8cb75f19da149d8d929d81f89259d51c484b65756a2f6630de7fa1ed0123897e",
     "prdflow/agents/openai.yaml": "761cdf6fe90d3e844ea35a9145d3eb3e43a376658563330ad6a0d22f25660f7d",
     "gateflow/agents/openai.yaml": "3fae9c724dfb4497393a96620920cf9fe310dc2f6a9f3a4263bd27b212367a8a",
     "gh-fix-ci/agents/openai.yaml": "36f73b9450504983d1647c960689596f59bf9147c14b1b43162912ed7ada9af6",
@@ -136,11 +137,11 @@
     "find-skills/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
     "herdr/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
     "kimi-webbridge/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
-    "create-skill/SKILL.md": "f252a53f243ca4efe373c5c6e76a07e9bcd780f5f3076739cfa63fd74b54264c",
+    "create-skill/SKILL.md": "1befe22b23300c15c3c68c501364b34be7083ad64693c8ea8f3cc70787e7af89",
     "create-skill/agents/openai.yaml": "676bd097069178c34a8bca02e0eda3b99d6863a7b5a86e402854be41776146dc",
     "baoyu-design/LICENSE": "50426a43964d21a284c1f248a2b86aa239274d6e7619947ff166e0c8842d5fef",
     "baoyu-design/project-types.json": "6128936023862d86d80be01f544854e2a5c3e0db50db4f0fd1bd182e5c1ee080",
-    "baoyu-design/SKILL.md": "22535fd011b73a0dd13a6e1daccdaf5f7b3a9fe8cf60039206d4a1610b5f1245",
+    "baoyu-design/SKILL.md": "d8e06468f17d984c812f71a1b23c8f354fcacacdcb190acccdc450ca7f60f5dc",
     "baoyu-design/system-prompt.md": "5b1ac406fa922eda53c4e73390fbc7114f8dcd26c464508e5e04f6f987ecea64",
     "baoyu-design/references/upstream-system-prompt.md": "5c0ca1c47fb6e522ffe772c483dac30bea60ce2ec2bb75260560ff81c7f5d35a",
     "baoyu-design/references/cursor.md": "68dcd2b73a7c49f834d139f6310284c279b107015a251aa48ae51ce4445c4d52",
@@ -338,7 +339,7 @@
     "baoyu-design/agents/gen-pptx/src/orchestrator/inject.ts": "247fd28f3e82c35805b1598d1595924430783e1a7c31acb3bd54fb45ca3afaa4",
     "baoyu-design/agents/gen-pptx/src/orchestrator/run.ts": "0a237440286055af86573182830121703ec3f12c990018a1dd67a3d4a9f7134f",
     "diagram-design/LICENSE": "bb7e12e91fecef43024111123ff784cec6c485585561d8b552557c0173b3ed29",
-    "diagram-design/SKILL.md": "1801db2ce04d82e52154098c99d63ddc87c552fda5186d261919ed6e02183158",
+    "diagram-design/SKILL.md": "300dc0665a724aa5182767844e1df1a92b1695fc7695e4b9c3f232d492e0ef37",
     "diagram-design/THIRD_PARTY_LICENSES.md": "22f5afcea56373e84d7f7eff93d8d4d6e4b81c5375bb1c996e78b91e53fa0b37",
     "diagram-design/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
     "diagram-design/assets/example-architecture-dark.html": "3767f518519dc7b6fc98066cc76c70937446ea9e71e380cf7c6064dc6ed6f5ba",
@@ -555,15 +556,21 @@
     "diagram-design/references/type-wardley.md": "aa93eb728a022b85f38de69c1d287752f91c487b05c50396ee21e769162900a9",
     "diagram-design/scripts/drawio_extract.py": "302b357688de234e5a46818a25120fd8fe5a58e5c3338f1f027ec269f24424d9",
     "diagram-design/scripts/mermaid_extract.py": "83294bfd3a7471ec272ef55005d889088823cedcb3cfbbae706acf944d2a362b",
-    "diagram-design/scripts/self_check.py": "5bb48bdd41378a5bde2cfae64363316e8435ba63a72f9a1e062ff0018d6ba0c7"
+    "diagram-design/scripts/self_check.py": "5bb48bdd41378a5bde2cfae64363316e8435ba63a72f9a1e062ff0018d6ba0c7",
+    "wait-what/LICENSE": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+    "wait-what/SKILL.md": "e3f44e3ccbc0e7b62f20ba70b295fc9c9f4aa3f96c77168faee1c71bacbf4215",
+    "wait-what/agents/openai.yaml": "b41faadf741d51e4ea184148b2d1854d93f947aaf754c7844f70a00f04194999",
+    "prdflow/references/gates.md": "a87fda39597d3513e1177c48d3e693bd2f677fa6eea99b9c2fab57c8ecfaf156",
+    "prdflow/scripts/check_gates.py": "04e09daf8f2aede790b27b13d562c81a68ec0a956e8028ffe6a17859a02cf1ca",
+    "prdflow/evals/test_check_gates.py": "170e0bddf7574e2a4618bd1309d69c0a134a0118a527e2b450147cc158821e20"
   },
   "kimi_webbridge_version": "2.0.5",
   "config_before_sha256": "d87c96e79a8b33db5c428f1583a4374dfbc1346486310ffe306d85d95c8646d6",
   "config_after_sha256": "ed3eada4034405b21b57fbcee92082a826b825d7e522bfa7767be66dbe32164b",
   "validation": {
     "full_directory_comparisons": 23,
-    "local_skill_count": 25,
-    "enabled_local_skills": 22,
+    "local_skill_count": 26,
+    "enabled_local_skills": 23,
     "duplicate_local_names": 0,
     "pdf_plugin_enabled": true,
     "ponytail_plugin_enabled": true,
@@ -645,6 +652,24 @@
       "upstream_scripts_executed": false,
       "diagram_workflow_executed": false,
       "report": "/Users/liuxie/.codex/skill-backups/install-diagram-design-20260909-214837/load-result.txt"
+    },
+    "wait_what": {
+      "verified_at": "2026-09-09T22:07:19",
+      "skill": "wait-what",
+      "source_count": 26,
+      "global_count": 23,
+      "manual_count": 15,
+      "automatic_count": 8,
+      "system_quick_validate": "unsupported upstream frontmatter key: disable-model-invocation; upstream preserved",
+      "openai_yaml_parse": "pass",
+      "upstream_2_file_hash_verification": "pass",
+      "global_copy_content_and_permissions": "pass",
+      "native_discovery": "pass",
+      "native_discovery_errors": [],
+      "manual_policy": true,
+      "explicit_load": "pass",
+      "workflow_executed": false,
+      "report": "/Users/liuxie/.codex/skill-backups/install-wait-what-20260909-220523/load-result.txt"
     }
   },
   "post_migration_adjustments": [
@@ -764,6 +789,20 @@
       ],
       "upstream_scripts_executed": false,
       "backup": "/Users/liuxie/.codex/skill-backups/install-diagram-design-20260909-214837"
+    },
+    {
+      "reason": "User requested wait-what installation, preserving upstream manual invocation policy",
+      "skill": "wait-what",
+      "repo": "mattpocock/skills",
+      "path": "skills/productivity/wait-what",
+      "ref": "main",
+      "commit": "3cca18b368ae95cdbdebbff572ccafa662551015",
+      "upstream_file_count": 2,
+      "upstream_git_blob_hashes_verified": true,
+      "local_adjustments": [
+        "Preserve repository-root LICENSE in skill folder"
+      ],
+      "backup": "/Users/liuxie/.codex/skill-backups/install-wait-what-20260909-220523"
     }
   ],
   "invocation_policy": {
@@ -781,7 +820,8 @@
       "kimi-webbridge",
       "create-skill",
       "baoyu-design",
-      "diagram-design"
+      "diagram-design",
+      "wait-what"
     ],
     "automatic": [
       "planreview",
@@ -793,5 +833,26 @@
       "py-perf-analyzer",
       "screenshot"
     ]
+  },
+  "cross_tool_invocation": {
+    "local_adjustment": "Use existing Codex policy as authority; add disable-model-invocation: true to 14 selected manual Skills. Preserve upstream bodies except create-skill maintenance instructions. wait-what unchanged.",
+    "adjusted_skills": [
+      "devflow",
+      "prdflow",
+      "phaseflow",
+      "gateflow",
+      "grilling",
+      "eli5",
+      "show-me",
+      "find-skills",
+      "hatch-pet",
+      "herdr",
+      "kimi-webbridge",
+      "create-skill",
+      "baoyu-design",
+      "diagram-design"
+    ],
+    "manual": 15,
+    "automatic": 8
   }
 }

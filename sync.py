@@ -34,6 +34,88 @@ def tree_snapshot(root):
     return result
 
 
+class UniqueKeyLoader(yaml.SafeLoader):
+    """Keep raw duplicate keys from being silently normalized before host validation."""
+    def construct_mapping(self, node, deep=False):
+        keys = set()
+        for key_node, _ in node.value:
+            key = self.construct_object(key_node, deep=deep)
+            if key in keys:
+                raise ValueError(f"Duplicate YAML key: {key!r}")
+            keys.add(key)
+        return super().construct_mapping(node, deep=deep)
+
+
+
+# Codex treats YAML 1.1 yes/no/on/off as strings; do not normalize them into policy booleans.
+UniqueKeyLoader.yaml_implicit_resolvers = {
+    key: [(tag, pattern) for tag, pattern in rules if tag != "tag:yaml.org,2002:bool"]
+    for key, rules in yaml.SafeLoader.yaml_implicit_resolvers.items()
+}
+UniqueKeyLoader.add_implicit_resolver(
+    "tag:yaml.org,2002:bool", re.compile(r"^(?:true|True|TRUE|false|False|FALSE)$"), list("tTfF"))
+
+
+def yaml_boolean(loader, node):
+    if node.value not in ("true", "True", "TRUE", "false", "False", "FALSE"):
+        raise ValueError(f"Expected YAML boolean true/false, got {node.value!r}")
+    return loader.construct_yaml_bool(node)
+
+
+UniqueKeyLoader.add_constructor("tag:yaml.org,2002:bool", yaml_boolean)
+
+
+def yaml_mapping(text, path):
+    try:
+        value = yaml.load(text, Loader=UniqueKeyLoader)
+    except (yaml.YAMLError, ValueError, TypeError) as error:
+        raise ValueError(f"{path}: {error}") from error
+    if not isinstance(value, dict):
+        raise ValueError(f"Expected YAML mapping: {path}")
+    return value
+
+
+def frontmatter(folder):
+    path = folder / "SKILL.md"
+    lines = path.read_text().splitlines(keepends=True)
+    if not lines or lines[0].rstrip("\r\n") != "---":
+        raise ValueError(f"Missing YAML frontmatter: {path}")
+    end = next((i for i in range(1, len(lines)) if lines[i].rstrip("\r\n") == "---"), None)
+    if end is None:
+        raise ValueError(f"Missing YAML frontmatter end: {path}")
+    metadata = yaml_mapping("".join(lines[1:end]), path)
+    if (metadata.get("name") != folder.name
+            or not isinstance(metadata.get("description"), str)
+            or not metadata["description"].strip()):
+        raise ValueError(f"Invalid skill name/description: {path}")
+    return metadata, "".join(lines[end + 1:])
+
+
+def codex_implicit(folder):
+    path = folder / "agents/openai.yaml"
+    metadata = yaml_mapping(path.read_text(), path) if path.exists() else {}
+    policy = metadata.get("policy", {})
+    if not isinstance(policy, dict):
+        raise ValueError(f"Expected policy mapping: {path}")
+    implicit = policy.get("allow_implicit_invocation", True)
+    if not isinstance(implicit, bool):
+        raise ValueError(f"{path}: policy.allow_implicit_invocation must be a YAML boolean")
+    return implicit
+
+
+def invocation_policy(folder):
+    metadata, body = frontmatter(folder)
+    disabled = metadata.get("disable-model-invocation", False)
+    if not isinstance(disabled, bool):
+        raise ValueError(f"{folder / 'SKILL.md'}: disable-model-invocation must be a YAML boolean")
+    implicit = codex_implicit(folder)
+    if implicit == disabled:
+        raise ValueError(f"Policy conflict: {folder / 'agents/openai.yaml'} "
+                         f"policy.allow_implicit_invocation={implicit}; "
+                         f"{folder / 'SKILL.md'} disable-model-invocation={disabled}")
+    return metadata, body
+
+
 def load_selection(root):
     source = root / "skills"
     real_directory(source)
@@ -55,14 +137,7 @@ def load_selection(root):
         skill = source / name / "SKILL.md"
         if not skill.is_file():
             raise ValueError(f"Missing SKILL.md: {skill}")
-        lines = skill.read_text().splitlines()
-        if not lines or lines[0] != "---" or "---" not in lines[1:]:
-            raise ValueError(f"Missing YAML frontmatter: {skill}")
-        metadata = yaml.safe_load("\n".join(lines[1:lines.index("---", 1)]))
-        if (not isinstance(metadata, dict) or metadata.get("name") != name
-                or not isinstance(metadata.get("description"), str)
-                or not metadata["description"].strip()):
-            raise ValueError(f"Invalid skill name/description: {skill}")
+        invocation_policy(skill.parent)
     chosen = set(names)
     return names, {key: value for key, value in snapshot.items()
                    if key.split("/", 1)[0] in chosen}

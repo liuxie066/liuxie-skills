@@ -1,4 +1,5 @@
 ---
+disable-model-invocation: true
 name: show-me
 description: Help the user understand the current topic visually with concise diagrams, code-shape sketches, and focused HTML artifacts.
 ---

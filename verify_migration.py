@@ -2,11 +2,31 @@
 import argparse
 import json
 import tomllib
+import subprocess
+import sys
+import tempfile
 from pathlib import Path
 
 import yaml
 
-from sync import entry_layout, load_selection, tree_snapshot
+from sync import codex_implicit, entry_layout, invocation_policy, load_selection, tree_snapshot
+
+
+def validate_skill(folder, validator=None):
+    """Validate the one local extension, then run the untouched system validator."""
+    folder = folder.resolve()
+    metadata, body = invocation_policy(folder)
+    metadata.pop("disable-model-invocation", None)
+    if validator is None:
+        validator = Path.home() / ".codex/skills/.system/skill-creator/scripts/quick_validate.py"
+    if not validator.is_file():
+        raise ValueError(f"Missing system validator: {validator}")
+    with tempfile.TemporaryDirectory(prefix="skill-compatible-validation-") as tmp:
+        copy = Path(tmp)
+        (copy / "SKILL.md").write_text("---\n" + yaml.safe_dump(metadata, allow_unicode=True, sort_keys=False)
+                                     + "---\n" + body)
+        subprocess.run([sys.executable, str(validator), str(copy)], check=True)
+    print(f"PASS: invocation extension + system compatible-copy validation: {folder}")
 
 
 def verify(root, home, source_only=False):
@@ -23,15 +43,7 @@ def verify(root, home, source_only=False):
     assert not set(policy["manual"]) & set(policy["automatic"])
     modes = {}
     for name in sources:
-        path = source / name / "agents/openai.yaml"
-        metadata = yaml.safe_load(path.read_text()) if path.exists() else {}
-        metadata = metadata or {}
-        assert isinstance(metadata, dict), path
-        settings = metadata.get("policy", {})
-        assert isinstance(settings, dict), path
-        implicit = settings.get("allow_implicit_invocation", True)
-        assert isinstance(implicit, bool), path
-        modes[name] = "automatic" if implicit else "manual"
+        modes[name] = "automatic" if codex_implicit(source / name) else "manual"
     for mode, recorded_names in policy.items():
         assert mode in ("manual", "automatic")
         for name in recorded_names:
@@ -61,6 +73,11 @@ def verify(root, home, source_only=False):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--source-only", action="store_true", help="check source/list evidence before sync or while retrying")
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument("--skill", type=Path, help="validate one source Skill and the supported invocation extension")
+    group.add_argument("--source-only", action="store_true", help="check source/list evidence before sync or while retrying")
     args = parser.parse_args()
-    verify(Path(__file__).resolve().parent, Path.home().resolve(), args.source_only)
+    if args.skill:
+        validate_skill(args.skill)
+    else:
+        verify(Path(__file__).resolve().parent, Path.home().resolve(), args.source_only)

@@ -1,4 +1,5 @@
 ---
+disable-model-invocation: true
 name: baoyu-design
 description: >-
   Create polished design artifacts as self-contained HTML: UI mockups, interactive

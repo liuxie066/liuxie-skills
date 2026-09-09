@@ -229,6 +229,12 @@
       "pluginId": "visualize@openai-bundled"
     },
     {
+      "name": "wait-what",
+      "path": "/Users/liuxie/.agents/skills/wait-what/SKILL.md",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
       "name": "imagegen",
       "path": "/Users/liuxie/.codex/skills/.system/imagegen/SKILL.md",
       "enabled": true,
@@ -323,7 +329,7 @@
     "github_download_executed": false,
     "evidence_directory": "/Users/liuxie/.codex/skill-backups/global-distribution-20260909-082445"
   },
-  "verification_history_note": "Other verification objects retain their historical evidence; diagram_design_verification records the latest installation and discovery.",
+  "verification_history_note": "Older objects retain historical evidence; cross_tool_invocation_verification records current policy and discovery validation.",
   "diagram_design_verification": {
     "verified_at": "2026-09-09T21:50:05",
     "skill": "diagram-design",
@@ -341,5 +347,92 @@
     "upstream_scripts_executed": false,
     "diagram_workflow_executed": false,
     "report": "/Users/liuxie/.codex/skill-backups/install-diagram-design-20260909-214837/load-result.txt"
+  },
+  "wait_what_verification": {
+    "verified_at": "2026-09-09T22:07:19",
+    "skill": "wait-what",
+    "source_count": 26,
+    "global_count": 23,
+    "manual_count": 15,
+    "automatic_count": 8,
+    "system_quick_validate": "unsupported upstream frontmatter key: disable-model-invocation; upstream preserved",
+    "openai_yaml_parse": "pass",
+    "upstream_2_file_hash_verification": "pass",
+    "global_copy_content_and_permissions": "pass",
+    "native_discovery": "pass",
+    "native_discovery_errors": [],
+    "manual_policy": true,
+    "explicit_load": "pass",
+    "workflow_executed": false,
+    "report": "/Users/liuxie/.codex/skill-backups/install-wait-what-20260909-220523/load-result.txt"
+  },
+  "prdflow_update_verification": {
+    "verified_at": "2026-09-09T23:42:00+08:00",
+    "skill": "prdflow",
+    "source_count": 26,
+    "global_count": 23,
+    "manual_count": 15,
+    "automatic_count": 8,
+    "source_path": "/Volumes/liuxie的硬盘/workspace/agent-skills/skills/prdflow",
+    "skill_sha256": "a96f728d9158f02a5fdb050353b9e74012ba1dae6a6cb30d471adf4b4c54f40c",
+    "system_quick_validate": "pass",
+    "openai_yaml_parse": "pass",
+    "manual_policy": true,
+    "installed_gate_smoke": "ready phase passed on dialogue-checked.md",
+    "global_copy_content_and_permissions": "pass",
+    "native_discovery": "pass",
+    "native_discovery_errors": [],
+    "selected_enabled_count": 23,
+    "prdflow_discovery": {
+      "name": "prdflow",
+      "description": "通过多轮对话把 idea 或功能需求收敛为可验收的产品需求方案，重点校验目标偏移、主线交互、数据口径、策略依据和最小交付范围，并准备 devflow 交接。适用于需求探索、PRD 共创和需求收口；不替代实现方案设计或授权开发。",
+      "interface": {
+        "displayName": "PRDflow",
+        "shortDescription": "通过多轮对话校准目标与交互，收敛可验收需求并准备开发交接",
+        "iconSmall": null,
+        "iconLarge": null,
+        "iconSmallUrl": null,
+        "iconLargeUrl": null,
+        "brandColor": null,
+        "defaultPrompt": "使用 $prdflow，帮我把这个 idea 收敛成可验收的需求方案，先讨论目标和关键取舍。"
+      },
+      "path": "/Users/liuxie/.agents/skills/prdflow/SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    "explicit_load": "pass",
+    "load_evidence": "Successful read-only ephemeral Codex commands read installed SKILL.md, references/gates.md, agents/openai.yaml and checker source; turn completed.",
+    "workflow_executed": false,
+    "evidence_directory": "/private/tmp/prdflow-upgrade/install-smoke",
+    "report": "docs/reviews/prdflow-20260909.md"
+  },
+  "cross_tool_invocation_verification": {
+    "verified_at": "2026-09-09T23:44:53.845115+08:00",
+    "source_count": 26,
+    "global_count": 23,
+    "manual_count": 15,
+    "automatic_count": 8,
+    "global_copy_content_and_permissions": "pass",
+    "native_codex_discovery_errors": [],
+    "native_codex_explicit_devflow_create_skill_phaseflow": "pass",
+    "native_codex_planreview_deepreview_default_and_read": "pass",
+    "phaseflow_gateflow_reference_read": "pass",
+    "dsh_version": "0.1.2-alpha.3",
+    "dsh_installed_provider_registry_tool_checks": {
+      "passed": 51,
+      "failed": 0
+    },
+    "dsh_test_scope": "Actual installed provider/registry/loader and pre-step callbacks with simulated registration/agent context; real home files. No live UI, host scheduler, existing-session cache or full workflow tested.",
+    "compatible_validation": {
+      "passed_manual": 14,
+      "existing_eli5_rejection": "Unchanged description contains angle brackets; system validator continues to reject. Not silently bypassed.",
+      "system_validator_modified": false
+    },
+    "unit_regression": "pass: test_sync.py, temporary directories only",
+    "full_workflow_executed": false,
+    "claude_live_runtime_tested": false,
+    "evidence_directory": "/Users/liuxie/.codex/skill-backups/cross-tool-invocation-20260909-233704",
+    "yaml_boolean_regression": "pass: YAML 1.1 aliases rejected before rsync and system validator; native Codex negative probe confirmed no/quoted false policy is ignored; global PyYAML resolver preserved"
   }
 }
