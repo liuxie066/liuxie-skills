@@ -1,0 +1,321 @@
+{
+  "skills": [
+    {
+      "name": "baoyu-design",
+      "path": "/Users/liuxie/.agents/skills/baoyu-design/SKILL.md",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "computer-history:computer-history",
+      "path": "/Users/liuxie/.codex/plugins/cache/openai-bundled/computer-history/1.0.1000926/skills/computer-history/SKILL.md",
+      "enabled": true,
+      "pluginId": "computer-history@openai-bundled"
+    },
+    {
+      "name": "create-skill",
+      "path": "/Users/liuxie/.agents/skills/create-skill/SKILL.md",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "deepreview",
+      "path": "/Users/liuxie/.agents/skills/deepreview/SKILL.md",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "devflow",
+      "path": "/Users/liuxie/.agents/skills/devflow/SKILL.md",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "documents:documents",
+      "path": "/Users/liuxie/.codex/plugins/cache/openai-primary-runtime/documents/26.904.11930/skills/documents/SKILL.md",
+      "enabled": true,
+      "pluginId": "documents@openai-primary-runtime"
+    },
+    {
+      "name": "eli5",
+      "path": "/Users/liuxie/.agents/skills/eli5/SKILL.md",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "find-skills",
+      "path": "/Users/liuxie/.agents/skills/find-skills/SKILL.md",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "gateflow",
+      "path": "/Users/liuxie/.agents/skills/gateflow/SKILL.md",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "gh-address-comments",
+      "path": "/Users/liuxie/.agents/skills/gh-address-comments/SKILL.md",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "gh-fix-ci",
+      "path": "/Users/liuxie/.agents/skills/gh-fix-ci/SKILL.md",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "grilling",
+      "path": "/Users/liuxie/.agents/skills/grilling/SKILL.md",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "hatch-pet",
+      "path": "/Users/liuxie/.agents/skills/hatch-pet/SKILL.md",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "herdr",
+      "path": "/Users/liuxie/.agents/skills/herdr/SKILL.md",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "ima-skill",
+      "path": "/Users/liuxie/.agents/skills/ima-skill/SKILL.md",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "kimi-webbridge",
+      "path": "/Users/liuxie/.agents/skills/kimi-webbridge/SKILL.md",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "pdf:pdf",
+      "path": "/Users/liuxie/.codex/plugins/cache/openai-primary-runtime/pdf/26.904.11930/skills/pdf/SKILL.md",
+      "enabled": true,
+      "pluginId": "pdf@openai-primary-runtime"
+    },
+    {
+      "name": "phaseflow",
+      "path": "/Users/liuxie/.agents/skills/phaseflow/SKILL.md",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "planreview",
+      "path": "/Users/liuxie/.agents/skills/planreview/SKILL.md",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "playwright",
+      "path": "/Users/liuxie/.agents/skills/playwright/SKILL.md",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "ponytail:ponytail",
+      "path": "/Users/liuxie/.codex/plugins/cache/ponytail/ponytail/4.9.0/skills/ponytail/SKILL.md",
+      "enabled": true,
+      "pluginId": "ponytail@ponytail"
+    },
+    {
+      "name": "ponytail:ponytail-audit",
+      "path": "/Users/liuxie/.codex/plugins/cache/ponytail/ponytail/4.9.0/skills/ponytail-audit/SKILL.md",
+      "enabled": true,
+      "pluginId": "ponytail@ponytail"
+    },
+    {
+      "name": "ponytail:ponytail-debt",
+      "path": "/Users/liuxie/.codex/plugins/cache/ponytail/ponytail/4.9.0/skills/ponytail-debt/SKILL.md",
+      "enabled": true,
+      "pluginId": "ponytail@ponytail"
+    },
+    {
+      "name": "ponytail:ponytail-gain",
+      "path": "/Users/liuxie/.codex/plugins/cache/ponytail/ponytail/4.9.0/skills/ponytail-gain/SKILL.md",
+      "enabled": true,
+      "pluginId": "ponytail@ponytail"
+    },
+    {
+      "name": "ponytail:ponytail-help",
+      "path": "/Users/liuxie/.codex/plugins/cache/ponytail/ponytail/4.9.0/skills/ponytail-help/SKILL.md",
+      "enabled": true,
+      "pluginId": "ponytail@ponytail"
+    },
+    {
+      "name": "ponytail:ponytail-review",
+      "path": "/Users/liuxie/.codex/plugins/cache/ponytail/ponytail/4.9.0/skills/ponytail-review/SKILL.md",
+      "enabled": true,
+      "pluginId": "ponytail@ponytail"
+    },
+    {
+      "name": "prdflow",
+      "path": "/Users/liuxie/.agents/skills/prdflow/SKILL.md",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "presentations:Presentations",
+      "path": "/Users/liuxie/.codex/plugins/cache/openai-primary-runtime/presentations/26.904.11930/skills/presentations/SKILL.md",
+      "enabled": true,
+      "pluginId": "presentations@openai-primary-runtime"
+    },
+    {
+      "name": "py-perf-analyzer",
+      "path": "/Users/liuxie/.agents/skills/py-perf-analyzer/SKILL.md",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "screenshot",
+      "path": "/Users/liuxie/.agents/skills/screenshot/SKILL.md",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "show-me",
+      "path": "/Users/liuxie/.agents/skills/show-me/SKILL.md",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "sites:sites-building",
+      "path": "/Users/liuxie/.codex/plugins/cache/openai-bundled/sites/0.1.57/skills/sites-building/SKILL.md",
+      "enabled": true,
+      "pluginId": "sites@openai-bundled"
+    },
+    {
+      "name": "sites:sites-hosting",
+      "path": "/Users/liuxie/.codex/plugins/cache/openai-bundled/sites/0.1.57/skills/sites-hosting/SKILL.md",
+      "enabled": true,
+      "pluginId": "sites@openai-bundled"
+    },
+    {
+      "name": "spreadsheets:Spreadsheets",
+      "path": "/Users/liuxie/.codex/plugins/cache/openai-primary-runtime/spreadsheets/26.904.11930/skills/spreadsheets/SKILL.md",
+      "enabled": true,
+      "pluginId": "spreadsheets@openai-primary-runtime"
+    },
+    {
+      "name": "spreadsheets:excel-live-control",
+      "path": "/Users/liuxie/.codex/plugins/cache/openai-primary-runtime/spreadsheets/26.904.11930/skills/excel-live-control/SKILL.md",
+      "enabled": true,
+      "pluginId": "spreadsheets@openai-primary-runtime"
+    },
+    {
+      "name": "template-creator:template-creator",
+      "path": "/Users/liuxie/.codex/plugins/cache/openai-primary-runtime/template-creator/26.904.11930/skills/template-creator/SKILL.md",
+      "enabled": true,
+      "pluginId": "template-creator@openai-primary-runtime"
+    },
+    {
+      "name": "visualize:visualize",
+      "path": "/Users/liuxie/.codex/plugins/cache/openai-bundled/visualize/1.0.29/skills/visualize/SKILL.md",
+      "enabled": true,
+      "pluginId": "visualize@openai-bundled"
+    },
+    {
+      "name": "imagegen",
+      "path": "/Users/liuxie/.codex/skills/.system/imagegen/SKILL.md",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "openai-docs",
+      "path": "/Users/liuxie/.codex/skills/.system/openai-docs/SKILL.md",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "plugin-creator",
+      "path": "/Users/liuxie/.codex/skills/.system/plugin-creator/SKILL.md",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "review-agent",
+      "path": "/Users/liuxie/.codex/skills/.system/review-agent/SKILL.md",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "skill-creator",
+      "path": "/Users/liuxie/.codex/skills/.system/skill-creator/SKILL.md",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "skill-installer",
+      "path": "/Users/liuxie/.codex/skills/.system/skill-installer/SKILL.md",
+      "enabled": true,
+      "pluginId": null
+    }
+  ],
+  "errors": [],
+  "invocation_verification": {
+    "manual_count": 11,
+    "automatic_count": 8,
+    "native_discovery_errors": [],
+    "skill_bodies_unchanged": true,
+    "existing_ui_metadata_unchanged": true,
+    "explicit_devflow_phaseflow_load": "pass",
+    "planreview_deepreview_default_availability_and_read": "pass",
+    "phaseflow_gateflow_reference_read": "pass",
+    "full_workflow_executed": false,
+    "report": "/Users/liuxie/.codex/skill-backups/invocation-policy-20260908-215122/skill-invocation-smoke-result.txt"
+  },
+  "create_skill_verification": {
+    "skill": "create-skill",
+    "manual": true,
+    "format_validation": "pass",
+    "native_discovery": "pass",
+    "explicit_load_and_system_creator_read": "pass",
+    "read_only_policy_scenarios": "pass",
+    "sample_skill_creation_executed": false,
+    "report": "/Users/liuxie/.codex/skill-backups/create-skill-20260908-215650/create-skill-smoke-result.txt"
+  },
+  "create_skill_install_verification": {
+    "format_validation": "pass",
+    "native_discovery": "pass",
+    "read_only_install_routing": "pass",
+    "download_or_install_executed": false,
+    "report": "/Users/liuxie/.codex/skill-backups/create-skill-install-route-20260908-220247/create-skill-install-smoke-result.txt"
+  },
+  "baoyu_design_verification": {
+    "skill": "baoyu-design",
+    "format_validation": "pass",
+    "upstream_197_file_hash_verification": "pass",
+    "manual_policy": true,
+    "native_discovery": "pass",
+    "explicit_load": "pass",
+    "design_workflow_executed": false,
+    "upstream_scripts_executed": false,
+    "report": "/Users/liuxie/.codex/skill-backups/install-baoyu-design-20260908-221154/baoyu-design-load-result.txt"
+  },
+  "global_distribution_verification": {
+    "verified_at": "2026-09-09T08:34:40",
+    "source_count": 24,
+    "global_count": 21,
+    "manual_count": 13,
+    "automatic_count": 8,
+    "native_discovery_errors": [],
+    "global_copy_content_and_permissions": "pass",
+    "explicit_devflow_phaseflow_create_skill_load": "pass",
+    "planreview_deepreview_default_available_and_read": "pass",
+    "phaseflow_gateflow_reference_read": "pass",
+    "create_skill_routing_and_decisions": "pass",
+    "temporary_install_result_sync_closure": "pass",
+    "full_workflow_executed": false,
+    "github_download_executed": false,
+    "evidence_directory": "/Users/liuxie/.codex/skill-backups/global-distribution-20260909-082445"
+  },
+  "verification_history_note": "Other verification objects retain pre-distribution historical evidence; global_distribution_verification describes the current topology."
+}

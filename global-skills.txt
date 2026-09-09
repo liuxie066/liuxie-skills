@@ -1,0 +1,22 @@
+# Global distribution members; edit skills only in the central repository.
+baoyu-design
+create-skill
+deepreview
+devflow
+eli5
+find-skills
+gateflow
+gh-address-comments
+gh-fix-ci
+grilling
+hatch-pet
+herdr
+ima-skill
+kimi-webbridge
+phaseflow
+planreview
+playwright
+prdflow
+py-perf-analyzer
+screenshot
+show-me
