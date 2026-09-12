@@ -18,7 +18,7 @@ Codex 手动调用：devflow, prdflow, phaseflow, gateflow, grilling, eli5, show
 
 Codex 自动调用：planreview, deepreview, gh-address-comments, gh-fix-ci, ima-skill, playwright, py-perf-analyzer, screenshot。保留默认自动调用；自动选择不扩大操作授权。
 
-Devflow 手动启动后先建议简单或完整链路，由用户确认；两条链路都保留四路独立设计 Panel、实现验证和 Deepreview，完整链路另含 Planreview 和分阶段确认。Phaseflow 读取 Gateflow 规则，二者入口手动调用。
+Devflow 提供 Brainstorm、Save Design、Improve Design、Impl、Review 五个独立节点；单节点完成即停止，workflow 负责衔接和返工。简单/完整路径都保留 Improve Design 内的四路独立建议，Planreview 按需使用，Review 不修改业务代码。可用 `$devflow Improve Design <设计路径>` 单独优化设计。Phaseflow 读取 Gateflow 规则，二者入口手动调用。
 
 校验脚本使用当前已安装的 PyYAML 读取调用策略。
 
@@ -71,3 +71,5 @@ wait-what：从 `mattpocock/skills` 的 `skills/productivity/wait-what` 安装�
 2026-09-09 跨工具策略验收：Codex 原生发现 23 项且零错误，手动入口显式注入、Planreview/Deepreview 默认可用及 Gateflow 规则读取通过；已安装 DSH provider/registry/tool loader 51 项检查通过（测试注册及 agent 上下文为模拟）。未运行完整工作流、现有 Web 会话或 Claude 客户端。单 Skill 兼容校验中 14 个手动项通过，eli5 原有描述尖括号仍被系统校验器拒绝；保留原文，不扩大格式修复范围。详见 discovery-verification.json。
 
 2026-09-12 PRDflow 更新：支持起步共创、已有讨论直接成稿和原文修订，区分已确认需求、建议及局部未决项。手动调用策略不变，验证结果和限制见[验证记录](docs/reviews/prdflow-20260912.md)。
+
+Devflow 五节点验收（2026-09-12）：格式、源码/副本一致性、Codex 扫描与显式加载通过；隔离试跑验证 Save Design 保存后停止、Review 报错但不改业务代码。50 项为回归用例定义，未全部执行；未运行完整 Panel 或端到端研发流程。证据见 discovery-verification.json。

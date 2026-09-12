@@ -65,7 +65,7 @@
     "ima-skill/meta.json": "e67163e272e5c4a25467db7654feddfb47134a891e2e494415f0fbbb9d129d6f",
     "doc/SKILL.md": "0a635585817d1ac96e8e512114d08258b70f9e54ce0052078a258291ac13a8ed",
     "doc/LICENSE.txt": "4dd13869245e356246a5b770723247bbb80a8f07a181d1d3d873a1734297cdb9",
-    "devflow/SKILL.md": "9007a57eaf0491ed4290d3c65929fb8a68a76b469a1c534b98624525614e0ebc",
+    "devflow/SKILL.md": "882c13598e00559c5620073ddf7365562985bb086691dd0931778e0659341dec",
     "kimi-webbridge/SKILL.md": "db1d82b37962a5a7756ca862bc0bea211c6bba46c3608b157a135386d4e9be6f",
     "py-perf-analyzer/README.md": "e3b5a592e5a3b25a639a6656f4102ecae855a7488c3d590ddf6e93b5c28fe49c",
     "py-perf-analyzer/SKILL.md": "26ee753a53de4c321016254dd761ff4d95f2cd9ee925d05115a5e56484ac1efa",
@@ -121,7 +121,7 @@
     "doc/scripts/render_docx.py": "52b3c3158913ebcad2ada7b8193970b70453239e255054aa2d60c1683af08751",
     "doc/assets/doc.png": "7eadf1088e5062f681dba6596173a1df13bbfbcddd8a8a9bb78fd2071947dcf8",
     "doc/assets/doc-small.svg": "bd5415fbbfe72c66c1527411d61625731fdd2f75b25d1542510b6ddef699ebe0",
-    "devflow/evals/evals.json": "7d50ad3573fca3ff67de3e3911880922eb4383980a76941f158ca1422f6ae313",
+    "devflow/evals/evals.json": "77d185bbb717f47db509b8afae94b7f757df446eb6cb3d90194be15ae97482c1",
     "kimi-webbridge/references/operations.md": "86855b663649d560a8939c25a7a15d1dba91a58e2e2ed92414848a9a9f8ee6d7",
     "py-perf-analyzer/scripts/perf_profile.py": "8fced3e1f91e9318c67f4e69db89f30fef6963c4f0f135a77276310f5d96030b",
     "grilling/agents/openai.yaml": "3c8415e2bc1bc96ef9cf3a2d0219987af16ca4d522beb7bfcda215533b485dd8",
@@ -866,5 +866,9 @@
       "prdflow/references/gates.md"
     ],
     "invocation_policy": "unchanged: manual"
+  },
+  "devflow_atomic_nodes_update": {
+    "date": "2026-09-12",
+    "reason": "Five independently callable nodes; internal four-reviewer design improvement; optional Planreview; workflow owns transitions and repair."
   }
 }
