@@ -435,6 +435,94 @@
     "evidence_directory": "/Users/liuxie/.codex/skill-backups/cross-tool-invocation-20260909-233704",
     "yaml_boolean_regression": "pass: YAML 1.1 aliases rejected before rsync and system validator; native Codex negative probe confirmed no/quoted false policy is ignored; global PyYAML resolver preserved"
   },
+  "delivery_verification": {
+    "verified_at": "2026-09-11T18:04:48.002029+08:00",
+    "skill": "delivery",
+    "source_count": 27,
+    "global_count": 24,
+    "manual_count": 16,
+    "automatic_count": 8,
+    "source_path": "/Volumes/liuxie的硬盘/workspace/agent-skills/skills/delivery",
+    "skill_sha256": "1a932ca6fa412bff191d4385b3e10cb0f944706eaa3b610309c6323137feeaad",
+    "compatible_system_validation": "pass",
+    "global_copy_content_and_permissions": "pass",
+    "native_codex_discovery": "pass",
+    "native_codex_discovery_errors": [],
+    "native_codex_entry": {
+      "name": "delivery",
+      "description": "独立的软件交付流程：提交推送、创建 PR、合并主分支、发布版本及升级运行环境。用户通过 $delivery 启动，按授权范围选择阶段，复用项目命令和有效研发证据，核验最终状态并处理失败恢复；不启动或扩展 Devflow。",
+      "interface": {
+        "displayName": "Delivery",
+        "shortDescription": "独立处理提交、PR、合并、发布与升级，复用项目入口并核验交付证据",
+        "iconSmall": null,
+        "iconLarge": null,
+        "iconSmallUrl": null,
+        "iconLargeUrl": null,
+        "brandColor": null,
+        "defaultPrompt": "使用 $delivery，按我指定的范围完成交付，先核对项目入口和现有证据。"
+      },
+      "path": "/Users/liuxie/.agents/skills/delivery/SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    "codex_explicit_load": "Read-only ephemeral $delivery invocation read installed SKILL.md and projects.md; turn completed. Existing-session refresh not tested.",
+    "dsh_load": {
+      "skill": "delivery",
+      "discovery": "pass",
+      "manual_policy": "pass",
+      "model_load_rejected": true,
+      "explicit_injection": "pass",
+      "scope": "Installed provider/registry/loader with simulated registration and empty agent context. No live host/UI, scheduler, model or delivery execution."
+    },
+    "behavioral_scenarios": {
+      "total": 10,
+      "independent_readonly_evaluation": "pass",
+      "scope": "Scenario reasoning only; no delivery commands executed."
+    },
+    "full_delivery_workflow_executed": false,
+    "claude_live_runtime_tested": false,
+    "evidence_directory": "/private/tmp/delivery-skill-validation"
+  },
+  "delivery_main_sync_verification": {
+    "verified_at": "2026-09-11T18:11:05.208042+08:00",
+    "skill_sha256": "1a68781352cc3c9772d3c0c744b1e14c47d2eb977345f2681891021ed0d96f3c",
+    "compatible_system_validation": "pass",
+    "source_and_global_copy": "pass",
+    "new_independent_scenarios": 4,
+    "native_git_tests": {
+      "passed": [
+        "untracked preserved with ff-only",
+        "overlapping dirty work rejected",
+        "divergence rejected",
+        "unchecked main fast-forwarded without switching branch",
+        "main checked out elsewhere rejected"
+      ],
+      "fixture_root": "/private/tmp/delivery-main-sync-aejfa94p",
+      "scope": "Temporary local repositories only"
+    },
+    "pm_main_sync": {
+      "repo": "/Volumes/liuxie的硬盘/workspace/portfolio-management",
+      "old_main": "3f2dde63432c3e7018bdbda5a56be072b532503b",
+      "main": "0943ad11dc7fb71f6b8bdd9c4d29e3da50ead91d",
+      "ahead_behind": "0\t0",
+      "untracked_files_preserved": 3
+    },
+    "om_main_sync": {
+      "status": "blocked",
+      "ahead": 0,
+      "behind": 17,
+      "reason": "Tracked uncommitted documentation; three files overlap incoming update. No checkout mutation or automatic stash/reset.",
+      "overlap": [
+        "docs/BOT_DESIGN.md",
+        "docs/PI_AGENT_CORE_INTEGRATION.md",
+        "docs/WHEEL_STRATEGY_PRD.md"
+      ]
+    },
+    "invocation_policy_changed": false,
+    "explicit_host_load_repeated": false,
+    "note": "Body-only update; prior discovery/load evidence remains historical. Current synchronized content was validated without rerunning the model load probe."
+  },
   "prdflow_synthesis_verification": {
     "verified_at": "2026-09-12T11:42:40+08:00",
     "source": "/Volumes/liuxie的硬盘/workspace/agent-skills/skills/prdflow",
@@ -489,5 +577,26 @@
     "report": "docs/reviews/prdflow-20260912.md",
     "evidence_directory": "/private/tmp/prdflow-synthesis-20260912-_2y3gk88",
     "live_bot_or_delivery_workflow_executed": false
+  },
+  "devflow_atomic_nodes_verification": {
+    "date": "2026-09-12",
+    "skill_sha256": "882c13598e00559c5620073ddf7365562985bb086691dd0931778e0659341dec",
+    "eval_definitions": 50,
+    "source_and_install_validation": "passed",
+    "native_discovery": {
+      "errors": [],
+      "enabled": true,
+      "evidence": "/private/tmp/devflow-atomic/install-smoke/discovery.json"
+    },
+    "explicit_load": {
+      "status": "passed",
+      "evidence": "/private/tmp/devflow-atomic/install-smoke/events.jsonl"
+    },
+    "isolated_behavior_trials": {
+      "save_design": "passed: saved approved design and stopped",
+      "review": "passed: reported empty-input defect without business-code mutation"
+    },
+    "scenario_review": "Improve Design, full optional Planreview, standalone Impl, checkpoint migration checked; three boundary ambiguities corrected",
+    "limits": "Not an execution of all 50 evals, four-reviewer Panel, or end-to-end development workflow."
   }
 }

@@ -1,0 +1,22 @@
+# 项目入口定位
+
+这些是定位提示，不是可直接执行的部署配置。先绑定当前 checkout，重新读取该版本的 `AGENTS.md`、脚本、workflow 和目标环境事实；不从本文件推断授权、主机、安装目录或当前版本。
+
+## Options Monitor (OM)
+
+- 本机源码通常在 `/Volumes/liuxie的硬盘/workspace/options-monitor`。入口约定见 `AGENTS.md`，部署见 `docs/DEPLOY_LINUX_MAC.md`，验证见 `tests/README.md`。
+- 版本和发布入口：`VERSION`、`CHANGELOG.md`、`scripts/release_check.py`、`scripts/release_preflight.sh`；CI 查 `.github/workflows/release-from-version.yml`、`release.yml` 和 `_release-reusable.yml`。按当前约定区分 workflow_dispatch 和 tag 触发，避免同时触发重复发布。
+- 本地完整发布预检现有入口为 `OM_PYTHON=/absolute/path/to/python bash scripts/release_preflight.sh --full`；解释器/Node、依赖图、元数据和测试门槛以当前脚本为准。
+- 升级复用 `./om update check|apply|verify|rollback`。读当前 CLI 的参数和行为，确认 apply 所需 current symlink 与目标 tag；无 `--confirm` 的 apply 是预览，但仍须核对该版本是否有准备副作用。
+- `update verify` 的部分健康信息来自 `upgrade_status` 历史记录。升级后仍独立检查 active symlink/版本、项目解释器的 `pip check`、当前服务健康、failed units 和 drift；不要把历史状态当实时验收。
+- 若实际入口支持 `--report-dir`，预检保存完整日志；update 保存原有 JSON，只精简终端成功命令输出。update 的子进程输出可能本来就有尾部长度限制，报告文件不能恢复已截断的内容。
+
+## Portfolio Management (PM)
+
+- 本机源码通常在 `/Volumes/liuxie的硬盘/workspace/portfolio-management`。发布/升级边界及检查命令见 `AGENTS.md`，安装细节见 `docs/deploy-linux.md`。
+- 版本真源 `VERSION`，对应 `CHANGELOG.md` 和 `.github/workflows/release.yml`。按当前项目约定核实 tag 触发和产物要求，不复制其它项目的发布方式。
+- 安装/升级入口为 `scripts/install.sh`，内部委托 `scripts/install_linux.py`。不带 `--apply` 也可能更新 checkout、创建 venv 并安装依赖，不能当纯只读预检。
+- 普通 `--apply` 的安装成功不证明常驻服务已重启；`--enable-*` 又可能激活服务。按当前参数和项目规定分别执行授权的服务变更、preflight 和 API/监听服务健康验收，不擅自添加 enable 参数。
+- 若当前脚本支持 `--report-dir`，使用其私有日志和紧凑安装结果；`scope=install` 只证明安装命令，`target_ref` 只是请求值。另行核验实际 checkout commit、活动服务与健康。
+
+报告选项可能尚未合入或部署到目标版本；必须查当前源码或安全的 help 入口，不能根据本机实验工作区假设远端支持。其它项目直接从其 `AGENTS.md` 和原生入口建立本次映射；不默认使用 OM/PM 的路径或服务命令。

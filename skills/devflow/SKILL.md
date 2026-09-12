@@ -1,198 +1,107 @@
 ---
 disable-model-invocation: true
 name: devflow
-description: "从需求澄清推进到已验证、已审查实现的开发工作流。先根据代码事实建议简单或完整链路，由用户确认选择；两条链路都保留四人独立设计 Panel、实现验证和 Deepreview，完整链路另含 Planreview 和分阶段确认。不包含提交、发布或部署。"
+description: "研发工作流及五个可独立调用的节点：Brainstorm、Save Design、Improve Design、Impl、Review。支持从已有设计或改动进入；完整流程先建议简单或完整链路，由用户选择，两者都保留四路并行设计优化。仅研发，不含提交、发布或部署。"
 ---
 
 # Devflow
 
-Devflow 只解决研发问题，范围从需求澄清到已验证、已评审实现的 Closeout。先完成 Brainstorm，给出链路建议，由用户确认 scope 和所选链路后推进：
+对外只有五个节点：`Brainstorm → Save Design → Improve Design → Impl → Review`。
+节点负责自己的输入和产物，workflow 负责顺序、授权和返工；不另建五套 skill。
+设计优先，把关键决策和失败语义在实现前说清，不把“90% 设计、10% 实现”变成固定时间配额。
 
-```text
-简单 simple:
-Save Design -> 四人 Parallel Design Panel
--> [确认建议、workspace 和后续实现]
--> Improve Design -> Implementation -> Deepreview -> Closeout
+## 调用与编排
 
-完整 full:
-Save Design -> 四人 Parallel Design Panel
--> [确认建议] -> Improve Design -> Planreview
--> [确认 workspace 和实现] -> Implementation -> Deepreview -> Closeout
--> [Human Confirm Completion]
-```
+- **单节点**：例如 `$devflow Save Design，把已确认方案保存到 docs/design.md`、`$devflow Improve Design docs/design.md`、`$devflow Impl，按已批准设计实现`、`$devflow Review --base main`。明确只做某一步时记为 `mode=node`；完成该节点即停止，不自动启动下一节点。节点名使用上面的五个名称，大小写/自然语言同义说法均可识别；Implementation 映射 Impl，Deepreview 映射 Review。
+- **整条或明确组合**：例如 `$devflow 走完整研发流程`、`$devflow 从现有设计开始，优化后实现并审查`。记为 `mode=workflow`，列出本次授权的节点序列；只有 workflow 可以衔接节点。仅说“用 devflow”时先澄清任务并建议路径，不猜已经获得实现授权。
+- 先检查当前节点必要输入。已有完整、有效且可回读的输入可直接使用，不为补节点名重跑 Brainstorm/Save Design；输入缺失时只补缺项，涉及其它节点的写操作先确认，不静默扩大单节点任务。PRD 交接只是证据输入，不能虚构前序节点已经执行或通过。
+- 原子化指职责与授权边界，不承诺文件操作具备数据库事务。每个节点报告产物、实际验证、未决项和退出状态；输出文件存在不等于节点通过。
 
-两条链路共用下文的节点和质量规则；简单链路减少单独的 Planreview 与确认次数，不减少 Panel 人数、独立性、验证或 Deepreview 覆盖。
+### 简单 / 完整预设
 
-这是一个轻量编排 skill。可用时复用现有 companion skills，缺失时使用下述受控 fallback；不复制它们的内部规则，也不替代项目 `AGENTS.md`。
+两个预设复用同一套五节点及质量规则，都包含 Improve Design 内的四路 Panel；不能为了简单而减少 reviewer。已有输入对应的前序工作只核验，不重复执行。
 
-## Path Selection
+- `simple`：适合行为清晰、局部、可独立验证的任务；设计可简短，合并展示范围与后续动作，不要求长篇备选方案。
+- `full`：适合重要设计取舍、跨系统契约、schema/migration、权限、并发/状态机、交易/账本、幂等或恢复行为变化；充分展示决策、失败场景和验收，再请用户确认实现。文件数量或仅位于这些模块中不单独构成理由。
+- workflow 先基于源码事实给出建议、依据、节点序列、所需内部检查及差别，最终由用户选择。没有答复或选择含糊不代表接受推荐；已明确选择则不重复确认。单节点不强制选择 simple/full。
+- Planreview 是 Improve Design 的按需内部检查：项目/用户要求，或仍有重要设计风险需对抗性验证时使用，并说明具体原因；不因 full 标签固定加一轮。两个预设均不豁免项目强制检查。
+- 发现新事实影响路径建议时说明影响并让用户决定，不自动切换。切换保留有效证据及 review 计数，不绕过未关闭缺陷或失败检查。
 
-Brainstorm 根据真实入口、改动行为、影响范围、可逆性和验收证据给出 `simple` 或 `full` 建议：
+### 决策与返工
 
-- 推荐简单链路：需求和行为明确，改动局部且可独立验证，没有尚待决定的重大方案取舍。
-- 推荐完整链路：有重大设计取舍，或改变跨系统契约、schema/migration、权限、并发/状态机语义、交易执行、资金/账本计算、幂等或数据恢复行为。文件多、代码长或仅位于这些模块中，不单独构成理由。
+只在目标/范围、重要产品或设计取舍、实现授权及新的副作用边界上等待确认；已有明确授权在原范围内持续有效，不为节点完成或普通修复重复确认。等待期间不得提前执行依赖该决定的节点。
 
-报告推荐链路、具体依据、两条链路的差别和未决问题，然后请用户明确选择简单或完整链路，并确认本次 scope；选择前只做本节点只读调查，不保存设计、不启动 Panel 或实现。没有答复不等于接受推荐；仅说“继续/确认”而不能确定选择时询问所选链路。用户已明确指定链路时保留其选择，只补充建议和差异，不重复索要同一个选择；scope 确认仍按 Brainstorm 执行。
+workflow 中，已确认的目标与范围可进入 Save Design，再进入 Improve Design。完成设计优化后展示实际设计版本、关键决策、验收及 workspace 决策；仅在已有授权覆盖这些输入时进入 Impl，否则请求实现授权。已授权的 Impl 完成后进入 Review。最终报告即收尾，不要求再回复“完成”。
 
-建议不替用户决策。用户选与建议不同的链路时，按其明确选择执行；项目强制的检查、未决产品/安全问题及外部或生产授权不因选择简单链路而豁免。简单链路下项目强制要求 Planreview 时仍执行该 Gate，并在选择时说明；未执行的 Planreview 记为 `not-applicable`，不得写成 pass。
+Review 只审查，不改业务代码或设计；问题交由 workflow 返回责任节点：实现缺陷回 Impl，设计缺口回 Improve Design，目标/范围变化回 Brainstorm。授权范围内的普通实现修复合批完成后验证并重审；策略或权限变化先询问。单独 Review 只报告 findings 和建议下一节点，不自动修复或重启全流程。
 
-Panel 或实现中发现改变建议的新事实时，说明证据、受影响范围和建议，请用户确认是否切换链路；不自动升级或降级。需要改变 scope/策略时先暂停解决对应决定，路径选择本身不是范围变更授权。切换后复用仍有效的 scope、设计、四人 Panel 和验证证据，不重复跑已完成节点；新出现的或已失效的 Gate 必须完成，review 预算不重置。
+## 节点契约
 
-## Capability Check
+| 节点 | 必要输入 | 输出与退出条件 |
+| --- | --- | --- |
+| Brainstorm | 需求、相关现状、约束 | 目标、非目标、范围、验收、取舍及未决项；必要决定已确认 |
+| Save Design | 已确认目标/方案、可回读的依据、保存目标 | 唯一 design_doc 及快照引用，决策和验收可独立阅读；缺失选择不得代填 |
+| Improve Design | design_doc 快照、目标/边界、事实、允许的设计写入范围 | 四份独立建议、主 agent 裁决、更新后的同一设计及版本；无未决 blocking finding，适用内部检查通过 |
+| Impl | 已批准设计版本、实现授权、workspace/base、验收 | 范围内改动、验证证据及 scope 检查通过；单节点到此停止 |
+| Review | 正确 base 下完整改动、目标/设计依据、可用验证证据 | review artifact、覆盖、verdict、findings 与风险；无 blocking finding 且证据充分才通过 |
 
-Brainstorm 前一次性检查 `$ponytail`、`$deepreview`，在 `options-monitor` 中再检查 `$om-doc-hygiene`；选定链路后仅在需要 Planreview 时检查 `$planreview`，否则记为 `not-applicable`；不得为运行 workflow 自动安装或配置它们。记录适用项的 `<skill>_status=used|fallback:unavailable`，不适用的 `$om-doc-hygiene` 记为 `not-applicable`：
+Review 可检查已有改动，即使尚无正式设计文档；以真实需求/授权记录核对已知行为，并明确设计一致性及验证的覆盖缺口，不伪造设计批准、不替用户创建方案。缺口影响结论时保持未通过。
 
-- `$ponytail` 缺失时，直接执行本 skill 的最小范围、最小改动规则；
-- `$planreview` 缺失时，由主 agent 对完整设计执行同等的 adversarial review，并产出本 Gate 要求的 artifact、findings 和 verdict；
-- `$deepreview` 缺失时，由主 agent 对 `review_base` 下的完整当前改动执行 evidence-based review，覆盖真实入口、调用链、contracts 和 tests，并产出本 Gate 要求的 artifact、findings 和 verdict；
-- `$om-doc-hygiene` 缺失时，包括在 `options-monitor` 中，都按目标仓库约定执行 owner-first 文档更新并披露 fallback。
+## 共用边界与证据
 
-## 全程规则
+- 读取适用 AGENTS.md 和当前节点相关源码、配置、测试及文档；只加载当前节点需要的 companion skill。Impl 使用可用 ponytail（已激活不重复初始化）；Improve Design 仅在内部检查适用时加载 planreview；Review 使用 deepreview。OM 设计/实现涉及文档时使用可用 om-doc-hygiene，其余按仓库 owner 约定。
+- companion 缺失记 `fallback:unavailable`，主 agent 执行同等必要检查和 artifact 要求；不适用记 `not-applicable`，不得伪称 pass。不自动安装或配置工具。
+- 原始 goal、non-goals、scope、success signals 和用户确认依据构成 scope contract，只保存一处。后续真实授权追加差异和引用，不能用新版设计覆盖原始批准。建议本身不是范围授权；范围外建议记 `deferred-with-owner`。
+- 设计与实现绑定 `design_ref`：仓库路径加实际内容 hash，已有固定 commit/permalink 时一并引用；Impl 和 Review 核对同一版本。不得仅引用可变 main 链接。方案决策、理由及相关验收留在唯一设计 owner，避免 v2/final 副本。
+- 研发结束时向 Delivery 交接 design_ref、实现及 review 证据。用户另行授权提交/PR时，建议将设计随提交保存，或在 PR 附本次版本的固定链接；无可访问链接时如实提供路径/hash，不编造 URL。
+- commit/push/PR/merge/release/upgrade 及生产操作不属于这五个节点；已有旧交付授权不自动覆盖新的研发变更。
 
-- `$ponytail` 可用时从第一步开始应用；如果已经激活，继续使用，不重复初始化。
-- 先读适用的 `AGENTS.md`、相关源码、测试、配置和现有文档，再提出设计。
-- 源码、配置和测试事实优先于过时文档；发现冲突时修正文档，不让实现迎合错误文档。
-- 同一事实只保留一个当前 owner。更新同一设计文档，不创建 `v2`、`final`、`revised` 等平行副本。
-- 用户确认 Brainstorm 后，确认的 goal、non-goals、scope 和 success signals 形成 binding scope contract。后续 design decision、slice 和 validation 必须映射到该 contract 或实现它所必需的 correctness/safety 条件；其它 finding 只能 `deferred-with-owner`，或在确需改变 contract 时暂停并请求用户重新确认，不得在 Improve Design、Planreview 或 Implementation 中自动扩大范围。
-- 按所选链路图推进：Save Design 后自动启动四人 Panel，Implementation 和 validation 后自动启动 Deepreview，通过后自动 Closeout。完整链路 Improve Design 后自动 Planreview；简单链路在 Panel 后获得建议、workspace 和后续实现的合并授权，Improve Design 后直接实现（项目强制 Planreview 除外）。图中确认点必须暂停，其余节点连续执行。
-- review finding、测试通过、artifact 已生成或仅选择链路都不构成实现授权；简单链路的合并授权只覆盖向用户明确展示过的后续工作。
-- commit / push、创建或合并 PR、发布、部署、升级及生产操作不属于 Devflow 节点。用户另行要求时交给项目独立流程处理，不扩展本 workflow；Closeout 提供研发证据交接。
+## Review 完成与重试
 
-## Node Contract
+有效且未关闭的严重、高、中问题是 blocking finding。调用失败、输出缺失/无法解析/矛盾、材料截断或覆盖不足均为 `review-unusable`，不得当成无问题或通过。低风险不为清零而扩展范围，保留 owner、影响及后续去向。
 
-每个节点开始前先确认输入，结束时只报告输出、退出条件和下一动作。节点不得用聊天历史替代输入，也不得把产物存在误判为节点通过。
+Improve Design 的四人 Panel 必须有四个可用结果；无建议但有依据的结果可用。适用的 Planreview 和 Review/Deepreview 各自最多五次调用尝试（含失败），分别计数；第 5 次仍未通过时停下，未经明确授权不得第 6 次。返回责任节点修复、路径切换或上下文恢复不清零计数。
 
-| 节点 | 必要输入 | 必须输出 | 退出条件 |
-| --- | --- | --- | --- |
-| Brainstorm | 原始需求、当前事实、可用 PRD 交接 | 链路建议、用户选择、binding scope contract | 所选链路及 goal、non-goals、scope、success signals 已确认；否则留在本节点 |
-| Save Design | 已确认的 scope contract、PRD 交接 | 唯一 `design_doc` | 设计覆盖目标、边界、行为、失败语义、切片和验证计划 |
-| Parallel Design Panel | 同一 `design_doc` 快照 | 四个 reviewer 的可用结果和主 agent 裁决 | 四个 reviewer 均有可用结果；每条建议已裁决 |
-| Improve Design | accepted findings、原 `design_doc` | 更新后的同一 `design_doc` | 未改变已批准 contract；完整链路进入 Planreview，简单链路满足实现前置条件后进入 Implementation |
-| Planreview | 最终 `design_doc` | verdict、findings、workspace 决策 | 没有 blocking finding，或按规则停下等待用户处理 |
-| Implementation | 已批准设计、workspace 决策、实现 baseline | 改动、验证结果、scope drift 结果 | 项目要求的 validation 完成；随后自动进入 Deepreview |
-| Deepreview | 正确 review base 上的完整当前改动 | review artifact、verdict、finding 状态 | 没有 blocking finding；随后自动进入 Closeout |
-| Closeout | 设计、实现、验证、review 证据 | closeout 摘要和未执行边界 | 简单链路报告后完成；完整链路等待用户确认完成 |
+重审前由对应责任节点合批处理本轮范围内全部有效 blockers，完成所需验证，核对快照/base/授权和材料可读性；未就绪不派发，未调用不占尝试。Planreview 在 Improve Design 内对完整修订设计重审；Review 对全部当前改动重审，不只审修复文件。单节点 Review 无修复授权时只交回结果。
 
-节点输出不足、无法解析、内容版本不一致或无法证明退出条件时，保持当前节点，不猜测通过。
+去重仅限同一检查、同一 reviewer 身份和同一有效快照。恢复时读取原 in-flight handle，不重复派发；内容/base/scope/依赖或验证环境变化时核验失效部分。四位 Panel reviewer 不能共用彼此结论，Panel 不能替代适用 Planreview 或 Review。仅复用仍有效的完整参考输入和检查证据，不用旧 verdict 代替变更后的重审。
 
-## PRD -> Devflow Handoff
+## 进度与交接
 
-PRDflow 的保存或交接只是 Devflow 的输入，不等同于 Brainstorm、Save Design 或任何后续节点已通过。已保存的 PRD 在进入 Brainstorm 时提供一个最小交接块；不要复制完整聊天记录或整份 PRD：
+在已有 workflow/control/review artifact 中维护同一简短块；无 artifact 时留在交接摘要，不另建状态系统。只在节点/内部检查边界、授权或内容变化时更新：
 
 ```yaml
-### Devflow Handoff
-prd_doc: /absolute/path/to/prd.md
-approval_record: "PRD 中批准记录的位置或引用"
-goal: "已批准根目标"
-non_goals: ["明确不做的事项"]
-scope: ["本次范围"]
-success_signals: ["可观察成功信号"]
-current_facts: ["有来源的事实"]
-open_questions: ["未决问题；阻塞产品决定单独标记"]
-blockers: []
-next_action: Brainstorm
-```
-
-Brainstorm 必须核对该交接块与原始需求；缺少 goal、边界或 success signals 时留在 Brainstorm 并补齐，不得在 Save Design 中替用户猜测。没有保存授权时，交接只保留在会话中，不虚构 `prd_doc` 路径。
-
-## Review Completion Rule
-
-下文 `blocking finding` 统一指有效且未关闭的 `严重`、`高`、`中` finding。所有 review 节点 fail closed：调用失败，结果缺失、无法解析或自相矛盾，或 scope / evidence 被截断到不足以支持结论时，标记为 `review-unusable`；不得视为“无 finding”、`pass`、`pass-with-risks` 或节点完成。
-
-两条链路的 Parallel Design Panel 都只有在四个所需 reviewer 均返回可用结果时才算完成。适用的 Planreview 和所有 Deepreview 都只有在 artifact 与 verdict 可用且没有 blocking finding 时才能通过。
-
-Planreview 和 Deepreview 共用以下重审规则，分别计数；Panel 使用其节点内的重试规则：
-
-1. 每个 Gate 最多五次 review attempt，首次为第 1 轮，每次调用尝试（含失败）都占预算。`review-unusable` 只能在剩余预算内补足证据后重审，不得进入 finding remediation。
-2. 先逐项核验可用结果并裁决，无效 finding 以理由关闭；由主 agent 合批修正本轮范围内全部有效 blocking findings，按对应 Gate 完成验证后再完整重审，不逐条 finding 触发完整复审。重复至通过或耗尽预算；策略性问题或新授权仍立即暂停，不等批次完成。
-3. 低风险 finding 不阻塞，也不为清零而扩大范围；每个 residual risk 必须有 owner、影响和后续去向。`pass-with-risks` 仅在这些条件满足且没有 blocking finding 时成立。
-4. 第 5 轮后仍有 blocking finding 或没有可用 verdict 时，报告逐项状态、阻塞原因、每轮 artifact 和已验证证据，进入 `awaiting_user_confirmation` 并询问用户如何处理；未经明确确认不得启动第 6 轮，也不得宣称通过或进入下一节点。
-
-### Review Dispatch Check
-
-调用前在当前节点内核对适用的前置条件：完整输入和原始授权证据可读，本节点已确定的 design_doc / workspace / review base / 内容快照一致，所需 validation 已完成且有效；Panel / Planreview 不要求尚未产生的实现 workspace、baseline 或代码测试。复审还须确认本轮范围内全部有效 blocking findings 已合批处理。缺项时先补齐，不把已知未就绪的材料交给 reviewer；这不是额外审查或确认门，也不能代替完整 review。尚未调用不占 attempt，实际调用后失败仍占预算。
-
-仅对同一 Gate、同一 reviewer 身份（Panel 使用固定编号 1–4）和同一快照去重：已有进行中的 review 时读取原任务，已有该 Gate 完整且有效的通过证据时按原节点退出条件推进，不因恢复会话或重复总结再开一轮。不同 Panel reviewer 仍独立执行，不能因问题相同而合并或复用彼此结果，Panel 结果不能替代适用的 Planreview，Planreview 不能替代 Deepreview；简单链路的 `not-applicable` 不是 Panel 代替 Planreview 的通过证据。内容、base、scope、实现授权依据或依赖语义变化，或覆盖/证据不足时不得沿用通过结果；需要新 review 时只复用仍有效的参考输入，按对应 Gate 完整重审，不沿用旧 verdict。用户明确要求的新审查和项目强制检查照常执行。
-
-## Human Confirmation Gate
-
-仅在所选链路的确认点或触发停止条件时：
-
-1. 报告当前节点、产物路径、关键决策或 findings、实际验证和未决风险；
-2. 说明下一节点及其将执行的动作；
-3. 将状态标记为 `awaiting_user_confirmation`；
-4. 明确询问用户是否进入下一节点，然后停止。
-
-只有用户在看到本节点结果后明确回复“继续”“确认”“进入下一环节”或同等含义，才可推进。用户要求修改时留在当前节点，
-修改完成后重新经过确认 gate。等待期间不得预启动下一节点的 subagents、编辑下一节点文件、调用下一节点 skill 或把下一节点写成已开始。
-
-上下文恢复时先按 Progress Checkpoint 恢复最后一个已获用户批准的节点；证据不清时保持 `awaiting_user_confirmation`，不要猜测。
-
-## Progress Checkpoint
-
-由主 agent 在已有 `control_doc` 或 workflow/review artifact 中维护一个简短的 `Devflow Progress` 块，并在交接摘要中给出其路径。选定位置后更新同一块，不复制历史日志或完整 findings；尚无合适 artifact 时先保留在交接摘要，首个合适 artifact 生成后迁入，不另建状态文件，也不写入设计真源。
-
-Progress 块使用以下固定字段；字段值必须来自当前证据，不用摘要覆盖原批准记录：
-
-```yaml
-### Devflow Progress
-workflow_version: 1
-workflow_path: null  # simple | full；只记录用户已确认的选择
-path_approval_ref: null  # 链路选择及后续切换的原文引用
-current_node: Brainstorm
+workflow_version: 2
+mode: node  # node | workflow
+workflow_path: null  # simple | full；单节点不适用
+node_sequence: [Review]  # 只列本次授权节点
+current_node: Review
+internal_step: null  # Panel | Revise | Planreview 等；不是独立外部节点
 status: in_progress  # awaiting_user_confirmation | blocked | completed
-next_action: "尚未完成的下一动作"
-approved_scope_ref: "原始批准记录及后续明确授权变更的位置"
-design_doc: "路径或 null"
-implementation_workspace: "路径或 null"
-review_base: "ref 或 commit 或 null"
-content_revision: "对应证据的版本或 hash（含未提交改动）"
+next_action: "实际尚未完成的动作"
+approved_scope_ref: null
+path_approval_ref: null
+design_doc: null
+design_ref: null
+implementation_workspace: null
+review_base: null
+content_revision: null
 planreview_round: 0
 deepreview_round: 0
-in_flight: []  # 进行中调用的 handle / job id
-evidence_paths: []  # artifact / validation
-blocking_findings: []  # 未关闭 finding / blocker 的引用及 owner
+in_flight: []
+evidence_paths: []
+blocking_findings: []
 ```
 
-旧 checkpoint 缺少链路字段时，若原始记录明确表明已在完整链路中，则保留其现有授权与进度；否则读取用户选择依据，无法确定时询问，不凭推荐补填。
+恢复旧记录时，把 Parallel Design Panel/Planreview 映射到 Improve Design 的相应内部步骤、Implementation 映射 Impl、Deepreview 映射 Review、Closeout 映射结果报告；保留原授权、计数和未完成动作。已通过的 Panel 不因名称变化重跑；原明确等待的用户决定不能被迁移跳过。mode/路径无法从原记录确定时询问，不猜授权。
 
-仅在节点/评审轮次边界、明确暂停、授权或内容版本变化时更新。`next_action` 必须是尚未完成的动作；等待用户确认时记录待进入的节点，不得记成已获授权。
+派发只带当前节点所需的自包含目标、非目标、scope、success signals、design_ref、workspace/base、证据路径、ownership/只读边界、验收与返回格式。原生支持时用 fork_turns=none；不复制整段会话/日志，不让 reviewer 读其他结论。写入 worker 须知道并保留其他人的改动。主 agent 核对实际 diff/完整 evidence 后裁决。
 
-原始批准的 goal / non-goals / scope / success signals 及可回读的确认原文引用只保存一处，由 `approved_scope_ref` 指向；后续明确授权的变更记录差异和授权依据，不以最新版设计覆盖原始批准记录，slice 和交接只引用该记录。
-
-review 调用前登记该次轮次和 `in-flight`，返回后更新结果；失败尝试同样占预算。恢复时先读 checkpoint，核对授权依据、相关内容版本和证据，再只读取下一动作所需材料；已完成且证据仍有效的节点和 validation 不重跑，review 轮次不归零。未完成调用先查询原任务状态，不重复派发；发现内容变化或证据不足时只重验受影响部分，但完整 review 的范围要求不变。
-
-## Agent Handoff
-
-所有原生 subagent 和 DSH Crew 派发统一使用当前节点所需的最小自包含 brief：
-
-- 所选链路、当前节点/职责、已批准目标、非目标、success signals 和本次范围；
-- `design_doc`、workspace、review base / 快照，以及所需文件和证据的可访问路径；
-- 文件 ownership / 只读边界、required validation、完成条件及需要停下交还主 agent 的条件；
-- 本节点要求的返回格式、artifact 路径（如需产出），以及禁止越界和执行 Devflow 范围外的交付或生产操作。
-
-不附整段会话历史、重复设计全文、无关阶段报告或重复日志。原生派发支持历史继承控制时，默认不继承完整会话（如 `fork_turns="none"`），由自包含 brief 补齐必要约束。需要写文件的 worker 必须知道还有其他改动者，不得回退他人修改。路径不可访问时补齐必要原文；材料不足不得猜测。
-
-返回摘要只给 status / verdict、关键 findings / blockers、validation 摘要和 artifact / evidence 路径；完整 findings 和证据保留在本节点要求的 artifact 中，只读 Panel 无 artifact 时仍按下文格式返回完整 findings。只精简交接文本，不缩减评审范围，不以摘要代替完整设计/改动重审；Panel reviewer 仍互不读取结论。主 agent 读取所需 artifact 和真实 diff/证据后裁决。
-
-## Tool Output and Waiting
-
-- 可预期的大量研发验证或评审输出留在现有日志/临时 artifact，记录命令、内容版本、执行环境、退出码、检查项及适用的成功/失败/跳过计数和证据路径；会话只返回本次变化、失败摘要和必要片段。失败时按线索读取原始 stdout/stderr，不能只看最后几行或摘要就认定根因/通过；管道必须保留被验证命令的退出码，不用日志尾部命令的成功覆盖失败。
-- 精简输出不精简输入证据：审查所需源码、diff、授权原文和 findings 必须完整可访问；单次输出会截断时分段读取，不能以截断内容或摘要算已覆盖。日志存储/脱敏沿用项目约定，完整证据仅保留一份并引用，不反复回传相同日志。
-- 异步任务登记原 handle / job id，优先用工具原生完成通知、增量游标或等待接口；仍需轮询时先等约 30 秒，无变化退避到约 60 秒（遵守工具上限）。不要用立即查询循环或持续唤醒模型实现等待；接口支持时只取新增输出，否则比较状态且不反复回传相同内容；最终仍读取工具提供的终态、退出码（如有）和完整结果，运行状态不代表成功。
-- 观察超时或临时查询失败不能证明任务停止：继续核验同一 handle，不重新派发。只有确认原任务已终止或不存在后才按原重试预算处理。任务有变化、需要干预或用户询问时及时报告；等待期间按宿主要求简短更新，不重复无变化日志或阻塞用户输入。
+大量日志保留在已有临时 artifact，会话只返回摘要、真实退出码和证据路径；失败时读取原始堆栈，不能以 tail/tee 的退出码冒充测试成功。长源码/diff 分段完整读取。异步调用优先等待通知或增量输出，无变化约 30–60 秒退避；临时超时不等于终止，不重派，不把运行状态当完成；最终读取完整结果。
 
 ## 1. Brainstorm
 
-确认以下内容：
-
-- goal、motivation、success signals；
-- non-goals 和 scope boundary；
-- 当前事实、约束和未知项；
-- 候选方案及主要 trade-offs。
-
-只有存在真实取舍时才列多个方案，通常不超过三个。推荐满足目标的最小方案，并说明为什么更复杂方案暂时不需要。
-同时按 Path Selection 给出链路建议和依据，进入 `awaiting_user_confirmation`。用户确认选定方案、scope 和链路后，才进入 Save Design；可在同一次答复完成这些确认。
+核对目标、动机、非目标、范围、success signals、事实、未知项和候选取舍。只在确有取舍时比较方案，推荐满足目标的最小设计。确认重大选择；已有明确依据不重问。单节点交付讨论结论后停止，不自动落盘。workflow 同时按预设规则建议路径，用户确认后才继续。
 
 ## 2. Save Design
 
@@ -217,13 +126,15 @@ review 调用前登记该次轮次和 `in-flight`，返回后更新结果；失�
 
 implementation slice 必须是可独立验证的行为增量，不按文件、模块或 owner 机械拆分；默认不超过 3 个，超过时先尝试合并，并在 `design_doc` 说明无法合并的原因。
 
-记录最终 `design_doc` 路径，后续所有评审使用这一个文件。
+记录最终 `design_doc` 路径，后续引用同一 owner 及对应版本。
 
-报告文档路径、owner、写入内容和检查结果后，直接启动 Parallel Design Panel，无需等待用户确认。
+记录 design_ref，报告文档路径、owner、写入内容及检查结果后，本节点完成。仅 workflow 按已授权序列进入 Improve Design；单独保存不启动 Panel。
 
-## 3. Parallel Design Panel
+## 3. Improve Design
 
-设计首次落盘后，派发四个只读 reviewers：前三个为原生 subagents，第四个由主会话直接调用 DSH Crew。四者使用相同的自包含 brief，读取同一个完整 `design_doc` 快照及目标、约束和事实材料，各自独立回答同一个问题：
+### 四路并行优化建议
+
+进入 Improve Design 后，先绑定本轮设计快照，派发四个只读 reviewers：前三个为原生 subagents，第四个由主会话直接调用 DSH Crew。四者使用相同的自包含 brief，读取同一个完整 `design_doc` 快照及目标、约束和事实材料，各自独立回答同一个问题：
 
 > Any suggestions to improve this design?
 
@@ -233,7 +144,7 @@ implementation slice 必须是可独立验证的行为增量，不按文件、�
 
 DSH 使用上述相同问题和材料，brief 必须自包含：给出 `design_doc` 和仓库绝对路径、只读边界、验收标准、禁止修改/commit/push，并要求区分直接证据与假设。
 
-容量允许时四者并行；并发槽不足时可分批，但后启动者仍只接收同一原始快照，不得看到先完成者的结论。DSH Crew 不可用、被禁用或确认未创建任务时，用第四个原生 subagent 独立回答同一问题，不减少 reviewer 数量；dispatch 状态不明或结果读取失败时，先按 Tool Output and Waiting 核验原任务/实际派发记录，确认未创建、已终止或不存在且无可用结果后才用该 reviewer 的只读 fallback，临时观察失败不重复派发。不得为运行本节点自动安装、启动或配置 DSH Crew。
+容量允许时四者并行；并发槽不足时可分批，但后启动者仍只接收同一原始快照，不得看到先完成者的结论。DSH Crew 不可用、被禁用或确认未创建任务时，用第四个原生 subagent 独立回答同一问题，不减少 reviewer 数量；dispatch 状态不明或结果读取失败时，先按共用等待规则核验原任务/实际派发记录，确认未创建、已终止或不存在且无可用结果后才用该 reviewer 的只读 fallback，临时观察失败不重复派发。不得为运行本节点自动安装、启动或配置 DSH Crew。
 
 汇总时报告 `dsh_crew_status=used|fallback:<reason>`、`reviewer_backend`、`reviewer_model` 和 `independence`。`reviewer_model` 只记录实际结果中可验证的模型身份，否则写 `unknown`；只有证据表明 reviewer 与主 agent 属于不同模型家族时，`independence` 才能写 `verified`，否则写 `unverified`，原生 fallback 写 `native-fallback`。
 
@@ -249,43 +160,28 @@ DSH 使用上述相同问题和材料，brief 必须自包含：给出 `design_d
 
 如果当前环境没有 subagent 能力，围绕同一问题自行审查并明确披露无法提供四份独立结果；不要假装执行了并行评审。
 
-任一 reviewer 返回 `review-unusable` 时，不计入四人覆盖；对该 reviewer 最多重试一次或改用回答同一问题的只读 fallback。仍不可用时报告 coverage gap，进入 `awaiting_user_confirmation`，不得进入 Improve Design。
+任一 reviewer 返回 `review-unusable` 时，不计入四人覆盖；对该 reviewer 最多重试一次或改用回答同一问题的只读 fallback。仍不可用时报告 coverage gap，进入 `awaiting_user_confirmation`，不得把 Improve Design 记为完成或进入 Impl。
 
-汇总建议、证据和拟议裁决后进入 `awaiting_user_confirmation`；此节点不得直接改设计文档。
 
-- 完整链路：用户确认 accepted 建议后，进入 Improve Design。
-- 简单链路：先完成下文只读 Workspace Isolation Check，同时展示拟采纳改法、修改后的预期行为、验收方式、workspace 决策，以及接下来将连续完成设计更新、实现、验证、Deepreview 和 Closeout；请求用户合并确认。仅确认建议而未授权实现时，可以更新设计，但必须在实施前补齐实现授权。项目强制 Planreview 时在后续工作中明确列出。
+四位 reviewer 的派发 brief 明确：不自行调用 Planreview 或启动其完整流程，不写 review artifact；只返回本节点规定的独立建议。必要的专项/Planreview 检查由主 agent 在汇总后按实际缺口决定，避免四路各跑一套 Planreview。
 
-若仍有影响实现的 `needs-more-evidence` 或未决策略问题，先补齐证据并裁决，不请求含糊的实现授权；新事实影响链路建议时按 Path Selection 处理。
+### 裁决与修订
 
-## 4. Improve Design
+主 agent 核验证据并处理 needs-more-evidence；不把四份建议原样拼接。已授权设计优化范围内的改进合批写回同一 design_doc；只读请求只交付建议及裁决，说明设计尚未修订，不冒充完整 Improve Design 已完成。重大取舍或 scope 变化先请用户决定，普通已授权修改不逐条询问。
 
-把 accepted 建议合并回同一个 `design_doc`。在 `options-monitor` 中再次应用可用的 `$om-doc-hygiene`；fallback 时遵循目标仓库文档约定，确保改写后仍是 current-state 文档，而不是评审会话记录。
+核对采纳项已落实、目标/验收未被偷换、无未决 blocking finding，更新 design_ref。结构性改动本身不触发再跑完整 Panel；明确尚未覆盖的专项风险才补相应证据或 reviewer，说明原因。原快照四份结果绑定原版本，不能伪称四人审过修改后版本。
 
-结构性改动本身不触发额外并行复核。只有存在明确且尚未覆盖的专项问题时，才追加对应职责的 reviewer，并说明问题、现有覆盖缺口及预期证据；不重开完整 Panel，不替代适用的 Planreview。
+### 按需 Planreview
 
-- 完整链路或项目强制要求：进入 Planreview Gate，普通 blocking finding 按有界循环回写同一个 `design_doc`。
-- 简单链路且 Planreview 不适用：核对采纳项已落实、无未决 blocking finding、设计与批准 scope/改法一致，然后冻结设计。已有覆盖该设计和 workspace 的实现授权且前置条件仍有效时直接 Implementation；否则报告差异并补齐所需决定或授权。不得把简单链路作为绕过已出现缺陷的理由。
+仅项目/用户要求，或剩余重要设计风险需要对抗性检查时，由主 agent 对最终完整 design_doc 使用 planreview（缺失则同等 fallback），说明具体原因；否则记 not-applicable。检查 goal alignment、切片是否按可验证行为拆分、失败语义及验收缺口。按五次预算合批修订后完整重审，不按每条建议加一轮。策略、scope、安全或新权限决定立即暂停。
 
-## 5. Planreview Gate
+完成修订及适用检查后冻结设计并报告 design_ref、重要决策、建议裁决、验证和风险，结束 Improve Design。单节点不启动实现；workflow 按实现授权和输入有效性决定是否继续。
 
-仅完整链路或项目强制要求时，对最终 `design_doc` 调用可用的 `$planreview`；fallback 时由主 agent 执行 Capability Check 中定义的同等 review。简单链路且无强制要求时跳过本 Gate，记为 `not-applicable`。
+## 4. Impl
 
-要求 `planreview` 检查每个 design decision、slice 和 validation 的 goal alignment，以及 slice 是否按可验证行为切分、是否可以合并；不得把 contract 外的改进机会升级为当前实现要求。
+### Workspace Isolation Check
 
-按 Review Completion Rule 使用独立的 Planreview 预算：
-
-1. 对已选方向内的 blocking finding 做最小设计修正，更新同一个 `design_doc`；在 `options-monitor` 中继续应用可用的 `$om-doc-hygiene`。
-2. 修正后对完整 `design_doc` 再次调用 `$planreview`，不得只审刚改的章节。
-
-finding 若要求重新选择 goal/non-goals、产品方向或行为、scope、public contract、schema、architecture/owner、安全/权限边界或不可逆副作用，停止自动改进并请求用户决策；需要新的外部或生产授权时同样暂停。循环不得替用户做策略选择或扩大授权。
-
-Planreview Gate 只负责 adversarial review；设计修改仍由主 agent 完成，并继续遵守可用的 `$om-doc-hygiene` 或其 fallback。
-适用的 Planreview 未通过时不得进入 Implementation。通过后冻结设计；完整链路执行 Workspace Isolation Check 并请求实现授权。简单链路若合并授权仍覆盖修订后的设计和 workspace，可继续实现，否则报告差异并补齐授权。
-
-## Workspace Isolation Check
-
-两条链路请求 Implementation 授权前，都先做只读检查；完整链路在 Planreview 通过后执行，简单链路在 Panel 汇总时执行：
+此只读预检可在 workflow 向 Impl 过渡时或独立 Impl 接收输入时执行，不代表已开始实现；请求实现授权前只读确定 workspace/base；若直接调用 Impl 已有足够授权则核对后继续，不重复确认普通可逆隔离选择。
 
 共享或受保护分支、无关改动及并行冲突的隔离条件优先于任何复用条件；当前或已有专用 worktree 也必须满足隔离条件，干净的受保护 `main` 不例外。满足条件的现有专用 worktree 仍优先于新建。
 
@@ -297,9 +193,7 @@ Planreview Gate 只负责 adversarial review；设计修改仍由主 agent 完�
 6. base、worktree owner 或未提交改动归属不清时保持 `awaiting_user_confirmation`，不得猜测。
 
 此检查只产生 `implementation_workspace`、`review_base` 和拟议动作，不创建 worktree、不切分支、不 stash、不移动文件。
-将 workspace 决策与当前 Panel 或 Planreview 结果一并报告，在对应确认点取得实现授权。用户明确批准后才执行 workspace 变更，进入 Implementation。
-
-## 6. Implementation
+报告 workspace 决策；授权不足才询问，授权充分时执行。不能在 Save Design、Improve Design 或 Review 中提前创建实现 worktree。
 
 进入 Implementation 后先执行已批准的 workspace 决策，不再增加确认门：
 
@@ -331,7 +225,7 @@ Review finding 不是扩大实现范围的授权。只有阻塞 approved success
 
 ### Implementation Model Routing
 
-模型路由不增加人工确认门；主 agent 始终负责设计一致性、集成、validation 和 Deepreview。
+模型路由不增加人工确认门；主 agent 始终负责设计一致性、集成及 validation；后续 Review 仅按已授权节点序列执行。
 
 Implementation slice 同时满足以下条件时，若当前原生 subagent 支持目标模型，优先使用
 `model=gpt-5.6-luna`、`reasoning_effort=max`：
@@ -341,11 +235,10 @@ Implementation slice 同时满足以下条件时，若当前原生 subagent 支�
 - 改动局部、可独立验证，失败后可以安全回退；
 - 不涉及 public contract、schema、architecture/owner、权限/安全、并发/状态机、migration、数据完整性或不可逆副作用。
 
-Implementation 委派沿用 Agent Handoff，并明确本 slice 的预期行为。
+Impl 委派沿用共用派发规则，并明确本 slice 的预期行为。
 
 主 agent 必须核对实际 diff 和测试证据。Luna 结果未通过验收、需要跨越上述边界或出现新的策略性选择时，立即收回主 agent
-处理，不让 worker 自主扩大范围。目标模型或 subagent 不可用时直接由主 agent 实现，不阻塞流程。所有改动仍进入相同的完整
-validation 和 Deepreview；不得因为使用 Luna 降低验收标准。
+处理，不让 worker 自主扩大范围。目标模型或 subagent 不可用时直接由主 agent 实现，不阻塞流程。所有改动仍接受相同的完整 validation；执行 Review 时覆盖全部改动，不得因为使用 Luna 降低验收标准。
 
 按冻结设计的 slices 连续实现。slice 是执行和进度报告单位，不是确认门：
 
@@ -354,49 +247,23 @@ validation 和 Deepreview；不得因为使用 Luna 降低验收标准。
 - 从真实入口追踪完整调用链，bug fix 落在共同 root owner；
 - 每个 slice 只运行能证明当前行为的最小针对性测试；全部 slices 完成后，对最终内容运行一次项目要求的完整 validation；
 - 普通实现取舍、可修复的编译或测试失败不暂停；诊断、修复并继续下一 slice；
-- 实现事实与设计记录不一致但不改变策略时，可在同一个 `design_doc` 补充事实和实现细节后继续；不得为迁就实现改写已批准目标、非目标或验收标准，也不得削弱测试掩盖偏离。真正的范围变更须有明确用户授权并记入原始批准记录的变更依据；
+- 实现事实与设计记录不一致但不改变策略时，在实现交接中记录差异；仅在另有设计写入授权时更新同一个 `design_doc` 并刷新 design_ref，否则建议由 Save Design 补录；不得为迁就实现改写已批准目标、非目标或验收标准，也不得削弱测试掩盖偏离。真正的范围变更须有明确用户授权并记入原始批准记录的变更依据；
 - 只有实现需要改变 goal/non-goals、产品行为、public contract、schema、architecture/owner、安全或权限边界、不可逆副作用，或需要新的用户授权时，才暂停并返回相应设计/确认节点。
 
-相同内容版本且证据仍有效的 validation 不重复运行；相关源码、测试、配置、依赖或验证环境变化导致证据失效，或项目/用户要求新验证时重新运行。每个 slice 完成后简要报告 changed files、验证和偏差，随后直接继续下一 slice，不进入 `awaiting_user_confirmation`。全部 slices 和项目要求的 validation 完成后，报告汇总结果并直接调用 `$deepreview`，无需等待用户确认。
+相同内容版本且证据仍有效的 validation 不重复运行；相关源码、测试、配置、依赖或验证环境变化导致证据失效，或项目/用户要求新验证时重新运行。每个 slice 完成后简要报告 changed files、验证和偏差，随后直接继续下一 slice，不进入 `awaiting_user_confirmation`。全部 slices 和项目要求的 validation 完成后报告汇总结果，Impl 节点结束。仅 workflow 在授权序列包含 Review 时继续；单节点不调用 deepreview。
 
-## 7. Deepreview Gate
+## 5. Review
 
-实现和 validation 完成后，对正确 base 下的全部当前改动调用可用的 `$deepreview`；fallback 时由主 agent 执行 Capability Check 中定义的同等 review。
+对正确 review_base 下全部本次改动调用 deepreview；缺失时由主 agent 做同等基于证据的审查。独立调用不要求先运行 Impl，也不自动新增设计或重跑所有验证；先核验已有证据，缺少且影响结论时记录缺口。审查可写 review artifact，不修改代码、测试或设计，不自动 stage 新文件。
 
-每轮 review 复用并核对 Scope Drift Guard 的当前 inventory，向 reviewer 显式传递本任务的完整文件清单，包括已提交差异、staged、unstaged 和 untracked 新文件；与实际状态不符时先刷新。要求逐个读取纳入范围的新文件实际内容，不能用普通 `git diff` 代替。artifact 必须记录覆盖范围和未覆盖文件/原因；有影响结论的覆盖缺口时标记为 `review-unusable`。此要求同样适用于 companion skill 和 fallback，不靠自动 stage 新文件补齐范围。
+核对当前 inventory，显式覆盖 committed、staged、unstaged、untracked 新文件及删除/重命名/模式变化；逐个读取新文件实际内容，普通 git diff 不能替代。artifact 记录覆盖及未覆盖范围，影响结论的缺口记 review-unusable。沿真实入口和调用链检查 contracts、失败路径、测试及设计一致性。
 
-同一轮 review 必须读取原始批准记录及后续明确授权的变更，核对每项验收的实现/测试证据，以及新增行为的授权或必要性证据；不能仅凭最新版设计与代码一致就通过。结果复用现有 artifact 和 Closeout 引用，不另开评审、不在每个 slice 重读设计全文或重跑完整 review。
+读取原始批准记录、真实授权变更和绑定的 design_ref，核验原验收与新增行为的依据；当前设计/代码/测试一致不能掩盖原范围漂移。同一审查上下文的完整参考原文且版本未变时可复用；新 reviewer、压缩丢原文、设计/授权变更时重读。代码修改后的每轮仍完整重审，不沿用上轮 verdict。
 
-Deepreview 各轮仅在同一审查上下文中，相关批准记录和冻结设计的版本未变且完整原文仍可用时，复用原文继续核对，免于重复工具读取；新 reviewer、上下文压缩、版本变化或证据不足时重读相关原文。只复用参考输入，不复用评审结论，不用摘要替代依据；代码改动仍每轮完整重审。
+返回 artifact、verdict、findings、必要下一节点和证据。发现代码问题建议回 Impl；设计缺口回 Improve Design；目标变化回 Brainstorm。是否执行返工由 workflow 和真实授权决定，Review 自身不修复。没有可用 verdict 或仍有 blocking finding 时不得报告通过；有可用失败结论可以完成一次审查任务，但明确研发未通过。
 
-按 Review Completion Rule 使用独立的 Deepreview 预算：
+## 结果与交付引用
 
-1. 先完成本轮范围内全部 blocking findings 的共同 root owner 最小修复及针对性测试，再对修复后的内容运行一次项目要求的完整 validation；不逐条 finding 重跑全套。验证失败则修复并重验，不能沿用已失效的结果。
-2. 修复后使用同一个 `implementation_workspace` 和 `review_base` 对全部当前改动再次调用 `$deepreview`，不得只审刚修的文件。
+每个节点完成后简报自己的产物、验证、退出状态及限制。单节点到此结束；workflow 完成其授权序列且全部所需检查通过后，报告：design_ref/设计决策依据、四人建议及裁决引用（适用时）、实现范围与验证、Review 结论/风险，以及给 Delivery 的设计附件或固定链接依据。不再创建 Closeout 节点或要求机械“完成”确认。
 
-finding 若要求改变已冻结的 goal、产品行为、架构、public contract、schema、安全/权限边界或不可逆副作用，停止自动修复，请用户决定范围/方案，并按 Path Selection 重新评估链路；批准后回到 Improve Design 和适用的 Planreview Gate；需要 destructive、外部写入、生产操作或新授权时同样暂停。循环不得绕过这些边界。
-
-实现或修复导致 living docs 变化时，在 `options-monitor` 中用可用的 `$om-doc-hygiene` 更新同一个 owner，fallback 时遵循目标仓库文档约定。所有 blocking finding 关闭并获得可用 verdict 后，报告每轮 artifact、修复和 validation，随后直接进入 Closeout，无需增加确认门。
-
-## 8. Closeout
-
-最终只报告：
-
-- 所选链路、`design_doc` 路径、四人 Panel 结果引用和 planreview 结论（不适用时明确写 `not-applicable`）；
-- 实现范围与 changed files；
-- validation 命令和结果；
-- deepreview artifact 与最终 finding 状态；
-- residual risks、owner 和下一步；
-- 未执行的 commit / push / merge / release / deploy 边界。
-
-简单链路在全部适用退出条件通过并交代结果后标记为 `completed`，无需额外“完成”确认。完整链路报告后进入 `awaiting_user_confirmation`，只有用户明确回复“完成”或同等含义才标记为 `completed`。两者均不包含 Delivery 或生产操作授权。
-
-## Additional Stop Conditions
-
-以下情况也必须暂停：
-
-- 需要用户在会显著改变行为或范围的方案间选择；
-- 权威事实、文件 owner 或目标 base 无法确定；
-- 需要 destructive、外部写入、生产操作或新的授权；
-- validation 无法运行，且没有等价证据；
-- finding 无法安全修复或 residual risk 无 owner。
+产品/范围取舍未决、权威事实或 base/owner 不明、需 destructive/外部/生产新授权、必要验证无可用证据、finding 无法安全修复时暂停并说明具体缺项，不增加无关节点、不猜测通过。

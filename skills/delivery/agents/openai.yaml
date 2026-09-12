@@ -1,0 +1,6 @@
+interface:
+  display_name: "Delivery"
+  short_description: "独立处理提交、PR、合并、发布与升级，复用项目入口并核验交付证据"
+  default_prompt: "使用 $delivery，按我指定的范围完成交付，先核对项目入口和现有证据。"
+policy:
+  allow_implicit_invocation: false

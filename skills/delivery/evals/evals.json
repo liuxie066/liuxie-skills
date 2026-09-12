@@ -1,0 +1,89 @@
+{
+  "skill_name": "delivery",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "提交并推送，内容、base 和验证环境未变，review/validation 完整可读。",
+      "expected_output": "复用有效证据，检查暂存范围并提交推送、核验远端；不创建 PR、不发布，不重复研发流程。",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "准备合并 PR，required checks 在 H1 通过，但 PR 当前 head 已变 H2。",
+      "expected_output": "不能用 H1 通过合并 H2，刷新本目标检查并绑定实际 head 合并；不得绕过 required checks。",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "用户仅授权发布，Release CI 通过，生产仍旧版本。",
+      "expected_output": "核验目标 commit/tag/Release/产物后结束发布，不升级生产，不把远端旧版本当发布失败。",
+      "files": []
+    },
+    {
+      "id": 4,
+      "prompt": "用户仅授权升级 v2，目标 tag/Release 不存在。",
+      "expected_output": "在任何运行环境变更前停下说明目标未发布，不自动补做发布或升级其它版本。",
+      "files": []
+    },
+    {
+      "id": 5,
+      "prompt": "已授权升级连接中断，原任务仍运行。",
+      "expected_output": "继续查询原任务和状态，不重复 apply、重启或回滚；实际版本和健康验收后才能成功。",
+      "files": []
+    },
+    {
+      "id": 6,
+      "prompt": "PM 安装报告 scope=install success=true，API/监听进程仍旧。",
+      "expected_output": "安装成功不能标记升级完成；按授权执行项目服务步骤并独立验证实际版本和健康。",
+      "files": []
+    },
+    {
+      "id": 7,
+      "prompt": "升级已写入，operation_response.write_applied=true，但报告落盘失败。",
+      "expected_output": "保留原始操作结果，先查运行状态，不凭报告失败重复升级；未验证状态明确 unknown。",
+      "files": []
+    },
+    {
+      "id": 8,
+      "prompt": "用户明确授权提交、PR、合并、发布并升级指定环境，没有 Devflow artifact，但项目检查和评审证据完整。",
+      "expected_output": "按项目检查和实际证据连续完成已授权链路，不强制 Devflow 或重复确认；每阶段以自身退出证据为准。",
+      "files": []
+    },
+    {
+      "id": 9,
+      "prompt": "PR 查询网络失败，提交状态不明；另一次查询成功确认不存在匹配 PR。",
+      "expected_output": "查询失败不能当不存在，不创建重复 PR；成功确认不存在且获授权后才创建，并核验 head/base。",
+      "files": []
+    },
+    {
+      "id": 10,
+      "prompt": "远端旧版不支持 --report-dir；测试经 tee/tail 输出 0，但原测试失败。",
+      "expected_output": "不强行传未支持选项，复用该版本入口并安全保存日志；保留被测进程真实失败码，不因 tail 成功继续交付。",
+      "files": []
+    },
+    {
+      "id": 11,
+      "prompt": "PR 在 GitHub 合并成功；linked task worktree 已完成，本地主工作区 main 干净且只落后 12 个提交。",
+      "expected_output": "刷新远端并定位 main 工作区，在该工作区无 autostash 地 ff-only；核验 SHA 和 0/0 再完成本地同步，不把 fetch 或 GitHub merged 当作已同步。",
+      "files": []
+    },
+    {
+      "id": 12,
+      "prompt": "OM main 有已跟踪文档未提交且与远端更新重叠；PM main 只有不重叠的未跟踪 assets/。",
+      "expected_output": "OM 保留现场并明确同步 blocked、文件和原因，不自动 stash/reset；PM 核对路径不冲突后可原生快进并验证 assets 保持原样。不掩盖 OM 尚未完成的本地收尾。",
+      "files": []
+    },
+    {
+      "id": 13,
+      "prompt": "本地 main ahead 2 behind 8，或者另一个工作区的活动任务正在使用 main；用户仅要求升级远端固定 tag。",
+      "expected_output": "不强制移动、rebase 或 stash main，不切换其它活动工作区；主分支同步不能用于远端 release 目录。单独升级不要求为本地同步重跑研发或发布。",
+      "files": []
+    },
+    {
+      "id": 14,
+      "prompt": "没有工作区检出 main，本地仅落后；另一任务已明确完成发布和升级，但本地同步失败。",
+      "expected_output": "可用非强制原生快进 fetch 更新未检出的 main，核验实际引用；恢复时仅做本地同步，不重放已成功的发布或升级。",
+      "files": []
+    }
+  ]
+}
