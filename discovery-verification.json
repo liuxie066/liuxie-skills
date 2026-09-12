@@ -434,5 +434,60 @@
     "claude_live_runtime_tested": false,
     "evidence_directory": "/Users/liuxie/.codex/skill-backups/cross-tool-invocation-20260909-233704",
     "yaml_boolean_regression": "pass: YAML 1.1 aliases rejected before rsync and system validator; native Codex negative probe confirmed no/quoted false policy is ignored; global PyYAML resolver preserved"
+  },
+  "prdflow_synthesis_verification": {
+    "verified_at": "2026-09-12T11:42:40+08:00",
+    "source": "/Volumes/liuxie的硬盘/workspace/agent-skills/skills/prdflow",
+    "source_file_hashes": {
+      "SKILL.md": "a4e0980a9796f82d86e5d9fa0225b758ff81caa26524abb33909cadee2113e11",
+      "evals/test_check_gates.py": "170e0bddf7574e2a4618bd1309d69c0a134a0118a527e2b450147cc158821e20",
+      "evals/evals.json": "cd66900bbee837461a918d851cc94ca04b8a7e910a713be12ea917ee091e3b5c",
+      "references/delivery.md": "82150bc013cc1711bd35177d73c12e070f2c2613a445499234c8721ab508163e",
+      "references/gates.md": "59f108f7c03335f3fc486b6168dd8ee562f53a33fdf2734a5af65cee6a0162aa",
+      "agents/openai.yaml": "3d1602da00381f4a16cc702d857a00700185fb8073a29b8d6dcdda41296d7824",
+      "scripts/check_gates.py": "04e09daf8f2aede790b27b13d562c81a68ec0a956e8028ffe6a17859a02cf1ca"
+    },
+    "manual_policy_unchanged": true,
+    "compatible_system_validation": "pass",
+    "gate_regression_tests": {
+      "passed": 6,
+      "checker_changed": false
+    },
+    "behavioral_samples": {
+      "scenario_families": 5,
+      "independent_runs": 7,
+      "multi_turn_lengths": [
+        4,
+        3
+      ],
+      "corrected_findings": 2,
+      "full_historical_suite_rerun": false,
+      "presentation_residual": "One blocked draft still displayed a short gate JSON."
+    },
+    "global_copy_verification": "pass",
+    "selected_enabled_count": 24,
+    "native_discovery_errors": [],
+    "prdflow_discovery": {
+      "name": "prdflow",
+      "description": "从 idea 共创需求，或把已有讨论直接整理、更新为可阅读和验收的 PRD，明确产品变更、用户主线、业务规则与未决项，并准备 devflow 交接。适用于需求探索、讨论后成稿和已有 PRD 修订；不替代实现方案设计或授权开发。",
+      "interface": {
+        "displayName": "PRDflow",
+        "shortDescription": "从想法共创或从已有讨论直接成稿，明确产品变更与验收并准备交接",
+        "iconSmall": null,
+        "iconLarge": null,
+        "iconSmallUrl": null,
+        "iconLargeUrl": null,
+        "brandColor": null,
+        "defaultPrompt": "使用 $prdflow，根据当前需求和已有讨论产出可阅读的 PRD；已有共识直接成稿，尚不明确时先澄清关键问题。"
+      },
+      "path": "/Users/liuxie/.agents/skills/prdflow/SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    "explicit_load": "pass: installed four files read, ephemeral read-only turn completed",
+    "report": "docs/reviews/prdflow-20260912.md",
+    "evidence_directory": "/private/tmp/prdflow-synthesis-20260912-_2y3gk88",
+    "live_bot_or_delivery_workflow_executed": false
   }
 }

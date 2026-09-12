@@ -54,7 +54,7 @@
     "playwright/SKILL.md": "0ffaabcc8e0990627c4725f18bf1c7955534a796c1c199e872909de2013ce6a8",
     "playwright/LICENSE.txt": "9a7110fc2d2f964038e5dc49128f908f29f47a574c961cba16085914e879cbda",
     "phaseflow/SKILL.md": "879d546c2a2d5b428bcea1056250774f2e58a2d87cfc3f48b28bc08b480763f0",
-    "prdflow/SKILL.md": "a96f728d9158f02a5fdb050353b9e74012ba1dae6a6cb30d471adf4b4c54f40c",
+    "prdflow/SKILL.md": "a4e0980a9796f82d86e5d9fa0225b758ff81caa26524abb33909cadee2113e11",
     "herdr/SKILL.md": "3438157bcab39f08624b361cce4995e73e6b227d4dd909b0c1f54a669934546f",
     "eli5/SKILL.md": "b077ab37758ab840146ac8aac39f5b07616b06bc535cc3a6438bcb57301366f8",
     "gateflow/SKILL.md": "f640791f2f065cb112cfd7079c8c9f3d13c16e7ebe7560be228093b29698c3f7",
@@ -65,7 +65,7 @@
     "ima-skill/meta.json": "e67163e272e5c4a25467db7654feddfb47134a891e2e494415f0fbbb9d129d6f",
     "doc/SKILL.md": "0a635585817d1ac96e8e512114d08258b70f9e54ce0052078a258291ac13a8ed",
     "doc/LICENSE.txt": "4dd13869245e356246a5b770723247bbb80a8f07a181d1d3d873a1734297cdb9",
-    "devflow/SKILL.md": "f99ef0ecb52eade5931611a08b3c22146353a51c39445a8229cb34a0b827bc21",
+    "devflow/SKILL.md": "9007a57eaf0491ed4290d3c65929fb8a68a76b469a1c534b98624525614e0ebc",
     "kimi-webbridge/SKILL.md": "db1d82b37962a5a7756ca862bc0bea211c6bba46c3608b157a135386d4e9be6f",
     "py-perf-analyzer/README.md": "e3b5a592e5a3b25a639a6656f4102ecae855a7488c3d590ddf6e93b5c28fe49c",
     "py-perf-analyzer/SKILL.md": "26ee753a53de4c321016254dd761ff4d95f2cd9ee925d05115a5e56484ac1efa",
@@ -105,9 +105,9 @@
     "playwright/assets/playwright-small.svg": "f1d213c0f76735d8272c3d3e9fbf71fe7b894e2d1588907044c780f2c33a9732",
     "playwright/assets/playwright.png": "521669f088c838196c6c852ccc9abdd7234d8f37fc9a8a7a9af7db2d50193381",
     "phaseflow/agents/openai.yaml": "182e29b1a9624b93912cbce8c643d249fbf0aaef6da94838bdc0a2ba8e815c71",
-    "prdflow/evals/evals.json": "57a36cd0250ff57163ae5cae5a960983744bd610de46f985eef006336f7f95e6",
-    "prdflow/references/delivery.md": "8cb75f19da149d8d929d81f89259d51c484b65756a2f6630de7fa1ed0123897e",
-    "prdflow/agents/openai.yaml": "761cdf6fe90d3e844ea35a9145d3eb3e43a376658563330ad6a0d22f25660f7d",
+    "prdflow/evals/evals.json": "cd66900bbee837461a918d851cc94ca04b8a7e910a713be12ea917ee091e3b5c",
+    "prdflow/references/delivery.md": "82150bc013cc1711bd35177d73c12e070f2c2613a445499234c8721ab508163e",
+    "prdflow/agents/openai.yaml": "3d1602da00381f4a16cc702d857a00700185fb8073a29b8d6dcdda41296d7824",
     "gateflow/agents/openai.yaml": "3fae9c724dfb4497393a96620920cf9fe310dc2f6a9f3a4263bd27b212367a8a",
     "gh-fix-ci/agents/openai.yaml": "36f73b9450504983d1647c960689596f59bf9147c14b1b43162912ed7ada9af6",
     "gh-fix-ci/scripts/inspect_pr_checks.py": "9459e5b03f86785d184a83e5cd8d621b832e918ec04158a2962d867785812c6c",
@@ -121,7 +121,7 @@
     "doc/scripts/render_docx.py": "52b3c3158913ebcad2ada7b8193970b70453239e255054aa2d60c1683af08751",
     "doc/assets/doc.png": "7eadf1088e5062f681dba6596173a1df13bbfbcddd8a8a9bb78fd2071947dcf8",
     "doc/assets/doc-small.svg": "bd5415fbbfe72c66c1527411d61625731fdd2f75b25d1542510b6ddef699ebe0",
-    "devflow/evals/evals.json": "80cdafdd9853ab308b23a3ece230a9c0c3fdefc863b60607c5610838487e287e",
+    "devflow/evals/evals.json": "7d50ad3573fca3ff67de3e3911880922eb4383980a76941f158ca1422f6ae313",
     "kimi-webbridge/references/operations.md": "86855b663649d560a8939c25a7a15d1dba91a58e2e2ed92414848a9a9f8ee6d7",
     "py-perf-analyzer/scripts/perf_profile.py": "8fced3e1f91e9318c67f4e69db89f30fef6963c4f0f135a77276310f5d96030b",
     "grilling/agents/openai.yaml": "3c8415e2bc1bc96ef9cf3a2d0219987af16ca4d522beb7bfcda215533b485dd8",
@@ -560,7 +560,7 @@
     "wait-what/LICENSE": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
     "wait-what/SKILL.md": "e3f44e3ccbc0e7b62f20ba70b295fc9c9f4aa3f96c77168faee1c71bacbf4215",
     "wait-what/agents/openai.yaml": "b41faadf741d51e4ea184148b2d1854d93f947aaf754c7844f70a00f04194999",
-    "prdflow/references/gates.md": "a87fda39597d3513e1177c48d3e693bd2f677fa6eea99b9c2fab57c8ecfaf156",
+    "prdflow/references/gates.md": "59f108f7c03335f3fc486b6168dd8ee562f53a33fdf2734a5af65cee6a0162aa",
     "prdflow/scripts/check_gates.py": "04e09daf8f2aede790b27b13d562c81a68ec0a956e8028ffe6a17859a02cf1ca",
     "prdflow/evals/test_check_gates.py": "170e0bddf7574e2a4618bd1309d69c0a134a0118a527e2b450147cc158821e20"
   },
@@ -854,5 +854,17 @@
     ],
     "manual": 15,
     "automatic": 8
+  },
+  "prdflow_synthesis_update": {
+    "date": "2026-09-12",
+    "reason": "Support early co-creation, late synthesis and same-document revision; deliver visible PRD prose with explicit product changes and local unresolved items.",
+    "changed_files": [
+      "prdflow/SKILL.md",
+      "prdflow/agents/openai.yaml",
+      "prdflow/evals/evals.json",
+      "prdflow/references/delivery.md",
+      "prdflow/references/gates.md"
+    ],
+    "invocation_policy": "unchanged: manual"
   }
 }
