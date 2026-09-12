@@ -4,18 +4,18 @@
     {
       "id": 1,
       "prompt": "在 options-monitor 里为新的候选策略评分机制走完整设计开发流程：先 brainstorm，落设计文档，并行让多个 agent 提升方案，通过 planreview 后实现，最后 deepreview。",
-      "expected_output": "使用 ponytail 约束范围；Brainstorm 完成后先报告并等待用户确认，不自动落文档；用户确认后使用 om-doc-hygiene 保存设计，并直接启动四个独立只读 reviewers，其中第四个在可用时由主会话直接调用 DSH Crew pro worker；Parallel Design Panel 结束后等待确认，Improve Design 完成后直接启动 planreview，最终 Implementation 和 validation 完成后直接启动 deepreview；Deepreview 通过后自动进入 Closeout，Closeout 报告后仅等待最终完成确认。",
+      "expected_output": "保留用户已指定的完整链路，结合当前代码事实说明建议，不重复要求选择链路；仍确认 Brainstorm 的具体 scope。使用 ponytail 约束范围；Brainstorm 完成后先报告并等待用户确认，不自动落文档；用户确认后使用 om-doc-hygiene 保存设计，并直接启动四个独立只读 reviewers，其中第四个在可用时由主会话直接调用 DSH Crew flash worker；Parallel Design Panel 结束后等待确认，Improve Design 完成后直接启动 planreview，最终 Implementation 和 validation 完成后直接启动 deepreview；Deepreview 通过后自动进入 Closeout，Closeout 报告后仅等待最终完成确认。",
       "files": []
     },
     {
       "id": 2,
-      "prompt": "已有 docs/ARCHITECTURE.md 中的一节设计，请不要新建文档。改进这份设计并完成实现和审查。",
+      "prompt": "用户已明确选择完整链路。已有 docs/ARCHITECTURE.md 中的一节设计，请不要新建文档。改进这份设计并完成实现和审查。",
       "expected_output": "复用现有设计 owner，不创建平行版本；设计保存后直接启动并行设计评审，Improve Design 完成后直接启动 planreview；Parallel Design Panel 结束及进入 implementation 前停在 awaiting_user_confirmation，最终实现和验证完成后直接启动 deepreview；Deepreview 通过后自动进入 Closeout，Closeout 报告后才等待最终完成确认；保留提交、发布与部署边界。",
       "files": []
     },
     {
       "id": 3,
-      "prompt": "在一个非 options-monitor 仓库里，从一个架构想法推进到已审查实现；当前没有 ponytail、planreview、deepreview 和 om-doc-hygiene。",
+      "prompt": "用户已明确选择完整链路。在一个非 options-monitor 仓库里，从一个架构想法推进到已审查实现；当前没有 ponytail、planreview、deepreview 和 om-doc-hygiene。",
       "expected_output": "启动时不自动安装或配置 companion skills，报告 ponytail、planreview、deepreview status=fallback:unavailable，om-doc-hygiene_status=not-applicable。直接应用 devflow 的最小范围规则；由主 agent 对完整设计执行同等 adversarial plan review，并对 review_base 下全部当前改动执行 evidence-based deep review，产出相同 Gate 要求的 artifacts、findings 和 verdict；Deepreview 通过后自动进入 Closeout，Closeout 报告后才等待最终完成确认；遵循目标仓库约定完成 owner-first 文档更新。其它确认门、五轮预算和 fail-closed 规则保持不变。",
       "files": []
     },
@@ -34,13 +34,13 @@
     {
       "id": 6,
       "prompt": "设计文档已经保存，开始 Parallel Design Panel；当前 DSH Crew 可用，但并发容量只能同时运行三个 reviewer。",
-      "expected_output": "完成四人评审而不是缩减人数：前三个 reviewer 覆盖 architecture、failure/safety、simplicity/delivery，第四个由主会话直接调用 DSH Crew，设置 tier=pro 做跨视角 adversarial critique，不先 spawn ds-pro/ds-flash Codex 子代理；并发不足时分批运行，所有 reviewer 只读取同一原始 design_doc 快照且互不读取结论；使用 spawn 时必须再读取最终 worker result；DSH brief 自包含、只读并禁止 commit/push；汇总报告 backend、实际 model 和 independence。",
+      "expected_output": "完成四人评审而不是缩减人数：四个 reviewer 使用相同问题 Any suggestions to improve this design? 和完整输入各自独立提出改进，不预分配专项角色；前三个为原生 subagents，第四个由主会话直接调用 DSH Crew，设置 tier=flash，不先 spawn ds-pro/ds-flash Codex 子代理；并发不足时分批运行，所有 reviewer 只读取同一原始 design_doc 快照且互不读取结论；使用 spawn 时必须再读取最终 worker result；DSH brief 自包含、只读并禁止 commit/push；汇总报告 backend、实际 model 和 independence。",
       "files": []
     },
     {
       "id": 7,
       "prompt": "开始四人 Parallel Design Panel，但当前主会话没有可调用的 DSH Crew tools。",
-      "expected_output": "不安装、不启动也不配置 DSH Crew；使用第四个原生 subagent 执行同一 adversarial critic 职责，仍完成四个 reviewer，并在汇总中明确报告 dsh_crew_status 及 fallback 原因、reviewer_backend=native-subagent、reviewer_model 和 independence=native-fallback。",
+      "expected_output": "不安装、不启动也不配置 DSH Crew；使用第四个原生 subagent 独立回答同一设计改进问题，仍完成四个 reviewer，并在汇总中明确报告 dsh_crew_status 及 fallback 原因、reviewer_backend=native-subagent、reviewer_model 和 independence=native-fallback。",
       "files": []
     },
     {
@@ -64,7 +64,7 @@
     {
       "id": 11,
       "prompt": "当前 DSH Crew 可用。请先启动一个 ds-pro Codex 子代理，让它代替主会话调用 DSH Crew，完成第四个设计 reviewer。",
-      "expected_output": "不通过 ds-pro 或 ds-flash Codex 子代理中转；由主会话直接调用全局 dsh_spawn_worker 或 dsh_run_worker 并设置 tier=pro。只读并行时才设置 allow_concurrent_cwd=true；使用 spawn 后通过 dsh_worker_result 获取最终 review。汇总报告 dsh_crew_status、reviewer_backend、可验证的 reviewer_model 和 independence。",
+      "expected_output": "不通过 ds-pro 或 ds-flash Codex 子代理中转；由主会话直接调用全局 dsh_spawn_worker 或 dsh_run_worker 并设置 tier=flash。只读并行时才设置 allow_concurrent_cwd=true；使用 spawn 后通过 dsh_worker_result 获取最终 review。汇总报告 dsh_crew_status、reviewer_backend、可验证的 reviewer_model 和 independence。",
       "files": []
     },
     {
@@ -88,7 +88,7 @@
     {
       "id": 15,
       "prompt": "一个 review 调用失败；另一个输出因截断缺少 scope 和最终 verdict；第三个声称 pass，却同时列出一个未关闭的严重 finding。可以继续下一节点吗？这些失败尝试如何计入最多五轮？",
-      "expected_output": "三种结果都标记为 review-unusable，不能解释为无 finding、pass、pass-with-risks 或节点完成。Panel 中不可用 reviewer 不计入四人覆盖，最多重试一次或使用同职责只读 fallback，仍不可用则报告 coverage gap 并停在当前 Gate。Planreview/Deepreview 的每次调用尝试都占一轮预算，只能在剩余预算内补证据后重审；第 5 轮仍无可用 verdict 或仍有严重、高、中 blocking finding 时进入 awaiting_user_confirmation，未经确认不得进入下一节点或启动第 6 轮。",
+      "expected_output": "三种结果都标记为 review-unusable，不能解释为无 finding、pass、pass-with-risks 或节点完成。Panel 中不可用 reviewer 不计入四人覆盖，最多重试一次或使用回答同一问题的只读 fallback，仍不可用则报告 coverage gap 并停在当前 Gate。Planreview/Deepreview 的每次调用尝试都占一轮预算，只能在剩余预算内补证据后重审；第 5 轮仍无可用 verdict 或仍有严重、高、中 blocking finding 时进入 awaiting_user_confirmation，未经确认不得进入下一节点或启动第 6 轮。",
       "files": []
     },
     {
@@ -105,7 +105,7 @@
     },
     {
       "id": 18,
-      "prompt": "Deepreview 已完成第 2 轮，artifact 和 verdict 可用，没有严重、高或中 finding，但仍有两个低风险 residual risks，均有 owner 和后续去向。当前应如何推进？",
+      "prompt": "当前为用户已确认的完整链路。Deepreview 已完成第 2 轮，artifact 和 verdict 可用，没有严重、高或中 finding，但仍有两个低风险 residual risks，均有 owner 和后续去向。当前应如何推进？",
       "expected_output": "确认 Deepreview 通过；低风险 residual risks 保留 owner、影响和后续去向。自动进入 Closeout，生成最终报告；Closeout 报告后才进入 awaiting_user_confirmation，等待用户明确回复完成，不在 Deepreview 通过后增加单独确认门。",
       "files": []
     },
@@ -137,6 +137,120 @@
       "id": 23,
       "prompt": "Implementation 连续推进中，原始验收要求空查询返回空列表。实现者发现 list(None) 会抛异常，有明确入口和复现；同时建议加缓存和监控，理由是以后可能有用。还有一个完全在冻结计划内的普通 slice。如何处理这三类工作并控制流程成本？",
       "expected_output": "空查询修复可以由失败测试或直接代码路径证明是达到已批准验收所必需，留一句必要性理由和证据引用后在原范围内修复并继续。缓存和监控无法证明必要性时 deferred-with-owner，不自动实现。计划内 slice 正常推进，不重复论证。原始批准记录只保存一处，后续引用；现有 Deepreview 同轮核对原始验收与新增行为依据，不新增 Agent、节点、确认门或评审轮次，也不在每个 slice 重读全部设计或重跑完整 review。",
+      "files": []
+    },
+    {
+      "id": 24,
+      "prompt": "Implementation 已完成 slice 1，开始后的初始 baseline 已保存。slice 2 检查时：A.py 与上次成功检查完全一致，原文和证据仍在当前上下文；B.py 大小不变但 hash 改变；出现新的 untracked debug.py；C.py 被删除；D.py 权限模式改变，E.py 从 staged 变为 committed。之后上下文压缩，只剩 A.py 的摘要与 hash。分别如何检查这些文件并准备 Deepreview？",
+      "expected_output": "每次完整枚举 committed/staged/unstaged/untracked，发现新增、删除、重命名及状态或模式变化，不只检查旧清单。初始 baseline 不变，最近成功检查记录单独保存在已有 workflow context。A.py 仅在原文、证据、相关 base/scope/依赖语义和各层指纹仍有效时免重复读取；B.py 同尺寸仍因 hash 变化重读；新 debug.py 读取并判定范围，不把新增文件加入 baseline 掩盖漂移。核对 C.py 删除前后、D.py 模式和 E.py 状态变化。压缩后原文丢失则重新读取。Deepreview 仍完整走读全部当前改动，不能用指纹或增量检查替代；证据不足 fail closed。",
+      "files": []
+    },
+    {
+      "id": 25,
+      "prompt": "Planreview 本轮给出三个有效中风险设计问题，均在已选方向内。另一个任务的 Deepreview 本轮给出两个不同 root owner 的有效高/中问题和两个低风险项，均不需要新授权。说明修复、验证和下一轮 review 的安排。如果修复中发现必须修改 public contract，或第 5 次 review 后仍有 blocking finding，怎么办？",
+      "expected_output": "主 agent 先裁决完整 finding 集合，将本轮范围内有效 blocking findings 合批修复。Planreview 修订同一个 design_doc 后完整重审，不按每条 finding 启动一次 review；Deepreview 分别完成必要 root owner 修复及针对性测试，对修复集运行一次项目要求的完整 validation，再在同一 workspace/base 完整复审全部改动。验证失败则修复重验，不复用失效结果；低风险项保留 owner/影响/去向，不为清零扩大范围。策略或 public contract 变化立即暂停，不等批次结束。两个 Gate 独立计算含失败的最多五次调用；第 5 次仍未通过时停下确认，未经授权不启动第 6 次。",
+      "files": []
+    },
+    {
+      "id": 26,
+      "prompt": "Deepreview 第 2 轮代码已修改。场景 A：同一 reviewer 上下文仍有完整原始批准记录、授权变更记录和冻结设计原文，版本均未变。场景 B：新 reviewer 只有这些文件的摘要、路径和 hash。场景 C：旧 reviewer 经上下文压缩丢失原文，或用户新批准了一项范围变更并更新了记录。各场景读取哪些材料，能否复用上轮 pass 或省略未修文件？",
+      "expected_output": "A 可以直接用仍完整可用且版本未变的参考原文重新核对，免重复工具读取，但代码改动仍完整重审。B/C 重新读取相关完整原文并核对有效授权；新 hash、摘要或上一轮结论不能替代原始依据。真实用户授权变更可纳入核对，但不以最新版设计覆盖原始批准记录。任何场景都不沿用上一轮 pass，不只审修复文件，不改变覆盖、fail-closed 或轮次预算。",
+      "files": []
+    },
+    {
+      "id": 27,
+      "prompt": "本轮 Deepreview 已返回两个有效 blocking findings；只修好其中一个，另一个仍未处理，完整 validation 也还没跑。上次 reviewer 曾因输入路径不可读失败。现在准备派发下一轮，如何处理与计数？",
+      "expected_output": "先处理全部范围内有效 blockers、跑完所需 validation，核对完整材料可读及快照/base/授权一致后才调用；不对已知未就绪快照派发，也不把此核对升级为新 review。未调用不占轮次，先前已发生的失败调用仍占预算；准备完成后全量复审，不能用 preflight 替代。",
+      "files": []
+    },
+    {
+      "id": 28,
+      "prompt": "Devflow 的 Deepreview 和最终 validation 已完成，Closeout 尚待用户确认。用户随后要求提交推送、创建 PR、合并 main 并发布升级。应如何划分 Devflow 的完成条件、节点和后续请求？如果之后用户只要求升级一个已发布版本，是否需要重新启动 Devflow？",
+      "expected_output": "Devflow 仍以研发 Closeout 和用户完成确认为终点，交接设计、改动、validation、review 和风险证据；不增加提交、PR、发布或升级节点，不把交付成功当作研发完成条件。明确的后续请求按项目独立流程和实际授权处理，不要求仅为发布/升级重走 Brainstorm、Panel 或实现。只有出现新的研发问题并获准处理时，才进入对应研发工作。",
+      "files": []
+    },
+    {
+      "id": 29,
+      "prompt": "恢复 Deepreview 时，摘要说 pass，但原 artifact 已丢失且一个新增文件的覆盖不明；本地测试曾通过，验证环境和依赖近期变更。用户要求省 token。能否沿用完成证据并进入 Closeout？",
+      "expected_output": "不能仅凭摘要/hash或旧测试成功沿用 review；补足原始证据与完整覆盖，必要时完整复审且不可重置预算。核对研发验证环境与依赖变更，重跑失效检查，证据完整有效后才按节点退出条件推进。精简日志不削减质量。",
+      "files": []
+    },
+    {
+      "id": 30,
+      "prompt": "一个测试命令输出了三万行日志，最早有失败堆栈，最后十行都是成功信息；命令经过 tee/tail 后 shell 显示 0。另一个 reviewer 读取长 diff 时工具提示截断。如何记录与判断？",
+      "expected_output": "保留原始 stdout/stderr 路径、内容版本/环境和各检查项结果，获取被测命令的真实退出码，不能信任 tail 的 0。摘要保留失败和跳过计数，按线索读取最早堆栈及必要上下文；不重复回传全量日志。审查 diff 必须分段完整读取，截断不能当覆盖或通过。",
+      "files": []
+    },
+    {
+      "id": 31,
+      "prompt": "已启动 Deepreview 第 2 次调用，handle=r2 确認仍运行，连续查询无新增输出。等待接口一次观察超时，随后查询临时失败。应如何继续？ 四人 Panel 的 DSH reviewer 也仍在运行，但读取 result 暂时报错，是否启动第四个原生 fallback？",
+      "expected_output": "继续原 r2 句柄，以原生等待/增量输出优先，无变化约30到60秒退避并遵守工具限制，避免紧密查询循环；观察超时不重启、不新增 review attempt。终态仍取完整结果且实际失败计预算；只有确认终止/不存在后才考虑重试。及时回应用户并按宿主要求更新。 Panel 同样先核验原任务，临时 result 读取失败不启动原生 fallback；派发状态不明也先核验实际记录。",
+      "files": []
+    },
+    {
+      "id": 32,
+      "prompt": "四人 Panel 中三人已给完整结果，第四人任务终止且结果缺失。为了省 token，是否可以据三人一致 pass 进入 Improve Design？另一个任务 Deepreview 已到第5次且输出不可用。",
+      "expected_output": "Panel 仍须四个 reviewer 结果可用，对缺失 reviewer 最多一次重试或回答同一问题的只读 fallback，不能降低人数或独立性且不得查看其它结论；仍缺结果停下。Deepreview 第5次无可用结果停下并请求用户，不自行第6次或用摘要补pass，失败尝试不归零。",
+      "files": []
+    },
+    {
+      "id": 33,
+      "prompt": "设计已保存并获准进入 Panel，尚未有实现 workspace、baseline 或代码测试；reviewer 1 已完成，其它三个 reviewer 尚未启动。可以复用该结果跳过其它职责或 Planreview 吗？之后实现代码和依赖文件未变，但验证环境从 Linux 换到 macOS。如何判断前置条件与证据有效性？",
+      "expected_output": "Panel/Planreview 只要求本节点实际前置条件，不要求未来实现工作区或代码测试。去重仅同Gate同reviewer身份同快照；其它三个reviewer仍须独立回答相同问题，不能复用第一人的结果，Panel不能替代Planreview或Deepreview。验证环境变化时核对适用性并重跑失效验证；行为/范围/权限变化须重新核验。保留原确认边界及完整覆盖。",
+      "files": []
+    },
+    {
+      "id": 34,
+      "prompt": "设计已保存，开始 Panel。主 agent 已有偏好的改法，打算让前三人分别只看架构、安全和简化，让 DSH 专门找反例，并把第一个完成者的建议交给后启动者以避免重复。四人返回后：三人建议增加 scope 外的监控，一人提出有代码证据的范围内简化；另一场景有 reviewer 明确无建议且给出完整依据。应如何派发和裁决？",
+      "expected_output": "四人使用相同自包含 brief、完整设计快照、目标与事实，各自独立回答 Any suggestions to improve this design?，不预分配角色，不注入主 agent 偏好，不传其他 reviewer 结论；分批也保持独立。前三个原生，第四个主会话直接调用 DSH Flash；按 reviewer 身份区分任务，不因相同问题去重。范围外监控 deferred-with-owner，多数意见不构成授权；核验单人提出的简化证据后可 accepted，不按票数丢弃。有依据的无建议与执行失败区分，前者可用、后者 review-unusable。主 agent 汇总裁决后等待用户确认，才改同一个 design_doc。",
+      "files": []
+    },
+    {
+      "id": 35,
+      "prompt": "用户调用 devflow 修复一个纯函数在空输入时的返回值。已读源码，根因局部，验收清晰，不改变契约或状态语义。用户尚未选择链路。下一步做什么？",
+      "expected_output": "说明基于代码证据推荐 simple，解释 simple/full 都有四人独立 Panel、验证和完整 Deepreview，simple 省去非强制 Planreview及部分确认；请求用户确认 scope 和路径。停在 Brainstorm，不能把推荐、无答复或泛泛继续当选择，不落设计、不派发 Panel、不实施。",
+      "files": []
+    },
+    {
+      "id": 36,
+      "prompt": "已建议 simple，同时列出了 full。用户只回复“继续”，没有其它选择依据；另一个任务用户明确说“选简单链路，按上述范围做”。分别如何推进？",
+      "expected_output": "第一种保持 awaiting_user_confirmation，澄清选 simple 还是 full，不推断接受推荐。第二种记录 workflow_path=simple、path_approval_ref 和 scope 依据，保存精简但足够的同一 design_doc，自动启动四人独立 Panel，不重复询问已明确的选择，也不提前实现。",
+      "files": []
+    },
+    {
+      "id": 37,
+      "prompt": "用户已选 simple 并批准 scope。设计已保存。DSH 不可用，三位原生 reviewer 已完成，第四位尚未派发。能否省略第四位，直接实现？",
+      "expected_output": "不能。simple/full 共用四人独立 Panel规则，DSH不可用时第四个原生 reviewer 独立读取同一完整快照并回答同一个问题；不读他人结论。四份结果均可用并裁决后，只读完成 workspace 检查，展示拟采纳改法、验收和后续连续工作，等待用户确认建议及实现，不把选 simple 当实现授权。",
+      "files": []
+    },
+    {
+      "id": 38,
+      "prompt": "simple 的四人 Panel 已完成，workspace/base已只读核验，无策略歧义，项目没有强制 Planreview。用户在看到拟采纳改法、验收、workspace和连续执行范围后明确说“确认建议并继续实现”。接下来如何走？",
+      "expected_output": "更新同一个 design_doc，核对改法落实、scope一致且无未决blocking finding后冻结；Planreview记not-applicable，不假称通过。执行已批准workspace决策，记录初始baseline，连续实现、针对性测试、最终项目validation、完整Deepreview和Closeout。保留授权和scope guard、全部改动覆盖、fail-closed及五次预算；不新增实现确认或最终完成确认，不提交发布。",
+      "files": []
+    },
+    {
+      "id": 39,
+      "prompt": "simple Panel汇总时用户只说“采纳这两条建议，先更新设计，我看完再决定是否实现”。应如何推进？",
+      "expected_output": "仅在原scope内更新同一设计，保持实施前等待；合并授权必须覆盖实现，用户明确保留该决定时不能自动进入Implementation，也不创建worktree或编辑实现。报告设计和workspace决策，等待实现授权。",
+      "files": []
+    },
+    {
+      "id": 40,
+      "prompt": "Brainstorm发现涉及账本schema及恢复语义变更，skill推荐full，但用户明确选择simple。项目AGENTS要求schema变更必须Planreview，恢复后的产品行为还未决定。怎么办？",
+      "expected_output": "保留用户simple选择，不强制改full；说明项目强制Planreview仍适用，并先解决未决恢复行为及scope确认。之后四人Panel与强制Planreview照常执行并需通过，测试与Deepreview不削弱；选择simple不能代替产品决定、实现授权或生产权限。",
+      "files": []
+    },
+    {
+      "id": 41,
+      "prompt": "simple 已批准实施。发现修复需要改变持久化状态机语义，skill建议转full。用户尚未回复。此前Panel可用、Deepreview已经用过两次尝试。如何处理？",
+      "expected_output": "停止受影响实施，展示新证据、方案/scope变化和full建议，等待用户决定，不自动切换或继续改变语义。用户批准切换后记录路径与范围变更引用，复用仍有效证据但补齐失效部分及Planreview；不重复相同快照四人Panel，不重置Deepreview预算，也不能借切换绕过blocking finding。",
+      "files": []
+    },
+    {
+      "id": 42,
+      "prompt": "恢复一个checkpoint：workflow_path=simple，path_approval_ref可读，Deepreview已通过且验证有效，尚未Closeout。另一个旧checkpoint无路径字段，只能找到推荐simple，找不到用户选择。如何继续？",
+      "expected_output": "第一种核验既有证据后执行Closeout并completed，报告Panel引用和Planreview不适用，无最终完成确认。第二种不把推荐当选择，读取原批准依据；若无法证明既有完整链路或用户选择，询问确认，不静默选simple/full，不重置review计数。",
       "files": []
     }
   ]

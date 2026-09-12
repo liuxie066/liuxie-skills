@@ -1,7 +1,7 @@
 interface:
   display_name: "PRDflow"
-  short_description: "通过多轮对话校准目标与交互，收敛可验收需求并准备开发交接"
-  default_prompt: "使用 $prdflow，帮我把这个 idea 收敛成可验收的需求方案，先讨论目标和关键取舍。"
+  short_description: "从想法共创或从已有讨论直接成稿，明确产品变更与验收并准备交接"
+  default_prompt: "使用 $prdflow，根据当前需求和已有讨论产出可阅读的 PRD；已有共识直接成稿，尚不明确时先澄清关键问题。"
 
 policy:
   allow_implicit_invocation: false
