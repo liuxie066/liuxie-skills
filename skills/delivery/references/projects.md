@@ -6,8 +6,11 @@
 
 - 本机源码通常在 `/Volumes/liuxie的硬盘/workspace/options-monitor`。入口约定见 `AGENTS.md`，部署见 `docs/DEPLOY_LINUX_MAC.md`，验证见 `tests/README.md`。
 - 版本和发布入口：`VERSION`、`CHANGELOG.md`、`scripts/release_check.py`、`scripts/release_preflight.sh`；CI 查 `.github/workflows/release-from-version.yml`、`release.yml` 和 `_release-reusable.yml`。按当前约定区分 workflow_dispatch 和 tag 触发，避免同时触发重复发布。
-- 本地完整发布预检现有入口为 `OM_PYTHON=/absolute/path/to/python bash scripts/release_preflight.sh --full`；解释器/Node、依赖图、元数据和测试门槛以当前脚本为准。
+- 本地完整发布预检现有入口为 `OM_PYTHON=/absolute/path/to/python bash scripts/release_preflight.sh --full`；解释器、依赖图、元数据和测试门槛以当前脚本为准；使用当前入口的并行参数，不额外重跑一轮串行全量测试。
 - 升级复用 `./om update check|apply|verify|rollback`。读当前 CLI 的参数和行为，确认 apply 所需 current symlink 与目标 tag；无 `--confirm` 的 apply 是预览，但仍须核对该版本是否有准备副作用。
+- 发布优先沿项目 GitHub Actions 的 VERSION → tag/Release 流程；升级由远端内置升级器消费已核验的 GitHub tag。不要默认上传本地源码归档；确需替代传输时，先明确目的地、载荷和授权。
+- 执行升级/回滚前核对 `service.profile.json` 的 `deploy_user` 与有效 UID，以部署用户运行预览和执行；不要用 sudo 包裹整个升级命令。服务操作沿用项目已有的 sudo 路径。当前与目标升级器内容一致时复用现有入口；有兼容性差异时才准备目标控制目录。
+- 复用升级器已有的依赖哈希缓存，以回执中的 `venv_reused` 和依赖校验为准；依赖变化仍需安装，不手工替换缓存或为了提速跳过校验。安装器选择以部署用户环境为准，不把提权后找不到 uv 当作需要重新搭建安装流程。
 - `update verify` 的部分健康信息来自 `upgrade_status` 历史记录。升级后仍独立检查 active symlink/版本、项目解释器的 `pip check`、当前服务健康、failed units 和 drift；不要把历史状态当实时验收。
 - 若实际入口支持 `--report-dir`，预检保存完整日志；update 保存原有 JSON，只精简终端成功命令输出。update 的子进程输出可能本来就有尾部长度限制，报告文件不能恢复已截断的内容。
 

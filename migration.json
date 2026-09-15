@@ -566,7 +566,7 @@
     "prdflow/evals/test_check_gates.py": "170e0bddf7574e2a4618bd1309d69c0a134a0118a527e2b450147cc158821e20",
     "delivery/SKILL.md": "1a68781352cc3c9772d3c0c744b1e14c47d2eb977345f2681891021ed0d96f3c",
     "delivery/evals/evals.json": "a8448e6e51733444678e093edad7ddbc744f96211b1cdf1505cccc0d0a1bf28e",
-    "delivery/references/projects.md": "e985fe2f9577e31c32b770f3c3f3bd7e29415885f518647010cc5bff188f01a5",
+    "delivery/references/projects.md": "1c192f9fadb4ca4961002075d2068baf1e44ab8c9fdfe435dfd18995f76b9427",
     "delivery/agents/openai.yaml": "5afb1193e5f7379e448dce401be30689d068a21a8d58f277ca0a286740772e65"
   },
   "kimi_webbridge_version": "2.0.5",
