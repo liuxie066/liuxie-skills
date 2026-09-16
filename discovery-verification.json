@@ -1084,6 +1084,34 @@
       "validation": "pass: verify_migration.py --skill skills/devflow；source-only 与全量 verify 均 PASS；全局副本 SHA 与源一致",
       "note": "devflow_atomic_nodes_verification 中 eval_definitions=50 为历史记录，未改写",
       "limits": "未在 Pi / Codex 会话中执行 devflow 节点；本轮只做内容、校验与分发一致性验证"
+    },
+    "scope_generalization": {
+      "date": "2026-09-16",
+      "trigger": "用户指出 devflow 要解决的是通用问题，不应只覆盖订单/交易这类领域数据结构",
+      "change": [
+        "Save Design 步骤 3 改为「复用不限于文档 owner」：覆盖领域结构（字段/实体/状态与枚举/标识与主键/单位与类型约定）、同一语义的别名、以及同一计算或校验的重复实现",
+        "触发条件由「是否加领域字段名」改为「是否新增任何概念、名称或实现」；不新增则记 not-applicable",
+        "节点契约、设计文档必含项、Improve Design 修订、Review 核验口径统一改用「概念、名称与实现」的通用措辞"
+      ],
+      "eval_coverage": {
+        "before": 53,
+        "after": 55,
+        "added_ids": [
+          54,
+          55
+        ],
+        "rewritten_ids": [
+          51
+        ],
+        "covers": [
+          "同一语义的别名（非订单域：报告模块 net_income）",
+          "同一计算或校验的重复实现（扫描模块的换算与校验）",
+          "新配置键仍须归属，不得记 not-applicable"
+        ]
+      },
+      "skill_sha256": "e9f5af5d3cda",
+      "validation": "pass: --skill 校验、source-only、sync、全量 verify 均通过；全局副本 SHA 与源一致",
+      "limits": "未在任何宿主执行 devflow 节点；通用性由措辞与 eval 覆盖体现，未经真实跨域试用验证"
     }
   }
 }

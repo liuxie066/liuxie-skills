@@ -40,7 +40,7 @@ Review 只审查，不改业务代码或设计；问题交由 workflow 返回责
 | 节点 | 必要输入 | 输出与退出条件 |
 | --- | --- | --- |
 | Brainstorm | 需求、相关现状、约束 | 目标、非目标、范围、验收、取舍及未决项；必要决定已确认 |
-| Save Design | 已确认目标/方案、可回读的依据、保存目标 | 唯一 design_doc 及快照引用，决策和验收可独立阅读；涉领域结构时含结构归属清单（不引入新名字记 `not-applicable`）；缺失选择不得代填 |
+| Save Design | 已确认目标/方案、可回读的依据、保存目标 | 唯一 design_doc 及快照引用，决策和验收可独立阅读；涉既有设计复用时含复用清单（不新增概念、名称或实现时记 `not-applicable`）；缺失选择不得代填 |
 | Improve Design | design_doc 快照、目标/边界、事实、允许的设计写入范围 | 四份独立建议、主 agent 裁决、更新后的同一设计及版本；无未决 blocking finding，适用内部检查通过 |
 | Impl | 已批准设计版本、实现授权、workspace/base、验收 | 范围内改动、验证证据及 scope 检查通过；单节点到此停止 |
 | Review | 正确 base 下完整改动、目标/设计依据、可用验证证据 | review artifact、覆盖、verdict、findings 与风险；无 blocking finding 且证据充分才通过 |
@@ -101,7 +101,7 @@ blocking_findings: []
 
 ## 1. Brainstorm
 
-核对目标、动机、非目标、范围、success signals、事实、未知项和候选取舍。涉及领域数据结构时，“事实”包含这些名字在现库中已有的定义；复用既有结构优先于新建平行结构，确需新建的留下理由。只在确有取舍时比较方案，推荐满足目标的最小设计。确认重大选择；已有明确依据不重问。单节点交付讨论结论后停止，不自动落盘。workflow 同时按预设规则建议路径，用户确认后才继续。
+核对目标、动机、非目标、范围、success signals、事实、未知项和候选取舍。涉及既有设计时，“事实”包含同一语义在现库中已有哪些 owner；复用既有 owner 优先于新建平行的结构、名称或实现，确需新建的留下理由。只在确有取舍时比较方案，推荐满足目标的最小设计。确认重大选择；已有明确依据不重问。单节点交付讨论结论后停止，不自动落盘。workflow 同时按预设规则建议路径，用户确认后才继续。
 
 ## 2. Save Design
 
@@ -109,7 +109,7 @@ blocking_findings: []
 
 1. 读取 `docs/INDEX.md` 并找到当前 canonical owner；
 2. owner 已存在时更新它；仅在没有合适 owner 时创建设计文档；
-3. 设计引入或修改领域数据结构时，按同一 owner-first 口径核对结构 owner：对每个新字段、实体、枚举值、主键组合或单位/类型约定给出 `复用 <符号路径>`、`新增`（附理由）或 `unresolved`。`复用` 必须具名符号，给不出就不是复用声明；检索只产证据、不下裁定，脚本或自动化输出不替代归属判断。范围限定在与该语义相关的 canonical owner 和结构声明点，不开放式探索整个仓库，也不以券商或运行时证据代替；记录实际检索范围、关键词及命中为空的结果；
+3. 复用不限于文档 owner：对本次拟新增或修改的每一项概念、名称和实现，按同一 owner-first 口径给出 `复用 <owner 符号或文档>`、`新增`（附理由）或 `unresolved`。覆盖领域结构（字段、实体、状态与枚举、标识与主键、单位与类型约定）、同一语义的别名，以及同一计算或校验的重复实现；`复用` 必须具名 owner，给不出就不是复用声明。检索只产证据、不下裁定，脚本或自动化输出不替代归属判断。范围限定在与之相关的 canonical owner 与声明点，不开放式探索整个仓库，也不以券商或运行时证据代替；记录实际检索范围、关键词及命中为空的结果；
 4. 保留事实、权限、状态、副作用、失败语义和生产安全边界；
 5. 不把 `docs/plans/`、`docs/reviews/` 或 `docs/gateflow/` 误当成 living documentation。
 
@@ -119,7 +119,7 @@ blocking_findings: []
 
 - goal / non-goals / success signals；
 - current facts and constraints；
-- 领域结构复用清单：新增或修改的字段、实体、枚举值、主键组合与单位/类型约定的归属，以及实际检索范围和为空命中；不向领域词汇表引入新名字的设计记 `not-applicable`，不要求检索；
+- 复用清单：本次新增或修改的概念、名称与实现的 owner 归属（`复用 <owner>` / `新增` + 理由 / `unresolved`），以及实际检索范围和为空命中；不新增任何概念、名称或实现的设计记 `not-applicable`，不要求检索；
 - chosen design and rejected alternatives；
 - affected owners、contracts、data flow、state transitions 和 failure behavior；
 - implementation slices；
@@ -169,7 +169,7 @@ DSH 使用上述相同问题和材料，brief 必须自包含：给出 `design_d
 
 ### 裁决与修订
 
-主 agent 核验证据并处理 needs-more-evidence；不把四份建议原样拼接。已授权设计优化范围内的改进合批写回同一 design_doc；只读请求只交付建议及裁决，说明设计尚未修订，不冒充完整 Improve Design 已完成。重大取舍或 scope 变化先请用户决定，普通已授权修改不逐条询问。修订引入新的字段、实体或枚举值时，按同一口径补该名字的归属行并刷新 design_ref；已核验且版本未变的名字不重复检索。
+主 agent 核验证据并处理 needs-more-evidence；不把四份建议原样拼接。已授权设计优化范围内的改进合批写回同一 design_doc；只读请求只交付建议及裁决，说明设计尚未修订，不冒充完整 Improve Design 已完成。重大取舍或 scope 变化先请用户决定，普通已授权修改不逐条询问。修订引入新的概念、名称或实现时，按同一口径补该项的归属行并刷新 design_ref；已核验且版本未变的项不重复检索。
 
 核对采纳项已落实、目标/验收未被偷换、无未决 blocking finding，更新 design_ref。结构性改动本身不触发再跑完整 Panel；明确尚未覆盖的专项风险才补相应证据或 reviewer，说明原因。原快照四份结果绑定原版本，不能伪称四人审过修改后版本。
 
@@ -260,7 +260,7 @@ Impl 委派沿用共用派发规则，并明确本 slice 的预期行为。
 
 对正确 review_base 下全部本次改动调用 deepreview；缺失时由主 agent 做同等基于证据的审查。独立调用不要求先运行 Impl，也不自动新增设计或重跑所有验证；先核验已有证据，缺少且影响结论时记录缺口。审查可写 review artifact，不修改代码、测试或设计，不自动 stage 新文件。
 
-核对当前 inventory，显式覆盖 committed、staged、unstaged、untracked 新文件及删除/重命名/模式变化；逐个读取新文件实际内容，普通 git diff 不能替代。artifact 记录覆盖及未覆盖范围，影响结论的缺口记 review-unusable。沿真实入口和调用链检查 contracts、失败路径、测试及设计一致性。有 design_doc/design_ref 依据时，新增或修改的领域结构名必须在复用清单中有对应归属行，且该行可核验：复用声明要有具名符号，新增理由要说明为何不能复用既有 owner；只有形式行而无依据、或与 diff 不符，记 finding。没有设计依据的独立审查记 `not-applicable` 并说明依据。
+核对当前 inventory，显式覆盖 committed、staged、unstaged、untracked 新文件及删除/重命名/模式变化；逐个读取新文件实际内容，普通 git diff 不能替代。artifact 记录覆盖及未覆盖范围，影响结论的缺口记 review-unusable。沿真实入口和调用链检查 contracts、失败路径、测试及设计一致性。有 design_doc/design_ref 依据时，新增或修改的概念、名称与实现必须在复用清单中有对应归属行，且该行可核验：`复用` 声明要有具名 owner，`新增` 理由要说明为何不能复用既有 owner；只有形式行而无依据、或与 diff 不符，记 finding。没有设计依据的独立审查记 `not-applicable` 并说明依据。
 
 读取原始批准记录、真实授权变更和绑定的 design_ref，核验原验收与新增行为的依据；当前设计/代码/测试一致不能掩盖原范围漂移。同一审查上下文的完整参考原文且版本未变时可复用；新 reviewer、压缩丢原文、设计/授权变更时重读。代码修改后的每轮仍完整重审，不沿用上轮 verdict。
 

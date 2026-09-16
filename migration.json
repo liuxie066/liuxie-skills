@@ -69,7 +69,7 @@
     "ima-skill/meta.json": "e67163e272e5c4a25467db7654feddfb47134a891e2e494415f0fbbb9d129d6f",
     "doc/SKILL.md": "0a635585817d1ac96e8e512114d08258b70f9e54ce0052078a258291ac13a8ed",
     "doc/LICENSE.txt": "4dd13869245e356246a5b770723247bbb80a8f07a181d1d3d873a1734297cdb9",
-    "devflow/SKILL.md": "1ac37da953f911e4fa3d139dcd172dfb45708d52d87fc7f70183e0fde7195811",
+    "devflow/SKILL.md": "e9f5af5d3cda32ede05dc8bb698ebf39a274bd40cddbee082bbe13b991a6a981",
     "kimi-webbridge/SKILL.md": "db1d82b37962a5a7756ca862bc0bea211c6bba46c3608b157a135386d4e9be6f",
     "py-perf-analyzer/README.md": "e3b5a592e5a3b25a639a6656f4102ecae855a7488c3d590ddf6e93b5c28fe49c",
     "py-perf-analyzer/SKILL.md": "26ee753a53de4c321016254dd761ff4d95f2cd9ee925d05115a5e56484ac1efa",
@@ -116,7 +116,7 @@
     "doc/scripts/render_docx.py": "52b3c3158913ebcad2ada7b8193970b70453239e255054aa2d60c1683af08751",
     "doc/assets/doc.png": "7eadf1088e5062f681dba6596173a1df13bbfbcddd8a8a9bb78fd2071947dcf8",
     "doc/assets/doc-small.svg": "bd5415fbbfe72c66c1527411d61625731fdd2f75b25d1542510b6ddef699ebe0",
-    "devflow/evals/evals.json": "678ba41047d317e46f0e680f5866633b4be3a902fc50b45104d163a285418db5",
+    "devflow/evals/evals.json": "eea220b183f4c0ff357daf39c901c5c11c9e59695a9e615aaecf703edf579898",
     "kimi-webbridge/references/operations.md": "86855b663649d560a8939c25a7a15d1dba91a58e2e2ed92414848a9a9f8ee6d7",
     "py-perf-analyzer/scripts/perf_profile.py": "8fced3e1f91e9318c67f4e69db89f30fef6963c4f0f135a77276310f5d96030b",
     "grilling/agents/openai.yaml": "3c8415e2bc1bc96ef9cf3a2d0219987af16ca4d522beb7bfcda215533b485dd8",
@@ -1244,6 +1244,18 @@
     "updated_hashes": {
       "devflow/SKILL.md": "1ac37da953f911e4fa3d139dcd172dfb45708d52d87fc7f70183e0fde7195811",
       "devflow/evals/evals.json": "678ba41047d317e46f0e680f5866633b4be3a902fc50b45104d163a285418db5"
+    }
+  },
+  "devflow_reuse_scope_generalization": {
+    "date": "2026-09-16",
+    "reason": "把复用规则的射程从「领域数据结构」改为通用问题：复用不限于文档 owner，覆盖概念/名称/实现（结构、同一语义的别名、同一计算或校验的重复实现），触发条件改为「不新增任何概念、名称或实现时记 not-applicable」；补 eval 54（重复实现）与 55（新配置键仍须归属），并把 eval 51 改为非订单域以体现通用性。",
+    "original_hashes": {
+      "devflow/SKILL.md": "1ac37da953f911e4fa3d139dcd172dfb45708d52d87fc7f70183e0fde7195811",
+      "devflow/evals/evals.json": "678ba41047d317e46f0e680f5866633b4be3a902fc50b45104d163a285418db5"
+    },
+    "updated_hashes": {
+      "devflow/SKILL.md": "e9f5af5d3cda32ede05dc8bb698ebf39a274bd40cddbee082bbe13b991a6a981",
+      "devflow/evals/evals.json": "eea220b183f4c0ff357daf39c901c5c11c9e59695a9e615aaecf703edf579898"
     }
   }
 }
