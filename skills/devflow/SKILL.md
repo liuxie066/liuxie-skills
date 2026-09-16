@@ -40,7 +40,7 @@ Review 只审查，不改业务代码或设计；问题交由 workflow 返回责
 | 节点 | 必要输入 | 输出与退出条件 |
 | --- | --- | --- |
 | Brainstorm | 需求、相关现状、约束 | 目标、非目标、范围、验收、取舍及未决项；必要决定已确认 |
-| Save Design | 已确认目标/方案、可回读的依据、保存目标 | 唯一 design_doc 及快照引用，决策和验收可独立阅读；缺失选择不得代填 |
+| Save Design | 已确认目标/方案、可回读的依据、保存目标 | 唯一 design_doc 及快照引用，决策和验收可独立阅读；涉领域结构时含结构归属清单（不引入新名字记 `not-applicable`）；缺失选择不得代填 |
 | Improve Design | design_doc 快照、目标/边界、事实、允许的设计写入范围 | 四份独立建议、主 agent 裁决、更新后的同一设计及版本；无未决 blocking finding，适用内部检查通过 |
 | Impl | 已批准设计版本、实现授权、workspace/base、验收 | 范围内改动、验证证据及 scope 检查通过；单节点到此停止 |
 | Review | 正确 base 下完整改动、目标/设计依据、可用验证证据 | review artifact、覆盖、verdict、findings 与风险；无 blocking finding 且证据充分才通过 |
@@ -101,7 +101,7 @@ blocking_findings: []
 
 ## 1. Brainstorm
 
-核对目标、动机、非目标、范围、success signals、事实、未知项和候选取舍。只在确有取舍时比较方案，推荐满足目标的最小设计。确认重大选择；已有明确依据不重问。单节点交付讨论结论后停止，不自动落盘。workflow 同时按预设规则建议路径，用户确认后才继续。
+核对目标、动机、非目标、范围、success signals、事实、未知项和候选取舍。涉及领域数据结构时，“事实”包含这些名字在现库中已有的定义；复用既有结构优先于新建平行结构，确需新建的留下理由。只在确有取舍时比较方案，推荐满足目标的最小设计。确认重大选择；已有明确依据不重问。单节点交付讨论结论后停止，不自动落盘。workflow 同时按预设规则建议路径，用户确认后才继续。
 
 ## 2. Save Design
 
@@ -109,15 +109,17 @@ blocking_findings: []
 
 1. 读取 `docs/INDEX.md` 并找到当前 canonical owner；
 2. owner 已存在时更新它；仅在没有合适 owner 时创建设计文档；
-3. 保留事实、权限、状态、副作用、失败语义和生产安全边界；
-4. 不把 `docs/plans/`、`docs/reviews/` 或 `docs/gateflow/` 误当成 living documentation。
+3. 设计引入或修改领域数据结构时，按同一 owner-first 口径核对结构 owner：对每个新字段、实体、枚举值、主键组合或单位/类型约定给出 `复用 <符号路径>`、`新增`（附理由）或 `unresolved`。`复用` 必须具名符号，给不出就不是复用声明；检索只产证据、不下裁定，脚本或自动化输出不替代归属判断。范围限定在与该语义相关的 canonical owner 和结构声明点，不开放式探索整个仓库，也不以券商或运行时证据代替；记录实际检索范围、关键词及命中为空的结果；
+4. 保留事实、权限、状态、副作用、失败语义和生产安全边界；
+5. 不把 `docs/plans/`、`docs/reviews/` 或 `docs/gateflow/` 误当成 living documentation。
 
-其它仓库或 `$om-doc-hygiene` fallback 遵循目标仓库的文档约定完成同样的 owner-first 写入，并明确说明未调用该 skill。
+其它仓库或 `$om-doc-hygiene` fallback 遵循目标仓库的文档约定完成同样的文档与结构 owner-first 写入，并明确说明未调用该 skill。
 
 简单链路可在同一个 `design_doc` 中用短段落或表格表达，不要求长篇备选方案或额外计划文件；四位 reviewer 仍须获得完整必要事实，不用聊天摘要代替设计。两条链路的设计文档至少包含：
 
 - goal / non-goals / success signals；
 - current facts and constraints；
+- 领域结构复用清单：新增或修改的字段、实体、枚举值、主键组合与单位/类型约定的归属，以及实际检索范围和为空命中；不向领域词汇表引入新名字的设计记 `not-applicable`，不要求检索；
 - chosen design and rejected alternatives；
 - affected owners、contracts、data flow、state transitions 和 failure behavior；
 - implementation slices；
@@ -167,7 +169,7 @@ DSH 使用上述相同问题和材料，brief 必须自包含：给出 `design_d
 
 ### 裁决与修订
 
-主 agent 核验证据并处理 needs-more-evidence；不把四份建议原样拼接。已授权设计优化范围内的改进合批写回同一 design_doc；只读请求只交付建议及裁决，说明设计尚未修订，不冒充完整 Improve Design 已完成。重大取舍或 scope 变化先请用户决定，普通已授权修改不逐条询问。
+主 agent 核验证据并处理 needs-more-evidence；不把四份建议原样拼接。已授权设计优化范围内的改进合批写回同一 design_doc；只读请求只交付建议及裁决，说明设计尚未修订，不冒充完整 Improve Design 已完成。重大取舍或 scope 变化先请用户决定，普通已授权修改不逐条询问。修订引入新的字段、实体或枚举值时，按同一口径补该名字的归属行并刷新 design_ref；已核验且版本未变的名字不重复检索。
 
 核对采纳项已落实、目标/验收未被偷换、无未决 blocking finding，更新 design_ref。结构性改动本身不触发再跑完整 Panel；明确尚未覆盖的专项风险才补相应证据或 reviewer，说明原因。原快照四份结果绑定原版本，不能伪称四人审过修改后版本。
 
@@ -185,14 +187,16 @@ DSH 使用上述相同问题和材料，brief 必须自包含：给出 `design_d
 
 共享或受保护分支、无关改动及并行冲突的隔离条件优先于任何复用条件；当前或已有专用 worktree 也必须满足隔离条件，干净的受保护 `main` 不例外。满足条件的现有专用 worktree 仍优先于新建。
 
-1. 读取项目 worktree 约定、`git status --short --branch`、`git worktree list --porcelain` 和预期 base；
+1. 读取项目 worktree 约定、`git status --short --branch`、`git worktree list --porcelain` 和预期 base。首次确定实现基线前刷新目标 remote 的目标分支（通常为 main），记录实际 SHA、本地与远端 ahead/behind，以及任务分支相对目标的独有提交；新任务从已刷新且核验的远端基线开始。fetch 仅更新远端引用，不切换分支或修改工作区；它是事实预检中允许的元数据更新。离线或刷新失败时明确基线未验证，不能将旧引用称为最新；用户明确指定固定历史基线时保留该选择并说明与交付目标的差异；
 2. 已处于本任务专用 worktree 时直接复用，不创建嵌套 worktree；
 3. 已有 base 和任务范围匹配的专用 worktree 时优先复用；
 4. 当前 checkout 仅包含本任务改动且不与其他工作共享时继续使用；
 5. 当前 checkout 位于共享或受保护分支、包含无关改动，或并行实现可能冲突时，拟定从已验证 base 创建隔离 worktree；
 6. base、worktree owner 或未提交改动归属不清时保持 `awaiting_user_confirmation`，不得猜测。
 
-此检查只产生 `implementation_workspace`、`review_base` 和拟议动作，不创建 worktree、不切分支、不 stash、不移动文件。
+对删除、退役或基于“无人调用”的简化，在上述基线核对目标符号的导入、调用、动态注册/字符串、exports 和相关测试，并沿真实入口确认保留 owner；审计记录不能替代当前消费者证据。发现新消费者时保留活跃实现，或按已有授权迁移到现行 owner；涉及产品契约或范围取舍则返回对应节点，不能把问题留到合并前。现有任务基线与交付目标已分叉时，先检查完整待交付 diff 是否夹带无关提交，不以工作区干净代替范围核验，也不自动 rebase 或扩大范围。
+
+此检查只更新上述远端引用并产生 `implementation_workspace`、`review_base` 和拟议动作，不创建 worktree、不切分支、不 stash、不移动文件。
 报告 workspace 决策；授权不足才询问，授权充分时执行。不能在 Save Design、Improve Design 或 Review 中提前创建实现 worktree。
 
 进入 Implementation 后先执行已批准的 workspace 决策，不再增加确认门：
@@ -256,7 +260,7 @@ Impl 委派沿用共用派发规则，并明确本 slice 的预期行为。
 
 对正确 review_base 下全部本次改动调用 deepreview；缺失时由主 agent 做同等基于证据的审查。独立调用不要求先运行 Impl，也不自动新增设计或重跑所有验证；先核验已有证据，缺少且影响结论时记录缺口。审查可写 review artifact，不修改代码、测试或设计，不自动 stage 新文件。
 
-核对当前 inventory，显式覆盖 committed、staged、unstaged、untracked 新文件及删除/重命名/模式变化；逐个读取新文件实际内容，普通 git diff 不能替代。artifact 记录覆盖及未覆盖范围，影响结论的缺口记 review-unusable。沿真实入口和调用链检查 contracts、失败路径、测试及设计一致性。
+核对当前 inventory，显式覆盖 committed、staged、unstaged、untracked 新文件及删除/重命名/模式变化；逐个读取新文件实际内容，普通 git diff 不能替代。artifact 记录覆盖及未覆盖范围，影响结论的缺口记 review-unusable。沿真实入口和调用链检查 contracts、失败路径、测试及设计一致性。有 design_doc/design_ref 依据时，新增或修改的领域结构名必须在复用清单中有对应归属行，且该行可核验：复用声明要有具名符号，新增理由要说明为何不能复用既有 owner；只有形式行而无依据、或与 diff 不符，记 finding。没有设计依据的独立审查记 `not-applicable` 并说明依据。
 
 读取原始批准记录、真实授权变更和绑定的 design_ref，核验原验收与新增行为的依据；当前设计/代码/测试一致不能掩盖原范围漂移。同一审查上下文的完整参考原文且版本未变时可复用；新 reviewer、压缩丢原文、设计/授权变更时重读。代码修改后的每轮仍完整重审，不沿用上轮 verdict。
 

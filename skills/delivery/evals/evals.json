@@ -84,6 +84,30 @@
       "prompt": "没有工作区检出 main，本地仅落后；另一任务已明确完成发布和升级，但本地同步失败。",
       "expected_output": "可用非强制原生快进 fetch 更新未检出的 main，核验实际引用；恢复时仅做本地同步，不重放已成功的发布或升级。",
       "files": []
+    },
+    {
+      "id": 15,
+      "prompt": "用户授权发布并升级指定主机。远端 apply 37 秒，用户请求到最终验收 40 分钟；本地 full 9 分钟、PR CI 12 分钟、main CI 13 分钟。",
+      "expected_output": "记录端到端 40 分钟及阶段时间，指出主耗时为检查；不把 37 秒当总时长，不取消 mandatory CI，不承诺轮询优化能省掉测试时间。",
+      "files": []
+    },
+    {
+      "id": 16,
+      "prompt": "OM release commit 已定稿，本地 full 通过且完整证据的代码、base、配置、依赖、环境均未变。PR CI 仍运行，远端主机已授权；目标 v3.5.5 已确定但 Release 尚未生成。",
+      "expected_output": "复用本地结果并等待同一 CI；期间可只读核对远端入口和准备验收，不提前 apply。Release 验证后显式绑定目标预览并执行，验收 no-check-latest 仍核对目标版本、依赖和 live 服务，逐项保留失败。",
+      "files": []
+    },
+    {
+      "id": 17,
+      "prompt": "新隔离克隆中 OM_PYTHON 指向外部环境，但测试使用 checkout/.venv/bin/python 且该路径缺失；full 尚未启动。",
+      "expected_output": "先按项目约定准备和核对本地隔离环境再运行 full，避免先跑整套后才发现固定路径缺失；不删测试。",
+      "files": []
+    },
+    {
+      "id": 18,
+      "prompt": "同一 CI 原生 watcher 返回运行中；只读验收批次 pip check 失败但最后 systemctl 成功，用户已授权目标主机。",
+      "expected_output": "继续原 handle，不新增 watcher 或重复确认主机；保留 pip 失败，不能以批次最后退出码宣称验收通过。",
+      "files": []
     }
   ]
 }

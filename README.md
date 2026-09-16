@@ -19,7 +19,7 @@ PRDflow 帮你回答：
 - **先做什么？** 第一版的范围，以及这次暂时不做的事情。
 - **怎样算做成？** 用哪些具体操作判断结果符合预期。
 
-产出是一份可以阅读、讨论和验收的产品需求文档（PRD）。尚未确定的事情会明确标出，留给你继续判断。
+产出是一份可以阅读、讨论和验收的产品需求文档（PRD）。尚未确定的事情会明确标出，留给你继续判断。 已明确且影响产品行为的技术约束会保留来源，验收会说明从哪里触发、在哪里观察结果；详细实现设计交给 Devflow。
 
 [查看 PRDflow](skills/prdflow/SKILL.md)
 
@@ -51,7 +51,7 @@ skills/prdflow 和 skills/devflow 两个 Skill。
 如果已有同名项，先核对版本，不要直接覆盖。
 ```
 
-安装后在下一轮对话中使用；若没有出现，重启 Codex 后再试。详见 [OpenAI 官方安装说明](https://learn.chatgpt.com/docs/build-skills)。只需要梳理需求时，也可以先安装 PRDflow。
+安装后在下一轮对话中使用；若没有出现，重启 Codex 后再试。 Skill 安装不包含其调用的本地程序及 API 凭据，已有环境可直接复用。详见 [OpenAI 官方安装说明](https://learn.chatgpt.com/docs/build-skills)。只需要梳理需求时，也可以先安装 PRDflow。
 
 ### 2. 说出你想解决的问题
 
@@ -95,3 +95,7 @@ PRDflow 负责需求，Devflow 负责研发；产品是否上线、使用哪些�
 欢迎在 [Issues](https://github.com/liuxie066/liuxie-skills/issues) 分享使用问题：你想做什么、使用哪个 Skill、预期与实际结果有什么差别。请先去除截图和日志中的私人数据与密钥。
 
 **PRDflow 和 Devflow 由 liuxie 原创，采用 [MIT License](LICENSE)。** 仓库中其他内容的许可与署名，以各自附带的说明为准。
+
+## 网页信息结构
+
+[to-page](skills/to-page/SKILL.md) 结合已有讨论与源码现状，将高密度业务页面的用户任务整理为可独立阅读的结构稿，说明用户问题、目标变化和三问对应的行为验收。使用 `$to-page` 加页面入口和主要任务；沿用现有组件库，默认交付结构方案。2026-09-13 本机发现与加载检查、三个独立设计场景试用通过，尚未完成真实产品页面验收。

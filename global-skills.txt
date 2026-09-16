@@ -18,8 +18,13 @@ planreview
 playwright
 prdflow
 py-perf-analyzer
-screenshot
 show-me
 diagram-design
 wait-what
 delivery
+dayu
+ian-xiaohei-illustrations
+install-futu-opend
+futuapi
+hithink-finance
+to-page

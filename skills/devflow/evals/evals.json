@@ -300,6 +300,24 @@
       "prompt": "用户选full，但已核验设计局部且无剩余重大风险，没有项目或用户强制Planreview。是否再固定做Planreview？",
       "expected_output": "不因full标签固定加Planreview；四路优化及主agent核证修订后记该内部检查not-applicable，完成设计，workflow仅按实现授权继续。",
       "files": []
+    },
+    {
+      "id": 51,
+      "prompt": "Save Design 保存一份已批准设计：给账本持仓手新增字段 `contracts_original`，方案里的理由是「Combo 现有代码就是这么叫的」。保存时怎么处理这个字段？",
+      "expected_output": "按同一 owner-first 口径核对结构归属：指出该语义在权威 lot 上已有定义，给出 `复用 <符号路径>` 行，或说明为何不能复用；不接受无具名符号的复用声明，也不把「现有代码这么叫」当作新增名字的理由。检索结论只作证据，归属判断由主 agent 做出并写入设计。",
+      "files": []
+    },
+    {
+      "id": 52,
+      "prompt": "已确认方案只调整止盈触发阈值、重试次数和日志级别，不新增或修改任何字段、实体、枚举值、主键或单位约定。Save Design 还需要做结构检索吗？",
+      "expected_output": "记结构归属清单 `not-applicable` 并说明未向领域词汇表引入新名字，不执行开放式检索；其余必需文档内容照常保存，四位 reviewer 仍获得完整事实。",
+      "files": []
+    },
+    {
+      "id": 53,
+      "prompt": "只调用 $devflow Review，改动是一个尚无设计文档的新分支代码。Review 是否要把新增的领域结构名与 design_doc 的复用清单核对？",
+      "expected_output": "记该检查 `not-applicable` 并说明没有 design_doc/design_ref 依据；不因缺少设计文档就判缺口或 finding，不替用户补写设计，按真实需求与授权核对已知行为并报告设计一致性及验证的覆盖缺口。",
+      "files": []
     }
   ]
 }

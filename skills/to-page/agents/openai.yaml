@@ -1,0 +1,6 @@
+interface:
+  display_name: "To Page · 网页信息结构"
+  short_description: "把用户任务转成页面骨架、信息编排和可执行的验收路径，适用于高密度业务页面"
+  default_prompt: "使用 $to-page 结合已有聊天记录和当前源码，回答页面三问，整理信息结构方案与验收路径。"
+policy:
+  allow_implicit_invocation: true

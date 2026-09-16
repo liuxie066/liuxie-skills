@@ -13,12 +13,6 @@
       "pluginId": "computer-history@openai-bundled"
     },
     {
-      "name": "create-skill",
-      "path": "/Users/liuxie/.agents/skills/create-skill/SKILL.md",
-      "enabled": true,
-      "pluginId": null
-    },
-    {
       "name": "deepreview",
       "path": "/Users/liuxie/.agents/skills/deepreview/SKILL.md",
       "enabled": true,
@@ -181,12 +175,6 @@
       "pluginId": null
     },
     {
-      "name": "screenshot",
-      "path": "/Users/liuxie/.agents/skills/screenshot/SKILL.md",
-      "enabled": true,
-      "pluginId": null
-    },
-    {
       "name": "show-me",
       "path": "/Users/liuxie/.agents/skills/show-me/SKILL.md",
       "enabled": true,
@@ -267,6 +255,76 @@
     {
       "name": "skill-installer",
       "path": "/Users/liuxie/.codex/skills/.system/skill-installer/SKILL.md",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "dayu",
+      "description": "使用本地 Dayu Agent 下载美股、A 股和港股财报，基于财报问答、生成公司分析报告并读取结果。用户提到 dayu、大愚，或要求利用本地财报库做公司研究时使用；普通行情查询、交易和持仓记账不适用。",
+      "interface": {
+        "displayName": "Dayu 财报分析",
+        "shortDescription": "调用本地 Dayu 下载财报、进行投研问答并生成和读取分析报告",
+        "iconSmall": null,
+        "iconLarge": null,
+        "iconSmallUrl": null,
+        "iconLargeUrl": null,
+        "brandColor": null,
+        "defaultPrompt": null
+      },
+      "path": "/Users/liuxie/.agents/skills/dayu/SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "create-skill",
+      "description": "按本机中央仓库约定创建、更新或从 GitHub 安装 Skill，复用 Codex 系统 skill-creator 和 skill-installer，并明确调用策略。通过 $create-skill 显式启动。",
+      "interface": {
+        "displayName": "Create Skill",
+        "shortDescription": "在中央仓库创建、更新或从 GitHub 安装 Skill，并验证调用策略",
+        "iconSmall": null,
+        "iconLarge": null,
+        "iconSmallUrl": null,
+        "iconLargeUrl": null,
+        "brandColor": null,
+        "defaultPrompt": "使用 $create-skill，在中央仓库创建或从 GitHub 安装这个 Skill，并按用途确定调用策略。"
+      },
+      "path": "/Users/liuxie/.agents/skills/create-skill/SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "ian-xiaohei-illustrations",
+      "description": "生成 Ian 风格的中文正文配图。用于用户要求为中文文章、帖子、博客、Notion 文档、工作流文档、方法论、流程、结构、状态、隐喻或观点生成“怪诞”“小黑”“手绘”“正文配图”“文章插图”“配图建议”“shot list”“去标题/改图”等任务；默认使用小黑 IP、纯白手绘、少量红橙蓝批注、简洁清爽但天马行空的视觉风格。",
+      "interface": {
+        "displayName": "Ian 小黑配图",
+        "shortDescription": "为中文文章生成怪诞清爽、有小黑IP的正文配图资产",
+        "iconSmall": null,
+        "iconLarge": null,
+        "iconSmallUrl": null,
+        "iconLargeUrl": null,
+        "brandColor": null,
+        "defaultPrompt": "Use $ian-xiaohei-illustrations to 为这篇中文文章设计并生成几张小黑怪诞正文配图。"
+      },
+      "path": "/Users/liuxie/.agents/skills/ian-xiaohei-illustrations/SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "futuapi",
+      "description": "富途 OpenAPI 交易与行情助手。查询行情、K线、报价、快照、买卖盘、逐笔成交、分时数据；搜索标的与资讯；解析期权代码、查询期权链/到期日/IV/行权概率；执行买入/卖出/下单/撤单/改单；查询持仓/资金/账户/订单；订阅实时推送；加密货币 (BTC/ETH) 行情与交易；预测市场（Event Contract、Combo 询价）；指标列表与计算（MA/MACD/RSI/KDJ/BOLL）；API 接口速查。用户提到行情、报价、价格、K线、快照、买卖盘、摆盘、成交、分时、搜索、新闻、公告、买入、卖出、下单、撤单、交易、持仓、资金、账户、订单、委托、futu、API、选股、板块、期权、期权链、行权价、到期日、Call、Put、认购、认沽、加密货币、BTC、ETH、财报、业绩、利润表、资产负债表、现金流、营收拆分、分析师评级、目标价、晨星报告、估值、PE、PB、PS、分红、派息、回购、拆合股、股东、持股变动、增持、减持、机构持仓、内部人交易、公司概况、高管信息、经营效率、十大经纪商、卖空、空头持仓、隐含波动率、IV、期权行权概率、事件合约、预测市场、EC、pred_side、amount、quote_id、组合询价、request_combo_quotes、Kalshi、指标、技术指标、indicator 时自动使用。",
+      "path": "/Users/liuxie/.agents/skills/futuapi/SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "install-futu-opend",
+      "description": "Futu OpenD 安装助手。自动下载安装Futu OpenD 并升级 Python SDK。支持 Windows、MacOS、Linux。用户提到安装、下载、启动、运行、配置 OpenD、开发环境、升级 SDK、futu-api 时自动使用。",
+      "path": "/Users/liuxie/.agents/skills/install-futu-opend/SKILL.md",
+      "scope": "user",
       "enabled": true,
       "pluginId": null
     }
@@ -598,5 +656,434 @@
     },
     "scenario_review": "Improve Design, full optional Planreview, standalone Impl, checkpoint migration checked; three boundary ambiguities corrected",
     "limits": "Not an execution of all 50 evals, four-reviewer Panel, or end-to-end development workflow."
+  },
+  "dayu_verification": {
+    "date": "2026-09-13",
+    "skill_sha256": "a6bb9150accab850090c1c6b6df6d5798413f29a24296f46256dfa246e3490c3",
+    "invocation": "automatic, explicit $dayu also available",
+    "source_and_install_validation": "passed; 28 source, 25 selected, 16 manual, 9 automatic",
+    "native_discovery": {
+      "date": "2026-09-13",
+      "method": "Codex app-server skills/list forceReload",
+      "skills": [
+        {
+          "name": "dayu",
+          "description": "使用本地 Dayu Agent 下载美股、A 股和港股财报，基于财报问答、生成公司分析报告并读取结果。用户提到 dayu、大愚，或要求利用本地财报库做公司研究时使用；普通行情查询、交易和持仓记账不适用。",
+          "interface": {
+            "displayName": "Dayu 财报分析",
+            "shortDescription": "调用本地 Dayu 下载财报、进行投研问答并生成和读取分析报告",
+            "iconSmall": null,
+            "iconLarge": null,
+            "iconSmallUrl": null,
+            "iconLargeUrl": null,
+            "brandColor": null,
+            "defaultPrompt": null
+          },
+          "path": "/Users/liuxie/.agents/skills/dayu/SKILL.md",
+          "scope": "user",
+          "enabled": true,
+          "pluginId": null
+        }
+      ],
+      "errors": []
+    },
+    "cli_checks": {
+      "help": [
+        "download",
+        "prompt",
+        "write"
+      ],
+      "missing_filings_exit": 1,
+      "missing_manifest_exit": 2,
+      "live_prompt": "passed: exit 0, DAYU_SKILL_OK, isolated workspace and SEC cache"
+    },
+    "evidence": "/Volumes/liuxie的硬盘/牛马/artifacts/2026-09-13-dayu-skill",
+    "limits": "No batch filing download or full report generation; no independent model skill-selection trial; DSH/Claude runtime discovery not tested."
+  },
+  "screenshot_removal_verification": {
+    "date": "2026-09-13",
+    "removed": "screenshot",
+    "central_source_absent": true,
+    "codex_global_absent": true,
+    "claude_shared_absent": true,
+    "remaining_source_skills": 27,
+    "remaining_global_skills": 24,
+    "unrelated_skill_content_and_permissions_unchanged": true,
+    "verify_migration": "pass",
+    "native_discovery_rechecked": false,
+    "backup": "/Volumes/liuxie的硬盘/牛马/artifacts/2026-09-13-remove-screenshot/before"
+  },
+  "hermes_installations": {
+    "ian-xiaohei-illustrations": {
+      "date": "2026-09-13",
+      "skill": "ian-xiaohei-illustrations",
+      "source": "/Volumes/liuxie的硬盘/workspace/agent-skills/skills/ian-xiaohei-illustrations",
+      "target": "/Users/liuxie/.hermes/skills/imported/ian-xiaohei-illustrations",
+      "upstream": "https://github.com/helloianneo/ian-xiaohei-illustrations",
+      "commit": "91b560849e8f883922cc2fa8a358a668caa94105",
+      "upstream_blobs_verified": 21,
+      "license_notice_preserved": true,
+      "invocation_policy": "upstream automatic retained",
+      "native_discovery": "pass",
+      "skill_view": "pass",
+      "reference_loading": "pass",
+      "slash_expansion": "pass",
+      "image_backend_available": false,
+      "image_generation_executed": false,
+      "global_distribution_changed": false,
+      "hermes_adaptation": "image_gen -> image_generate, explicit missing-backend behavior"
+    }
+  },
+  "xiaohei_global_verification": {
+    "date": "2026-09-13",
+    "global_count": 25,
+    "manual_count": 16,
+    "automatic_count": 9,
+    "native_discovery": {
+      "method": "Codex app-server skills/list forceReload",
+      "skills": [
+        {
+          "name": "create-skill",
+          "description": "按本机中央仓库约定创建、更新或从 GitHub 安装 Skill，复用 Codex 系统 skill-creator 和 skill-installer，并明确调用策略。通过 $create-skill 显式启动。",
+          "interface": {
+            "displayName": "Create Skill",
+            "shortDescription": "在中央仓库创建、更新或从 GitHub 安装 Skill，并验证调用策略",
+            "iconSmall": null,
+            "iconLarge": null,
+            "iconSmallUrl": null,
+            "iconLargeUrl": null,
+            "brandColor": null,
+            "defaultPrompt": "使用 $create-skill，在中央仓库创建或从 GitHub 安装这个 Skill，并按用途确定调用策略。"
+          },
+          "path": "/Users/liuxie/.agents/skills/create-skill/SKILL.md",
+          "scope": "user",
+          "enabled": true,
+          "pluginId": null
+        },
+        {
+          "name": "ian-xiaohei-illustrations",
+          "description": "生成 Ian 风格的中文正文配图。用于用户要求为中文文章、帖子、博客、Notion 文档、工作流文档、方法论、流程、结构、状态、隐喻或观点生成“怪诞”“小黑”“手绘”“正文配图”“文章插图”“配图建议”“shot list”“去标题/改图”等任务；默认使用小黑 IP、纯白手绘、少量红橙蓝批注、简洁清爽但天马行空的视觉风格。",
+          "interface": {
+            "displayName": "Ian 小黑配图",
+            "shortDescription": "为中文文章生成怪诞清爽、有小黑IP的正文配图资产",
+            "iconSmall": null,
+            "iconLarge": null,
+            "iconSmallUrl": null,
+            "iconLargeUrl": null,
+            "brandColor": null,
+            "defaultPrompt": "Use $ian-xiaohei-illustrations to 为这篇中文文章设计并生成几张小黑怪诞正文配图。"
+          },
+          "path": "/Users/liuxie/.agents/skills/ian-xiaohei-illustrations/SKILL.md",
+          "scope": "user",
+          "enabled": true,
+          "pluginId": null
+        }
+      ],
+      "errors": []
+    },
+    "hermes_create_skill_load": "pass",
+    "scope_rule": "New installs default to global distribution; only explicit limitations in current request narrow the scope",
+    "full_verify_migration": "pass",
+    "image_generation_executed": false
+  },
+  "futu_installation_verification": {
+    "date": "2026-09-13",
+    "source": "https://openapi.futunn.com/futu-api-doc/intro/ai.html",
+    "global_skills": [
+      "install-futu-opend",
+      "futuapi"
+    ],
+    "opend_app": "/Applications/Futu_OpenD.app",
+    "opend_version": "10.10.7008",
+    "opend_action": "reused existing latest GUI; no restart",
+    "sdk_python": "/Users/liuxie/.local/share/futu-skills/venv/bin/python",
+    "runtime": {
+      "sdk_versions": {
+        "futu-api": "10.10.7008",
+        "backtrader": "1.9.78.123",
+        "matplotlib": "3.11.2",
+        "pandas": "3.0.5",
+        "numpy": "2.5.3",
+        "protobuf": "7.36.1"
+      },
+      "opend": {
+        "server_ver": "1010",
+        "qot_logined": true,
+        "trd_logined": true,
+        "market_hk": "CLOSED",
+        "market_us": "AFTER_HOURS_END"
+      },
+      "local_connection": "pass",
+      "transactions_executed": false
+    },
+    "official_scripts": {
+      "check_env.py": {
+        "ok": true,
+        "checks": [
+          {
+            "check": "SDK",
+            "ok": true,
+            "message": "futu-api 10.10.7008"
+          },
+          {
+            "check": "OpenD",
+            "ok": true,
+            "message": "OpenD 可连接 (127.0.0.1:11111)"
+          }
+        ]
+      },
+      "quote/get_global_state.py": {
+        "ok": true,
+        "server_ver": "1010",
+        "qot_logined": true
+      }
+    },
+    "native_discovery": {
+      "method": "Codex app-server skills/list forceReload",
+      "skills": [
+        {
+          "name": "futuapi",
+          "description": "富途 OpenAPI 交易与行情助手。查询行情、K线、报价、快照、买卖盘、逐笔成交、分时数据；搜索标的与资讯；解析期权代码、查询期权链/到期日/IV/行权概率；执行买入/卖出/下单/撤单/改单；查询持仓/资金/账户/订单；订阅实时推送；加密货币 (BTC/ETH) 行情与交易；预测市场（Event Contract、Combo 询价）；指标列表与计算（MA/MACD/RSI/KDJ/BOLL）；API 接口速查。用户提到行情、报价、价格、K线、快照、买卖盘、摆盘、成交、分时、搜索、新闻、公告、买入、卖出、下单、撤单、交易、持仓、资金、账户、订单、委托、futu、API、选股、板块、期权、期权链、行权价、到期日、Call、Put、认购、认沽、加密货币、BTC、ETH、财报、业绩、利润表、资产负债表、现金流、营收拆分、分析师评级、目标价、晨星报告、估值、PE、PB、PS、分红、派息、回购、拆合股、股东、持股变动、增持、减持、机构持仓、内部人交易、公司概况、高管信息、经营效率、十大经纪商、卖空、空头持仓、隐含波动率、IV、期权行权概率、事件合约、预测市场、EC、pred_side、amount、quote_id、组合询价、request_combo_quotes、Kalshi、指标、技术指标、indicator 时自动使用。",
+          "path": "/Users/liuxie/.agents/skills/futuapi/SKILL.md",
+          "scope": "user",
+          "enabled": true,
+          "pluginId": null
+        },
+        {
+          "name": "install-futu-opend",
+          "description": "Futu OpenD 安装助手。自动下载安装Futu OpenD 并升级 Python SDK。支持 Windows、MacOS、Linux。用户提到安装、下载、启动、运行、配置 OpenD、开发环境、升级 SDK、futu-api 时自动使用。",
+          "path": "/Users/liuxie/.agents/skills/install-futu-opend/SKILL.md",
+          "scope": "user",
+          "enabled": true,
+          "pluginId": null
+        }
+      ],
+      "errors": []
+    },
+    "pip_check": "pass",
+    "source_count": 30,
+    "global_count": 27,
+    "hermes_installed": false,
+    "business_trade_actions": false
+  },
+  "default_host_distribution_20260913": {
+    "hosts": [
+      "Codex",
+      "Claude",
+      "Hermes",
+      "DSH",
+      "Pi"
+    ],
+    "verified_skills": [
+      "create-skill",
+      "futuapi",
+      "install-futu-opend"
+    ],
+    "hermes_native_list_view_commands": "pass",
+    "pi_native_loader": "pass",
+    "dsh_installed_provider_list_get": "pass",
+    "existing_sessions_refreshed": false,
+    "evidence": "/Volumes/liuxie的硬盘/牛马/artifacts/2026-09-13-skill-host-defaults"
+  },
+  "hithink_finance_installation": {
+    "commit": "402574a6221d5e255dba47166df8e5abb7149938",
+    "codex_native_discovery": "pass",
+    "claude_shared_directory": "verified",
+    "hermes_native_load": "pass",
+    "pi_native_load": "pass",
+    "dsh_installed_provider_load": "pass",
+    "online_data_tested": false,
+    "evidence": "/Volumes/liuxie的硬盘/牛马/artifacts/2026-09-13-hithink-finance"
+  },
+  "page_structure_20260913": {
+    "codex": {
+      "method": "Codex app-server skills/list forceReload",
+      "skills": [
+        {
+          "name": "page-structure",
+          "description": "为后台、监控台、数据工具和业务工作台设计或审查网页信息结构，将用户任务转成页面骨架、内容顺序与验收路径。适用于信息齐全却难以比较、判断或操作的页面，以及开发前的信息架构设计；不用于纯视觉润色、营销落地页或仅修复组件代码。",
+          "interface": {
+            "displayName": "Page Structure · 网页信息结构",
+            "shortDescription": "把用户任务转成页面骨架、信息编排和可执行的验收路径，适用于高密度业务页面",
+            "iconSmall": null,
+            "iconLarge": null,
+            "iconSmallUrl": null,
+            "iconLargeUrl": null,
+            "brandColor": null,
+            "defaultPrompt": "使用 $page-structure 分析目标页面的主任务和决策信息，给出页面骨架、区域顺序及验收路径。"
+          },
+          "path": "/Users/liuxie/.agents/skills/page-structure/SKILL.md",
+          "scope": "user",
+          "enabled": true,
+          "pluginId": null
+        }
+      ],
+      "errors": []
+    },
+    "hermes": {
+      "name": "page-structure",
+      "native_discovery_and_load": "pass"
+    },
+    "pi": {
+      "skills": [
+        {
+          "name": "page-structure",
+          "description": "为后台、监控台、数据工具和业务工作台设计或审查网页信息结构，将用户任务转成页面骨架、内容顺序与验收路径。适用于信息齐全却难以比较、判断或操作的页面，以及开发前的信息架构设计；不用于纯视觉润色、营销落地页或仅修复组件代码。",
+          "filePath": "/Users/liuxie/.pi/agent/skills/page-structure/SKILL.md",
+          "baseDir": "/Users/liuxie/.pi/agent/skills/page-structure",
+          "sourceInfo": {
+            "path": "/Users/liuxie/.pi/agent/skills/page-structure/SKILL.md",
+            "source": "local",
+            "scope": "user",
+            "origin": "top-level",
+            "baseDir": "/Users/liuxie/.pi/agent/skills/page-structure"
+          },
+          "disableModelInvocation": false
+        }
+      ],
+      "diagnostics": []
+    },
+    "dsh": {
+      "path": "/Users/liuxie/.agents/skills/page-structure/SKILL.md",
+      "invocation": {
+        "modelInvocable": true,
+        "userInvocable": true
+      },
+      "native_load": "pass"
+    },
+    "behavioral_test": "/Volumes/liuxie的硬盘/牛马/artifacts/2026-09-13-page-structure/forward-test.md",
+    "real_product_ui_test": false
+  },
+  "to_page_optimization_20260913": {
+    "codex": {
+      "method": "Codex app-server skills/list forceReload",
+      "skills": [
+        {
+          "name": "to-page",
+          "description": "为后台、监控台、数据工具和业务工作台设计或审查网页信息结构，结合聊天上下文与源码现状，将用户任务转成页面骨架、内容顺序与验收路径。适用于信息齐全却难以比较、判断或操作的页面，以及开发前的信息架构设计；不用于纯视觉润色、营销落地页或仅修复组件代码。",
+          "interface": {
+            "displayName": "To Page · 网页信息结构",
+            "shortDescription": "把用户任务转成页面骨架、信息编排和可执行的验收路径，适用于高密度业务页面",
+            "iconSmall": null,
+            "iconLarge": null,
+            "iconSmallUrl": null,
+            "iconLargeUrl": null,
+            "brandColor": null,
+            "defaultPrompt": "使用 $to-page 结合已有聊天记录和当前源码，回答页面三问，整理信息结构方案与验收路径。"
+          },
+          "path": "/Users/liuxie/.agents/skills/to-page/SKILL.md",
+          "scope": "user",
+          "enabled": true,
+          "pluginId": null
+        }
+      ],
+      "errors": []
+    },
+    "hermes": {
+      "native_discovery_load": "pass",
+      "skill": "to-page"
+    },
+    "pi_dsh": {
+      "pi": "native load pass",
+      "dsh": "native load pass"
+    },
+    "real_page_validation": false
+  },
+  "prdflow_constraints_20260913": {
+    "codex": {
+      "method": "Codex app-server skills/list forceReload",
+      "skills": [
+        {
+          "name": "prdflow",
+          "description": "从 idea 共创需求，或把已有讨论直接整理、更新为可阅读和验收的 PRD，明确产品变更、用户主线、业务规则与未决项，并准备 devflow 交接。适用于需求探索、讨论后成稿和已有 PRD 修订；不替代实现方案设计或授权开发。",
+          "interface": {
+            "displayName": "PRDflow",
+            "shortDescription": "从想法共创或从已有讨论直接成稿，明确产品变更与验收并准备交接",
+            "iconSmall": null,
+            "iconLarge": null,
+            "iconSmallUrl": null,
+            "iconLargeUrl": null,
+            "brandColor": null,
+            "defaultPrompt": "使用 $prdflow，根据当前需求和已有讨论产出可阅读的 PRD；已有共识直接成稿，尚不明确时先澄清关键问题。"
+          },
+          "path": "/Users/liuxie/.agents/skills/prdflow/SKILL.md",
+          "scope": "user",
+          "enabled": true,
+          "pluginId": null
+        }
+      ],
+      "errors": []
+    },
+    "dsh": {
+      "native_load": "pass",
+      "invocation": {
+        "modelInvocable": false,
+        "userInvocable": true
+      }
+    },
+    "hermes_pi": "not installed; existing host scope preserved"
+  },
+  "devflow_structure_reuse_verification": {
+    "date": "2026-09-16",
+    "skill": "devflow",
+    "skill_sha256": "52b1129a2fc276a4",
+    "previous_recorded_sha256": "882c13598e00559c",
+    "reason": "Save Design/Improve Design/Review 增加领域结构复用清单（owner-first 结构检索、复用/新增/unresolved 归属、检索只产证据不下裁定）；frontmatter、description 与调用策略未变。",
+    "source_and_install_validation": "pass: verify_migration.py --skill skills/devflow（本地 invocation 扩展 + 系统 quick_validate 兼容副本）",
+    "manifest_update": "migration.json 仅刷新 devflow/SKILL.md 哈希并记录原因；未重置无关文件哈希",
+    "source_only_verification": "pass: 32 source skills; 29 selected (16 manual / 13 automatic)；此前因 devflow 哈希陈旧而失败的断言已恢复",
+    "global_copy_content_and_permissions": "pass: /Users/liuxie/.agents/skills/devflow/SKILL.md 与源内容 SHA 一致（sync.py --apply 后 verify_migration.py 全量 PASS）",
+    "native_discovery": {
+      "method": "Codex app-server skills/list forceReload",
+      "errors": [],
+      "skills_discovered": 109,
+      "devflow": {
+        "name": "devflow",
+        "path": "/Users/liuxie/.agents/skills/devflow/SKILL.md",
+        "scope": "user",
+        "enabled": true,
+        "pluginId": null
+      },
+      "description_unchanged": true
+    },
+    "invocation_policy_preserved": "manual/explicit-only（allow_implicit_invocation=false + disable-model-invocation=true），未更改",
+    "readme_update": "not required：devflow 已在 README 第 38 行链接，清单成员与调用策略未变",
+    "limits": "未执行 devflow 完整工作流、四路 Panel 或行为试跑；devflow 未安装到 Pi 与 Hermes，沿用既有宿主动作范围，未新增宿主接入。",
+    "pi_host": {
+      "date": "2026-09-16",
+      "finding": "devflow 已在 Pi 可用，无需安装或建链接",
+      "mechanism": "Pi 无条件加载 ~/.agents/skills 为用户技能（dist/core/package-manager.js addResources(\"skills\", collectAutoSkillEntries(userAgentsSkillsDir, \"agents\"), ...)），且该目录始终按可信用户资源处理（dist/core/trust-manager.js hasTrustRequiringProjectResources）",
+      "no_link_added": "未创建 ~/.pi/agent/skills/devflow；Pi 按 realpath 去重（dist/core/skills.js loadSkills 的 realPathSet 对 symlink 静默跳过），因此该链接只是冗余副本",
+      "discovery_evidence": "pi -p 读取 <available_skills> 返回 deepreview/planreview/gh-fix-ci/playwright/py-perf-analyzer 等仅存在于 ~/.agents/skills 的技能，证明该来源被加载",
+      "explicit_load": "pass：pi -p \"/skill:devflow ...\" 返回“已加载。五个节点：Brainstorm、Save Design、Improve Design、Impl、Review。”",
+      "prompt_visibility": "按设计隐藏：devflow 的 disable-model-invocation=true 使其不出现在 <available_skills>，仅可经 /skill:devflow 使用；同目录同策略的 create-skill 为对照（既已建链接也不出现在该块）",
+      "limits": "只有显式加载验证，未在 Pi 中执行 devflow 任何节点或完整工作流"
+    },
+    "repair_round": {
+      "date": "2026-09-16",
+      "defects_fixed": [
+        "Review 的复用清单检查在无 design_doc/design_ref 的独立审查下不可执行；改为条件式并要求记 not-applicable",
+        "节点契约 Save Design 输出列未同步结构归属清单",
+        "该检查只验归属行存在、不验其成立；补具名符号与新增理由的核验要求"
+      ],
+      "eval_coverage": {
+        "before": 50,
+        "after": 53,
+        "added_ids": [
+          51,
+          52,
+          53
+        ],
+        "covers": [
+          "应复用既有 owner 的近义新名",
+          "只改行为不引入新名字应记 not-applicable",
+          "无 design_doc 的独立 Review 应记 not-applicable"
+        ]
+      },
+      "skill_sha256": "1ac37da953f9",
+      "validation": "pass: verify_migration.py --skill skills/devflow；source-only 与全量 verify 均 PASS；全局副本 SHA 与源一致",
+      "note": "devflow_atomic_nodes_verification 中 eval_definitions=50 为历史记录，未改写",
+      "limits": "未在 Pi / Codex 会话中执行 devflow 节点；本轮只做内容、校验与分发一致性验证"
+    }
   }
 }

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Dayu 财报分析"
+  short_description: "调用本地 Dayu 下载财报、进行投研问答并生成和读取分析报告"
+policy:
+  allow_implicit_invocation: true

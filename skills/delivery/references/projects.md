@@ -12,6 +12,9 @@
 - 执行升级/回滚前核对 `service.profile.json` 的 `deploy_user` 与有效 UID，以部署用户运行预览和执行；不要用 sudo 包裹整个升级命令。服务操作沿用项目已有的 sudo 路径。当前与目标升级器内容一致时复用现有入口；有兼容性差异时才准备目标控制目录。
 - 复用升级器已有的依赖哈希缓存，以回执中的 `venv_reused` 和依赖校验为准；依赖变化仍需安装，不手工替换缓存或为了提速跳过校验。安装器选择以部署用户环境为准，不把提权后找不到 uv 当作需要重新搭建安装流程。
 - `update verify` 的部分健康信息来自 `upgrade_status` 历史记录。升级后仍独立检查 active symlink/版本、项目解释器的 `pip check`、当前服务健康、failed units 和 drift；不要把历史状态当实时验收。
+- 已确认发布目标后，apply 预览和执行均显式传同一 `--target-version`；验收该目标时使用受支持的 `update verify --no-check-latest`，避免再次查询“最新版本”。仍核对实际 active 版本等于已发布目标；不凭 `ok` 接受别的版本，也不省略独立 live 服务验收。
+- 一次只读验收可批量收集 active symlink/版本、`pip check`、`update verify --no-check-latest`、service drift、当前服务及 failed units。每项保留真实退出码和输出，缺项失败不能被最后一条成功掩盖；事实未变时不为总结再运行一轮。
+- OM 本地 `--full` 与 PR/main 的必需 CI 分属不同证据，不因重复运行全量测试便直接删门禁。若测试使用 checkout 下 `.venv/bin/python`，开始 full 前核对该路径；仅设置外部 `OM_PYTHON` 不足以满足这些测试。
 - 若实际入口支持 `--report-dir`，预检保存完整日志；update 保存原有 JSON，只精简终端成功命令输出。update 的子进程输出可能本来就有尾部长度限制，报告文件不能恢复已截断的内容。
 
 ## Portfolio Management (PM)
