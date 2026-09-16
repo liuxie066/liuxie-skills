@@ -113,7 +113,7 @@ blocking_findings: []
 4. 保留事实、权限、状态、副作用、失败语义和生产安全边界；
 5. 不把 `docs/plans/`、`docs/reviews/` 或 `docs/gateflow/` 误当成 living documentation。
 
-其它仓库或 `$om-doc-hygiene` fallback 遵循目标仓库的文档约定完成同样的文档与结构 owner-first 写入，并明确说明未调用该 skill。
+其它仓库或 `$om-doc-hygiene` fallback 遵循目标仓库的文档约定完成同样的文档与既有设计 owner-first 写入，并明确说明未调用该 skill。
 
 简单链路可在同一个 `design_doc` 中用短段落或表格表达，不要求长篇备选方案或额外计划文件；四位 reviewer 仍须获得完整必要事实，不用聊天摘要代替设计。两条链路的设计文档至少包含：
 
