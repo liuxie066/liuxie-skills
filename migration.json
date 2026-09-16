@@ -69,7 +69,7 @@
     "ima-skill/meta.json": "e67163e272e5c4a25467db7654feddfb47134a891e2e494415f0fbbb9d129d6f",
     "doc/SKILL.md": "0a635585817d1ac96e8e512114d08258b70f9e54ce0052078a258291ac13a8ed",
     "doc/LICENSE.txt": "4dd13869245e356246a5b770723247bbb80a8f07a181d1d3d873a1734297cdb9",
-    "devflow/SKILL.md": "35ce9eb009c56bc143c67d63784b86b028b3802ac70a6da3440f333ea6cceb4a",
+    "devflow/SKILL.md": "4c47d4a58a1824baaeff8025551bc190ac0839af5f48849d2c8dc61318be2600",
     "kimi-webbridge/SKILL.md": "db1d82b37962a5a7756ca862bc0bea211c6bba46c3608b157a135386d4e9be6f",
     "py-perf-analyzer/README.md": "e3b5a592e5a3b25a639a6656f4102ecae855a7488c3d590ddf6e93b5c28fe49c",
     "py-perf-analyzer/SKILL.md": "26ee753a53de4c321016254dd761ff4d95f2cd9ee925d05115a5e56484ac1efa",
@@ -116,7 +116,7 @@
     "doc/scripts/render_docx.py": "52b3c3158913ebcad2ada7b8193970b70453239e255054aa2d60c1683af08751",
     "doc/assets/doc.png": "7eadf1088e5062f681dba6596173a1df13bbfbcddd8a8a9bb78fd2071947dcf8",
     "doc/assets/doc-small.svg": "bd5415fbbfe72c66c1527411d61625731fdd2f75b25d1542510b6ddef699ebe0",
-    "devflow/evals/evals.json": "eea220b183f4c0ff357daf39c901c5c11c9e59695a9e615aaecf703edf579898",
+    "devflow/evals/evals.json": "33dc32273b0abb76c55ea7579f9a4eb8318824849d05d88999b305dbe1c66c4e",
     "kimi-webbridge/references/operations.md": "86855b663649d560a8939c25a7a15d1dba91a58e2e2ed92414848a9a9f8ee6d7",
     "py-perf-analyzer/scripts/perf_profile.py": "8fced3e1f91e9318c67f4e69db89f30fef6963c4f0f135a77276310f5d96030b",
     "grilling/agents/openai.yaml": "3c8415e2bc1bc96ef9cf3a2d0219987af16ca4d522beb7bfcda215533b485dd8",
@@ -822,7 +822,8 @@
     "hithink-finance/references/api/capability-map.md": "a762613818909542f37eb479be9cc97bc5d28bd9dd114f70a73fc2e51c3a846e",
     "hithink-finance/agents/openai.yaml": "3eb9832e2413e025d339551298c016d668f9528a9607f1396d33e9d959a7cb53",
     "to-page/SKILL.md": "b0e733efea67d81609c5660d1caddad929b1c008dbca0031c6dde47d5487eb33",
-    "to-page/agents/openai.yaml": "50e82d596461cc9b152ce0ee7ba20de7c796d5267145dc16f926dcd0bdd78fd7"
+    "to-page/agents/openai.yaml": "50e82d596461cc9b152ce0ee7ba20de7c796d5267145dc16f926dcd0bdd78fd7",
+    "devflow/scripts/reuse_scan.py": "0f83c16daa57845cb8a7aef5c8bf600397774edf828b41531c7511acaeb8a125"
   },
   "kimi_webbridge_version": "2.0.5",
   "config_before_sha256": "d87c96e79a8b33db5c428f1583a4374dfbc1346486310ffe306d85d95c8646d6",
@@ -1266,6 +1267,29 @@
       "updated_hashes": {
         "devflow/SKILL.md": "35ce9eb009c56bc143c67d63784b86b028b3802ac70a6da3440f333ea6cceb4a"
       }
+    }
+  },
+  "devflow_reuse_scan_tool": {
+    "date": "2026-09-16",
+    "reason": "为 Save Design 的复用清单加入 skill 自带的只读扫描器 scripts/reuse_scan.py：产出候选证据（声明点清单、同名跨 owner、近义名分组、关键词命中），不产裁定；结构遍历对所有 Python 文件完整并报告未读文件数，文本遍历为有界扫描并报告截断。跨仓库通用、仅标准库、确定性输出。",
+    "original_hashes": {
+      "devflow/SKILL.md": "35ce9eb009c56bc143c67d63784b86b028b3802ac70a6da3440f333ea6cceb4a",
+      "devflow/scripts/reuse_scan.py": null
+    },
+    "updated_hashes": {
+      "devflow/SKILL.md": "4c47d4a58a1824baaeff8025551bc190ac0839af5f48849d2c8dc61318be2600",
+      "devflow/scripts/reuse_scan.py": "0f83c16daa57845cb8a7aef5c8bf600397774edf828b41531c7511acaeb8a125",
+      "devflow/evals/evals.json": "33dc32273b0abb76c55ea7579f9a4eb8318824849d05d88999b305dbe1c66c4e"
+    },
+    "eval_coverage": {
+      "before": 55,
+      "after": 56,
+      "added_ids": [
+        56
+      ],
+      "covers": [
+        "扫描器报告截断时不得据此断言不存在；须记为 unresolved 或缩范围重跑"
+      ]
     }
   }
 }

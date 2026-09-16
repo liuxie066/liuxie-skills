@@ -330,6 +330,12 @@
       "prompt": "已批准设计只新增一个配置键 `scan_retry_limit`，不新增任何领域字段、实体或枚举值。Save Design 是否记 `not-applicable`？",
       "expected_output": "不记 `not-applicable`：复用范围不限于领域结构，新配置键同样要给 owner 归属（`复用 <既有 owner>` 或 `新增` + 理由）并写入复用清单；`not-applicable` 只用于完全没有新增概念、名称或实现的设计。",
       "files": []
+    },
+    {
+      "id": 56,
+      "prompt": "Save Design 用 skill 自带的 `scripts/reuse_scan.py` 扫了一遍，输出里 `structure_truncated: true`（有 12 个 Python 文件没读），`text_truncated: true`，并且候选清单里没有目标名字。能否据此写「现库中不存在该语义，记为新增」？",
+      "expected_output": "不能：截断是覆盖缺口，不是「不存在」的结论。要么提高预算/用 --include 缩小范围重跑，要么在复用清单里把该项标 `unresolved` 并记录实际检索范围、关键词与未读文件；脚本输出只作证据，`新增` 或 `复用` 的归属判断由主 agent 做出。",
+      "files": []
     }
   ]
 }

@@ -1152,5 +1152,32 @@
       }
     },
     "limits": "各宿主只验证发现与加载，未在任何宿主执行 devflow 节点或完整工作流；Hermes 的 update/gateway 提示与本改动无关。"
+  },
+  "devflow_reuse_scan_tool": {
+    "date": "2026-09-16",
+    "skill": "devflow",
+    "artifact": "skills/devflow/scripts/reuse_scan.py",
+    "sha256": "0f83c16daa57",
+    "skill_sha256": "4c47d4a58a18",
+    "purpose": "Save Design 的复用清单需要可比对的既有设计证据；prompt 无法证伪（分不清“搜了没找到”和“没搜”）",
+    "discipline": "只产证据不产裁定；结构遍历对所有 Python 文件完整并报告未读文件数；文本遍历有界并报告截断；输出含 git SHA、确定性",
+    "verification": {
+      "on_options_monitor": "1034 个 Python 文件全部解析、0 跳过（structure_truncated=false）；文本遍历 6000 文件后截断（text_truncated=true）；顶层同名跨 owner：status 70、account 54、symbol 37、currency 34",
+      "case_check": "--include domain/** --query contracts_original 命中 _Lot（domain/domain/combo_reconciliation.py:41/73），即最初那个重复结构的实例",
+      "determinism": "同一树同一版本两次运行逐字节一致",
+      "read_only": "运行前后 git status 输出哈希不变",
+      "edge_cases": "空目录、非 Python 仓库（agent-skills，194 文件）、无匹配 include、坏 --root（exit 2）均正常",
+      "installed_path_run": "从 /Users/liuxie/.agents/skills/devflow/scripts/reuse_scan.py 运行成功",
+      "perf": "聚焦 --include 0.25s；仅结构 4.8s；结构+文本 8.9s（OM 全仓库）",
+      "hosts": "源 = ~/.agents/skills = Hermes 副本 = 4c47d4a58a18；Pi 为链接跟随"
+    },
+    "eval_coverage": {
+      "before": 55,
+      "after": 56,
+      "added_ids": [
+        56
+      ]
+    },
+    "limits": "未在真实 Save Design 会话中由 agent 实际调用做端到端试用；未验证在非 Python 为主的仓库上的证据质量（结构遍历只解析 Python）。"
   }
 }
