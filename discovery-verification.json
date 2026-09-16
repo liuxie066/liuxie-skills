@@ -1113,5 +1113,44 @@
       "validation": "pass: --skill 校验、source-only、sync、全量 verify 均通过；全局副本 SHA 与源一致",
       "limits": "未在任何宿主执行 devflow 节点；通用性由措辞与 eval 覆盖体现，未经真实跨域试用验证"
     }
+  },
+  "devflow_host_sync_20260916": {
+    "date": "2026-09-16",
+    "skill": "devflow",
+    "central_commit": "9ec953c",
+    "skill_sha256": "e9f5af5d3cda",
+    "reason": "用户要求更新中央库、同步到各 agent 并推送 GitHub",
+    "central": "main == origin/main == 9ec953c08248；sync.py --apply 与全量 verify_migration.py 均 PASS",
+    "hosts": {
+      "agents_dsh_claude": {
+        "mechanism": "~/.agents/skills 为分发目标，~/.claude/skills 是指向它的符号链接",
+        "devflow_sha256": "e9f5af5d3cda",
+        "status": "pass"
+      },
+      "codex": {
+        "method": "Codex app-server skills/list forceReload",
+        "errors": [],
+        "devflow": {
+          "name": "devflow",
+          "path": "/Users/liuxie/.agents/skills/devflow/SKILL.md",
+          "scope": "user",
+          "enabled": true
+        },
+        "status": "pass"
+      },
+      "pi": {
+        "action": "新建符号链接 ~/.pi/agent/skills/devflow -> /Users/liuxie/.agents/skills/devflow（此前仅有 6 个其他 skill 有链接）",
+        "explicit_load": "pass：pi -p \"/skill:devflow …\" 返回已加载并列出五个节点",
+        "note": "Pi 本身也直接读取 ~/.agents/skills，链接按 realpath 去重（dist/core/skills.js loadSkills 的 realPathSet），因此链接是冗余但一致的登记",
+        "status": "pass"
+      },
+      "hermes": {
+        "action": "复制到 ~/.hermes/skills/imported/devflow（此前无同名），diff -r 与源逐字一致，无需宿主适配",
+        "native_discovery": "pass：hermes skills list 显示 devflow | imported | local | local | enabled",
+        "note": "Hermes imported/ 此前是内容/能力类技能的选集（18 项），devflow 是其中第一个工作流类技能；如需 Hermes 保持选集，可删除该目录回退",
+        "status": "pass"
+      }
+    },
+    "limits": "各宿主只验证发现与加载，未在任何宿主执行 devflow 节点或完整工作流；Hermes 的 update/gateway 提示与本改动无关。"
   }
 }
