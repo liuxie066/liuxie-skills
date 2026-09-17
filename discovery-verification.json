@@ -1179,5 +1179,35 @@
       ]
     },
     "limits": "未在真实 Save Design 会话中由 agent 实际调用做端到端试用；未验证在非 Python 为主的仓库上的证据质量（结构遍历只解析 Python）。"
+  },
+  "devflow_prdflow_handoff_20260918": {
+    "date": "2026-09-18",
+    "skill": "devflow",
+    "skill_sha256": "75bb0637c57d9745b23a707323ea60b6a3a8d6ea852c315791a634631c9448be",
+    "previous_recorded_sha256": "c433adf857b509c446f9a31b0704bae14e239a86976d62c741cd1a78e24f2d5d",
+    "reason": "补齐 prdflow → devflow 产物交接：scope contract 增加产品合同绑定 prd_doc / prd_doc_ref（与 design_doc / design_ref 对称），success_signals 溯源到 PRD 验收，line 54 把 prdflow 交接的 prd_doc 列为交接输入，Review 增加对 prd_doc_ref 的核对（无产品合同记 not-applicable）。frontmatter、description 与调用策略未变。",
+    "source_and_install_validation": "pass: verify_migration.py --skill skills/devflow",
+    "manifest_update": "migration.json 仅刷新 devflow/SKILL.md 哈希（c433adf… → 75bb063…）并追加 devflow_product_contract_binding 原因记录；未重置无关文件哈希",
+    "source_only_verification": "pass: 32 source skills; 29 selected (16 manual / 13 automatic)",
+    "global_copy_content_and_permissions": "pass: sync.py --apply 后 verify_migration.py 全量 PASS（29 global skills 与源内容/权限一致）",
+    "hosts": {
+      "agents_dsh_claude": {
+        "mechanism": "~/.agents/skills 为分发目标，~/.claude/skills 是指向它的符号链接；sync.py --apply + 全量 verify PASS",
+        "status": "pass"
+      },
+      "pi": {
+        "mechanism": "~/.pi/agent/skills/devflow -> ~/.agents/skills/devflow 符号链接，内容自动跟随",
+        "status": "pass"
+      },
+      "hermes": {
+        "action": "备份 ~/.hermes/skills/imported/devflow/SKILL.md → SKILL.md.bak-20260918-product-contract 后复制新内容，diff -r 与源逐字一致（无其它宿主适配）",
+        "native_discovery": "pass: hermes skills list 显示 devflow | imported | local | local | enabled",
+        "status": "pass"
+      }
+    },
+    "codex_appserver_note": "本 shell 的 codex CLI v25.8.1 无 skills list 子命令；以 sync.py --apply + 全量 verify_migration.py 的内容/权限一致作为 Codex/Claude/DSH 加载入口证据，未重跑 app-server skills/list forceReload（技能路径与 enabled 状态未变）",
+    "invocation_policy_preserved": "manual/explicit-only（allow_implicit_invocation=false + disable-model-invocation=true），未更改",
+    "readme_update": "not required：devflow 已在 README 第 38 行链接，清单成员与调用策略未变",
+    "limits": "未在真实 devflow 会话中端到端跑 prdflow → devflow 交接；仅文件级内容与原生发现验证，未执行五节点或四路 Panel。"
   }
 }

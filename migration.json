@@ -69,7 +69,7 @@
     "ima-skill/meta.json": "e67163e272e5c4a25467db7654feddfb47134a891e2e494415f0fbbb9d129d6f",
     "doc/SKILL.md": "0a635585817d1ac96e8e512114d08258b70f9e54ce0052078a258291ac13a8ed",
     "doc/LICENSE.txt": "4dd13869245e356246a5b770723247bbb80a8f07a181d1d3d873a1734297cdb9",
-    "devflow/SKILL.md": "4c47d4a58a1824baaeff8025551bc190ac0839af5f48849d2c8dc61318be2600",
+    "devflow/SKILL.md": "75bb0637c57d9745b23a707323ea60b6a3a8d6ea852c315791a634631c9448be",
     "kimi-webbridge/SKILL.md": "db1d82b37962a5a7756ca862bc0bea211c6bba46c3608b157a135386d4e9be6f",
     "py-perf-analyzer/README.md": "e3b5a592e5a3b25a639a6656f4102ecae855a7488c3d590ddf6e93b5c28fe49c",
     "py-perf-analyzer/SKILL.md": "26ee753a53de4c321016254dd761ff4d95f2cd9ee925d05115a5e56484ac1efa",
@@ -1290,6 +1290,26 @@
       "covers": [
         "扫描器报告截断时不得据此断言不存在；须记为 unresolved 或缩范围重跑"
       ]
+    }
+  },
+  "devflow_scope_contract_persistence": {
+    "date": "2026-09-18",
+    "reason": "把 scope contract 与运行态从「会话上下文」落盘到唯一 git 跟踪文件 <worktree>/.devflow/scope.md：scope contract 定义补齐「本次授权范围」（authorized_slices → success signal）并指定唯一落盘路径；进度块、implementation_baseline、inventory 指纹一并写入该文件，撤销「不创建 repository 状态文件」与「无 artifact 时留在交接摘要」两条禁令；补 .devflow/scope.md 完整字段 schema（scope contract / design&workspace / 授权差异 / 进度 / baseline / inventory / 检查预算）。已有 codex/<task>-devflow-handoff.md 与 docs/gateflow/<task>/scope.md 降级为交接输入。",
+    "original_hashes": {
+      "devflow/SKILL.md": "4c47d4a58a1824baaeff8025551bc190ac0839af5f48849d2c8dc61318be2600"
+    },
+    "updated_hashes": {
+      "devflow/SKILL.md": "c433adf857b509c446f9a31b0704bae14e239a86976d62c741cd1a78e24f2d5d"
+    }
+  },
+  "devflow_product_contract_binding": {
+    "date": "2026-09-18",
+    "reason": "补齐 prdflow → devflow 的产物交接：scope contract 增加产品合同绑定字段 prd_doc / prd_doc_ref（路径 + 内容 hash，与 design_doc / design_ref 对称），success_signals 溯源到 PRD 验收，line 54 把 prdflow 交接的 prd_doc 列为交接输入，Review 增加对 prd_doc_ref 的核对（无产品合同记 not-applicable）。",
+    "original_hashes": {
+      "devflow/SKILL.md": "c433adf857b509c446f9a31b0704bae14e239a86976d62c741cd1a78e24f2d5d"
+    },
+    "updated_hashes": {
+      "devflow/SKILL.md": "75bb0637c57d9745b23a707323ea60b6a3a8d6ea852c315791a634631c9448be"
     }
   }
 }

@@ -51,7 +51,7 @@ Review 可检查已有改动，即使尚无正式设计文档；以真实需求/
 
 - 读取适用 AGENTS.md 和当前节点相关源码、配置、测试及文档；只加载当前节点需要的 companion skill。Impl 使用可用 ponytail（已激活不重复初始化）；Improve Design 仅在内部检查适用时加载 planreview；Review 使用 deepreview。OM 设计/实现涉及文档时使用可用 om-doc-hygiene，其余按仓库 owner 约定。
 - companion 缺失记 `fallback:unavailable`，主 agent 执行同等必要检查和 artifact 要求；不适用记 `not-applicable`，不得伪称 pass。不自动安装或配置工具。
-- 原始 goal、non-goals、scope、success signals 和用户确认依据构成 scope contract，只保存一处。后续真实授权追加差异和引用，不能用新版设计覆盖原始批准。建议本身不是范围授权；范围外建议记 `deferred-with-owner`。
+- 原始 goal、non-goals、scope、success signals、本次授权的实现范围（对应 design_doc 中本次实际授权的 slice/块及各自成功标准）和用户确认依据构成 scope contract，只落盘一处：`<worktree>/.devflow/scope.md`（git 跟踪，随提交同步）。已有 `codex/<task>-devflow-handoff.md`、`docs/gateflow/<task>/scope.md` 或 prdflow 交接的 `prd_doc` 只作为交接输入，进入时把仍有效的授权、范围、产品决定与 design_ref 迁入该文件，不并行维护两份。产品合同（prd_doc）与实现设计（design_doc）各自用 `prd_doc_ref` / `design_ref` 绑定路径加内容 hash；无产品合同的纯实现任务记 `not-applicable`。后续真实授权在该文件追加差异和引用，不能用新版设计或新版 PRD 覆盖原始批准。建议本身不是范围授权；范围外建议记 `deferred-with-owner`。
 - 设计与实现绑定 `design_ref`：仓库路径加实际内容 hash，已有固定 commit/permalink 时一并引用；Impl 和 Review 核对同一版本。不得仅引用可变 main 链接。方案决策、理由及相关验收留在唯一设计 owner，避免 v2/final 副本。
 - 研发结束时向 Delivery 交接 design_ref、实现及 review 证据。用户另行授权提交/PR时，建议将设计随提交保存，或在 PR 附本次版本的固定链接；无可访问链接时如实提供路径/hash，不编造 URL。
 - commit/push/PR/merge/release/upgrade 及生产操作不属于这五个节点；已有旧交付授权不自动覆盖新的研发变更。
@@ -68,23 +68,55 @@ Improve Design 的四人 Panel 必须有四个可用结果；无建议但有依�
 
 ## 进度与交接
 
-在已有 workflow/control/review artifact 中维护同一简短块；无 artifact 时留在交接摘要，不另建状态系统。只在节点/内部检查边界、授权或内容变化时更新：
+scope contract、进度、`implementation_baseline` 与 inventory 指纹共用一个 `.devflow/scope.md`（上文），字段如下；conversation-only 结果不足以替代，不得只在交接摘要里留存。只在节点/内部检查边界、授权或内容变化时更新同一文件：
 
 ```yaml
+# —— scope contract（原始批准，只此一处；授权差异见下方 authorization_diffs，不覆盖本段）——
+goal: null
+non_goals: []
+scope: null
+success_signals: []           # 有 PRD 时逐项溯源到 prd_doc 对应验收（章节/ID）；无 PRD 记 not-applicable
+authorized_slices: []          # [{slice, design_doc_ref, success_signal}]；本次授权范围，未授权块 deferred
+user_confirmation: []          # 用户确认原话/依据；转述不编造时间戳或消息 ID
+
+# —— product & design & workspace 绑定（Impl/Review 核对同一版本）——
+prd_doc: null                  # 产品合同（prdflow 交接的 PRD）路径；纯实现任务无产品需求记 not-applicable
+prd_doc_ref: null              # 路径 + 内容 hash；有固定 commit/permalink 时一并引用，不引用可变 main
+design_doc: null
+design_ref: null               # 路径 + 内容 hash；有固定 commit/permalink 时一并引用，不引用可变 main
+implementation_workspace: null
+review_base: null
+
+# —— 授权差异（追加；覆盖记录在 scope contract 之外，不覆盖原始批准）——
+authorization_diffs: []        # [{when, what, ref}]
+
+# —— 进度 ——
 workflow_version: 2
-mode: node  # node | workflow
-workflow_path: null  # simple | full；单节点不适用
-node_sequence: [Review]  # 只列本次授权节点
-current_node: Review
-internal_step: null  # Panel | Revise | Planreview 等；不是独立外部节点
-status: in_progress  # awaiting_user_confirmation | blocked | completed
+mode: node                     # node | workflow
+workflow_path: null            # simple | full；单节点不适用
+node_sequence: []              # 只列本次授权节点
+current_node: null
+internal_step: null            # Panel | Revise | Planreview 等；不是独立外部节点
+status: in_progress            # awaiting_user_confirmation | blocked | completed
 next_action: "实际尚未完成的动作"
 approved_scope_ref: null
 path_approval_ref: null
-design_doc: null
-design_ref: null
-implementation_workspace: null
-review_base: null
+
+# —— implementation_baseline（进入 Impl 时冻结，不得覆盖）——
+implementation_baseline:
+  design_doc: null
+  implementation_workspace: null
+  review_base: null
+  head: null
+  git_status: null             # git status --short 快照
+  staged: []                   # [{path, hash, size}]
+  unstaged: []                 # [{path, hash, size}]
+  untracked: []                # [{path, hash, size}]
+
+# —— 实现阶段 inventory / 指纹（随检查更新；不替代 Deepreview 完整走读）——
+inventory: []                  # [{path, status, hash, size, type, mode, classification, evidence_ref}]
+
+# —— 检查预算、飞行中与证据 ——
 content_revision: null
 planreview_round: 0
 deepreview_round: 0
@@ -208,7 +240,7 @@ DSH 使用上述相同问题和材料，brief 必须自包含：给出 `design_d
 
 ### Implementation Scope Drift Guard
 
-进入 Implementation 时，在现有 workflow context 中记录 `implementation_baseline`，不创建新的 repository 状态文件。baseline 包含冻结的 `design_doc`、`implementation_workspace`、`review_base`、`HEAD`、`git status --short`，以及每个既有 staged index、unstaged working-tree 和 untracked 内容各自的 hash 和 size；只记录路径不够。该初始 baseline 保持不变，不得用后续检查结果覆盖。
+进入 Implementation 时，把 `implementation_baseline` 与本次授权范围一并落盘到 `.devflow/scope.md`，不再只留在 workflow context。baseline 包含冻结的 `design_doc`、`implementation_workspace`、`review_base`、`HEAD`、`git status --short`，以及每个既有 staged index、unstaged working-tree 和 untracked 内容各自的 hash 和 size；只记录路径不够。本次授权范围列出 design_doc 中本次实际授权的 slice/块及其对应 approved success signal，未授权的块记 `deferred-with-owner` 或留待后续授权。该初始 baseline 保持不变，不得用后续检查结果覆盖。
 
 每个 slice 开始前明确对应的 approved success signal、本 slice 交付的行为、expected owners / files 和 validation 命令。
 每项实际修改必须归类为：
@@ -221,7 +253,7 @@ DSH 使用上述相同问题和材料，brief 必须自包含：给出 `design_d
 
 每个 slice 完成后及进入 Deepreview 前，完整枚举相对 `review_base` 的 committed、staged、unstaged 和 untracked 改动，核对新增、删除、重命名及状态变化；不得只检查已有路径。范围判断始终对照初始 `implementation_baseline` 和冻结 scope。
 
-最近成功检查的文件指纹（各状态层的 hash、size、类型和模式）、范围归类及证据引用保留在现有 workflow context。仅在同一上下文中原文与证据仍完整可用、相关 base / scope / 依赖语义未变且指纹一致时，跳过正文重读；否则重新读取实际内容并归类，删除/重命名须核对前后差异。二进制或过大文件先核对指纹，必要时读取；证据不足不得视为已覆盖。此优化仅用于实现阶段 inventory，不替代 Deepreview 对全部当前改动的完整走读。
+最近成功检查的文件指纹（各状态层的 hash、size、类型和模式）、范围归类及证据引用保留在 `.devflow/scope.md`。仅在同一上下文中原文与证据仍完整可用、相关 base / scope / 依赖语义未变且指纹一致时，跳过正文重读；否则重新读取实际内容并归类，删除/重命名须核对前后差异。二进制或过大文件先核对指纹，必要时读取；证据不足不得视为已覆盖。此优化仅用于实现阶段 inventory，不替代 Deepreview 对全部当前改动的完整走读。
 
 无法映射到上述两类的修改不得进入下一 slice：仅属于本 agent 的改动应移除；有价值的发现记录为 `deferred-with-owner`；归属不明或确需改变 scope contract 时暂停并请求用户确认。
 
@@ -262,7 +294,7 @@ Impl 委派沿用共用派发规则，并明确本 slice 的预期行为。
 
 核对当前 inventory，显式覆盖 committed、staged、unstaged、untracked 新文件及删除/重命名/模式变化；逐个读取新文件实际内容，普通 git diff 不能替代。artifact 记录覆盖及未覆盖范围，影响结论的缺口记 review-unusable。沿真实入口和调用链检查 contracts、失败路径、测试及设计一致性。有 design_doc/design_ref 依据时，新增或修改的概念、名称与实现必须在复用清单中有对应归属行，且该行可核验：`复用` 声明要有具名 owner，`新增` 理由要说明为何不能复用既有 owner；只有形式行而无依据、或与 diff 不符，记 finding。没有设计依据的独立审查记 `not-applicable` 并说明依据。
 
-读取原始批准记录、真实授权变更和绑定的 design_ref，核验原验收与新增行为的依据；当前设计/代码/测试一致不能掩盖原范围漂移。同一审查上下文的完整参考原文且版本未变时可复用；新 reviewer、压缩丢原文、设计/授权变更时重读。代码修改后的每轮仍完整重审，不沿用上轮 verdict。
+读取原始批准记录、真实授权变更、绑定的 design_ref 与 prd_doc_ref（无产品合同时记 not-applicable），核验原验收与新增行为的依据；当前设计/代码/测试一致不能掩盖原范围漂移。同一审查上下文的完整参考原文且版本未变时可复用；新 reviewer、压缩丢原文、设计/授权/PRD 变更时重读。代码修改后的每轮仍完整重审，不沿用上轮 verdict。
 
 返回 artifact、verdict、findings、必要下一节点和证据。发现代码问题建议回 Impl；设计缺口回 Improve Design；目标变化回 Brainstorm。是否执行返工由 workflow 和真实授权决定，Review 自身不修复。没有可用 verdict 或仍有 blocking finding 时不得报告通过；有可用失败结论可以完成一次审查任务，但明确研发未通过。
 
