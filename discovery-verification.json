@@ -1209,5 +1209,33 @@
     "invocation_policy_preserved": "manual/explicit-only（allow_implicit_invocation=false + disable-model-invocation=true），未更改",
     "readme_update": "not required：devflow 已在 README 第 38 行链接，清单成员与调用策略未变",
     "limits": "未在真实 devflow 会话中端到端跑 prdflow → devflow 交接；仅文件级内容与原生发现验证，未执行五节点或四路 Panel。"
+  },
+  "devflow_reuse_scan_bounded_read_20260918": {
+    "date": "2026-09-18",
+    "skill": "devflow",
+    "skill_sha256": "a78ff24124198ee58ed129e240dc985b01a2c717e73f2cc47d82c40c744f226f",
+    "previous_recorded_sha256": "75bb0637c57d9745b23a707323ea60b6a3a8d6ea852c315791a634631c9448be",
+    "reason": "节约 token：Save Design 复用扫描候选证据改为按 owner 聚合读取（owner 名 + 命中数 + 代表性声明点），不逐行展开全部命中，仅在下裁定时定点读对应声明点。frontmatter、description 与调用策略未变。",
+    "source_and_install_validation": "pass: verify_migration.py --skill skills/devflow",
+    "manifest_update": "migration.json 仅刷新 devflow/SKILL.md 哈希（75bb063… → a78ff24…）并追加 devflow_reuse_scan_bounded_read 原因记录；未重置无关文件哈希",
+    "source_only_verification": "pass: 32 source skills; 29 selected (16 manual / 13 automatic)",
+    "global_copy_content_and_permissions": "pass: sync.py --apply 后 verify_migration.py 全量 PASS",
+    "hosts": {
+      "agents_dsh_claude": {
+        "mechanism": "~/.agents/skills 分发目标，~/.claude/skills 符号链接；sync + 全量 verify PASS",
+        "status": "pass"
+      },
+      "pi": {
+        "mechanism": "~/.pi/agent/skills/devflow 符号链接自动跟随",
+        "status": "pass"
+      },
+      "hermes": {
+        "action": "备份 SKILL.md → SKILL.md.bak-20260918-reuse-scan-bounded 后复制，diff -r 与源逐字一致",
+        "status": "pass"
+      }
+    },
+    "invocation_policy_preserved": "manual/explicit-only，未更改",
+    "readme_update": "not required：devflow 已在 README 链接，清单成员与调用策略未变",
+    "limits": "未在真实 Save Design 会话中验证聚合读取的 token 效果；仅文件级内容与原生发现验证。"
   }
 }

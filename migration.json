@@ -69,7 +69,7 @@
     "ima-skill/meta.json": "e67163e272e5c4a25467db7654feddfb47134a891e2e494415f0fbbb9d129d6f",
     "doc/SKILL.md": "0a635585817d1ac96e8e512114d08258b70f9e54ce0052078a258291ac13a8ed",
     "doc/LICENSE.txt": "4dd13869245e356246a5b770723247bbb80a8f07a181d1d3d873a1734297cdb9",
-    "devflow/SKILL.md": "75bb0637c57d9745b23a707323ea60b6a3a8d6ea852c315791a634631c9448be",
+    "devflow/SKILL.md": "a78ff24124198ee58ed129e240dc985b01a2c717e73f2cc47d82c40c744f226f",
     "kimi-webbridge/SKILL.md": "db1d82b37962a5a7756ca862bc0bea211c6bba46c3608b157a135386d4e9be6f",
     "py-perf-analyzer/README.md": "e3b5a592e5a3b25a639a6656f4102ecae855a7488c3d590ddf6e93b5c28fe49c",
     "py-perf-analyzer/SKILL.md": "26ee753a53de4c321016254dd761ff4d95f2cd9ee925d05115a5e56484ac1efa",
@@ -1310,6 +1310,16 @@
     },
     "updated_hashes": {
       "devflow/SKILL.md": "75bb0637c57d9745b23a707323ea60b6a3a8d6ea852c315791a634631c9448be"
+    }
+  },
+  "devflow_reuse_scan_bounded_read": {
+    "date": "2026-09-18",
+    "reason": "节约 token：Save Design 复用扫描的候选证据改为按 owner 聚合读取（owner 名 + 命中数 + 代表性声明点），不逐行展开全部命中，仅在下裁定时定点读对应声明点。",
+    "original_hashes": {
+      "devflow/SKILL.md": "75bb0637c57d9745b23a707323ea60b6a3a8d6ea852c315791a634631c9448be"
+    },
+    "updated_hashes": {
+      "devflow/SKILL.md": "a78ff24124198ee58ed129e240dc985b01a2c717e73f2cc47d82c40c744f226f"
     }
   }
 }
