@@ -76,7 +76,8 @@ goal: null
 non_goals: []
 scope: null
 success_signals: []           # 有 PRD 时逐项溯源到 prd_doc 对应验收（章节/ID）；无 PRD 记 not-applicable
-authorized_slices: []          # [{slice, design_doc_ref, success_signal}]；本次授权范围，未授权块 deferred
+authorized_slices: []          # [{slice, design_doc_ref, success_signal, depends_on}]；success_signal 逐项列出本 slice 覆盖的验收，depends_on 列前序 slice；未授权块 deferred
+slice_checkpoints: []          # [{slice, diff_fingerprint, validation, done}]；每片完成时落一条边界快照（可回退、可 bisect）
 user_confirmation: []          # 用户确认原话/依据；转述不编造时间戳或消息 ID
 
 # —— product & design & workspace 绑定（Impl/Review 核对同一版本）——
@@ -158,7 +159,7 @@ blocking_findings: []
 - validation plan；
 - risks and open questions。
 
-implementation slice 必须是可独立验证的行为增量，不按文件、模块或 owner 机械拆分；默认不超过 3 个，超过时先尝试合并，并在 `design_doc` 说明无法合并的原因。
+implementation slice 必须是可独立验证的行为增量，不按文件、模块或 owner 机械拆分；默认不超过 3 个，超过时先尝试合并，并在 `design_doc` 说明无法合并的原因。每片写明其覆盖的 success signal 与依赖的前序 slice；确需更多片时，在 `design_doc` 给出切片总账（覆盖 + 依赖），保证每个 success signal 都被至少一片覆盖、无 orphan——切片多不是问题，覆盖与依赖没有闭合才是。
 
 记录最终 `design_doc` 路径，后续引用同一 owner 及对应版本。
 
@@ -238,9 +239,9 @@ implementation slice 必须是可独立验证的行为增量，不按文件、�
 
 ### Implementation Scope Drift Guard
 
-进入 Implementation 时，把 `implementation_baseline` 与本次授权范围一并落盘到 `.devflow/scope.md`，不再只留在 workflow context。baseline 包含冻结的 `design_doc`、`implementation_workspace`、`review_base`、`HEAD`、`git status --short`，以及每个既有 staged index、unstaged working-tree 和 untracked 内容各自的 hash 和 size；只记录路径不够。本次授权范围列出 design_doc 中本次实际授权的 slice/块及其对应 approved success signal，未授权的块记 `deferred-with-owner` 或留待后续授权。该初始 baseline 保持不变，不得用后续检查结果覆盖。
+进入 Implementation 时，把 `implementation_baseline` 与本次授权范围一并落盘到 `.devflow/scope.md`，不再只留在 workflow context。baseline 包含冻结的 `design_doc`、`implementation_workspace`、`review_base`、`HEAD`、`git status --short`，以及每个既有 staged index、unstaged working-tree 和 untracked 内容各自的 hash 和 size；只记录路径不够。本次授权范围按切片总账列出 design_doc 中本次实际授权的 slice/块、各自覆盖的 approved success signal 与依赖的前序 slice，未授权的块记 `deferred-with-owner` 或留待后续授权。该初始 baseline 保持不变，不得用后续检查结果覆盖。落盘时做一次闭合核对：只对照 `success_signals` 与 `authorized_slices` 两张表，确认每个 signal 都被至少一片覆盖、每片覆盖到某个 signal、无 orphan；缺口记 uncovered，不得带缺口进入实现。
 
-每个 slice 开始前明确对应的 approved success signal、本 slice 交付的行为、expected owners / files 和 validation 命令。
+每个 slice 开始前明确对应的 approved success signal、本 slice 交付的行为、expected owners / files 和 validation 命令；其依赖的前序 slice 须已完成并落边界快照。
 每项实际修改必须归类为：
 
 - `planned`：冻结设计已经要求；
@@ -249,7 +250,7 @@ implementation slice 必须是可独立验证的行为增量，不按文件、�
 邻近 cleanup、风格调整、顺手重构、future-proofing、额外监控以及 reviewer 建议本身，都不构成
 `required-correctness/safety`。
 
-每个 slice 完成后及进入 Deepreview 前，完整枚举相对 `review_base` 的 committed、staged、unstaged 和 untracked 改动，核对新增、删除、重命名及状态变化；不得只检查已有路径。范围判断始终对照初始 `implementation_baseline` 和冻结 scope。
+每个 slice 完成后及进入 Deepreview 前，完整枚举相对 `review_base` 的 committed、staged、unstaged 和 untracked 改动，核对新增、删除、重命名及状态变化；不得只检查已有路径。范围判断始终对照初始 `implementation_baseline` 和冻结 scope。该片边界快照（diff 指纹 + 验证结果）落 `slice_checkpoints`，作为可回退、可定位的切片边界。进入 Deepreview 前做最终闭合核对：只对照 `success_signals` 与 `authorized_slices` 两张已落盘的表（不重读 `design_doc`），确认所有 signal 都被覆盖、无 orphan；未闭合的 signal 记 uncovered 并暂停，不得当作已完成。
 
 最近成功检查的文件指纹（各状态层的 hash、size、类型和模式）、范围归类及证据引用保留在 `.devflow/scope.md`。仅在同一上下文中原文与证据仍完整可用、相关 base / scope / 依赖语义未变且指纹一致时，跳过正文重读；否则重新读取实际内容并归类，删除/重命名须核对前后差异。二进制或过大文件先核对指纹，必要时读取；证据不足不得视为已覆盖。此优化仅用于实现阶段 inventory，不替代 Deepreview 对全部当前改动的完整走读。
 

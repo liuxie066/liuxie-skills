@@ -1266,5 +1266,33 @@
     "readme_update": "not required：devflow 已在 README 链接，清单成员与调用策略未变",
     "note": "四路 reviewer 不再跨模型家族（原第四路 DSH/DeepSeek 提供 independence=verified），independence 字段保留但通常为 unverified，除非原生 subagent 配置为不同模型家族。",
     "limits": "未在真实 Improve Design 会话中端到端跑四路原生 subagent Panel；仅文件级内容与原生发现验证。"
+  },
+  "devflow_slice_ledger_closure_20260919": {
+    "date": "2026-09-19",
+    "skill": "devflow",
+    "skill_sha256": "5dac14cbba15171ef30bdeebaab1286f5044573395be8a56895e5e2cc8e9f549",
+    "previous_recorded_sha256": "20cdda1792cf2a160d0b79bcbd94b83688cbfde616e27d190e81f5efd0b4cf8c",
+    "reason": "大需求切片实现可控性：authorized_slices 升级为切片总账（success_signal 覆盖 + depends_on 依赖），新增 slice_checkpoints 边界快照；Save Design 要求每片写明覆盖与依赖、多片时给出切片总账；Impl 进入时与 Deepreview 前做闭合核对（只对照已落盘的 success_signals 与 authorized_slices 两张表，不重读 design_doc，token 敏感）。frontmatter、description 与调用策略未变。",
+    "source_and_install_validation": "pass: verify_migration.py --skill skills/devflow",
+    "manifest_update": "migration.json 仅刷新 devflow/SKILL.md 哈希（20cdda1… → 5dac14c…）并追加 devflow_slice_ledger_closure 原因记录",
+    "source_only_verification": "pass: 32 source skills; 29 selected (16 manual / 13 automatic)",
+    "global_copy_content_and_permissions": "pass: sync.py --apply 后 verify_migration.py 全量 PASS",
+    "hosts": {
+      "agents_dsh_claude": {
+        "mechanism": "~/.agents/skills 分发目标，~/.claude/skills 符号链接；sync + 全量 verify PASS",
+        "status": "pass"
+      },
+      "pi": {
+        "mechanism": "~/.pi/agent/skills/devflow 符号链接自动跟随",
+        "status": "pass"
+      },
+      "hermes": {
+        "action": "备份 SKILL.md → SKILL.md.bak-20260919-slice-ledger 后复制，diff -r（排除 .bak）与源逐字一致",
+        "status": "pass"
+      }
+    },
+    "invocation_policy_preserved": "manual/explicit-only，未更改",
+    "readme_update": "not required：devflow 已在 README 链接，清单成员与调用策略未变",
+    "limits": "未在真实大需求切片会话中验证闭合核对的可控性效果；仅文件级内容与原生发现验证。"
   }
 }

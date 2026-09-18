@@ -69,7 +69,7 @@
     "ima-skill/meta.json": "e67163e272e5c4a25467db7654feddfb47134a891e2e494415f0fbbb9d129d6f",
     "doc/SKILL.md": "0a635585817d1ac96e8e512114d08258b70f9e54ce0052078a258291ac13a8ed",
     "doc/LICENSE.txt": "4dd13869245e356246a5b770723247bbb80a8f07a181d1d3d873a1734297cdb9",
-    "devflow/SKILL.md": "20cdda1792cf2a160d0b79bcbd94b83688cbfde616e27d190e81f5efd0b4cf8c",
+    "devflow/SKILL.md": "5dac14cbba15171ef30bdeebaab1286f5044573395be8a56895e5e2cc8e9f549",
     "kimi-webbridge/SKILL.md": "db1d82b37962a5a7756ca862bc0bea211c6bba46c3608b157a135386d4e9be6f",
     "py-perf-analyzer/README.md": "e3b5a592e5a3b25a639a6656f4102ecae855a7488c3d590ddf6e93b5c28fe49c",
     "py-perf-analyzer/SKILL.md": "26ee753a53de4c321016254dd761ff4d95f2cd9ee925d05115a5e56484ac1efa",
@@ -1330,6 +1330,16 @@
     },
     "updated_hashes": {
       "devflow/SKILL.md": "20cdda1792cf2a160d0b79bcbd94b83688cbfde616e27d190e81f5efd0b4cf8c"
+    }
+  },
+  "devflow_slice_ledger_closure": {
+    "date": "2026-09-19",
+    "reason": "大需求切片实现的可控性：authorized_slices 升级为切片总账（每片 success_signal 覆盖 + depends_on 依赖），新增 slice_checkpoints 边界快照；Save Design 要求每片写明覆盖与依赖、多片时给出切片总账；Impl 进入时与 Deepreview 前做闭合核对（只对照已落盘的 success_signals 与 authorized_slices 两张表，不重读 design_doc，token 敏感）。",
+    "original_hashes": {
+      "devflow/SKILL.md": "20cdda1792cf2a160d0b79bcbd94b83688cbfde616e27d190e81f5efd0b4cf8c"
+    },
+    "updated_hashes": {
+      "devflow/SKILL.md": "5dac14cbba15171ef30bdeebaab1286f5044573395be8a56895e5e2cc8e9f549"
     }
   }
 }
