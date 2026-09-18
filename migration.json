@@ -69,7 +69,7 @@
     "ima-skill/meta.json": "e67163e272e5c4a25467db7654feddfb47134a891e2e494415f0fbbb9d129d6f",
     "doc/SKILL.md": "0a635585817d1ac96e8e512114d08258b70f9e54ce0052078a258291ac13a8ed",
     "doc/LICENSE.txt": "4dd13869245e356246a5b770723247bbb80a8f07a181d1d3d873a1734297cdb9",
-    "devflow/SKILL.md": "a78ff24124198ee58ed129e240dc985b01a2c717e73f2cc47d82c40c744f226f",
+    "devflow/SKILL.md": "20cdda1792cf2a160d0b79bcbd94b83688cbfde616e27d190e81f5efd0b4cf8c",
     "kimi-webbridge/SKILL.md": "db1d82b37962a5a7756ca862bc0bea211c6bba46c3608b157a135386d4e9be6f",
     "py-perf-analyzer/README.md": "e3b5a592e5a3b25a639a6656f4102ecae855a7488c3d590ddf6e93b5c28fe49c",
     "py-perf-analyzer/SKILL.md": "26ee753a53de4c321016254dd761ff4d95f2cd9ee925d05115a5e56484ac1efa",
@@ -1320,6 +1320,16 @@
     },
     "updated_hashes": {
       "devflow/SKILL.md": "a78ff24124198ee58ed129e240dc985b01a2c717e73f2cc47d82c40c744f226f"
+    }
+  },
+  "devflow_fourth_reviewer_native_subagent": {
+    "date": "2026-09-19",
+    "reason": "Improve Design 四路 Panel 第四个 reviewer 不再用 DSH Crew，改为与前三者一致的原生 subagent：删除 dsh_spawn_worker/dsh_run_worker 派发段与 dsh_crew_status 上报，brief 统一为四者自包含，reviewer_backend 记为 native-subagent（无 subagent 能力退化为 self-review）。",
+    "original_hashes": {
+      "devflow/SKILL.md": "a78ff24124198ee58ed129e240dc985b01a2c717e73f2cc47d82c40c744f226f"
+    },
+    "updated_hashes": {
+      "devflow/SKILL.md": "20cdda1792cf2a160d0b79bcbd94b83688cbfde616e27d190e81f5efd0b4cf8c"
     }
   }
 }

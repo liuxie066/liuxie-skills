@@ -168,19 +168,17 @@ implementation slice 必须是可独立验证的行为增量，不按文件、�
 
 ### 四路并行优化建议
 
-进入 Improve Design 后，先绑定本轮设计快照，派发四个只读 reviewers：前三个为原生 subagents，第四个由主会话直接调用 DSH Crew。四者使用相同的自包含 brief，读取同一个完整 `design_doc` 快照及目标、约束和事实材料，各自独立回答同一个问题：
+进入 Improve Design 后，先绑定本轮设计快照，派发四个只读 reviewers，均为原生 subagents。四者使用相同的自包含 brief，读取同一个完整 `design_doc` 快照及目标、约束和事实材料，各自独立回答同一个问题：
 
 > Any suggestions to improve this design?
 
-不预分配架构、安全、简化或对抗角色，也不给 DSH 额外的找茬目标。每位 reviewer 自行判断整份设计最值得改进之处；不得读取其他 reviewer 的结论、主 agent 的预设改法或继承含这些内容的会话，不得编辑文件。建议须遵守已批准 scope contract；没有有价值的改进时可以明确回答无建议并说明依据，不为凑数制造问题。
+不预分配架构、安全、简化或对抗角色，也不预设额外的找茬目标。每位 reviewer 自行判断整份设计最值得改进之处；不得读取其他 reviewer 的结论、主 agent 的预设改法或继承含这些内容的会话，不得编辑文件。建议须遵守已批准 scope contract；没有有价值的改进时可以明确回答无建议并说明依据，不为凑数制造问题。
 
-第四个 reviewer 启动前先检查当前主会话是否提供全局 DSH Crew `dsh_spawn_worker` 或 `dsh_run_worker`。可用时必须由主会话直接调用，设置 `tier=flash`；可并行时优先 `dsh_spawn_worker`，分批执行时可用 `dsh_run_worker`，只读并行任务才可设置 `allow_concurrent_cwd=true`。使用 spawn 后必须通过 `dsh_worker_result` 取得最终结果，不得把 job id 或运行状态当成 review。不得先 spawn `ds-pro` / `ds-flash` Codex subagent 代为调用；当前 Codex 子代理不继承主会话的 DSH Crew MCP tools。
+四者的 brief 必须自包含：给出 `design_doc` 和仓库绝对路径、只读边界、验收标准、禁止修改/commit/push，并要求区分直接证据与假设。
 
-DSH 使用上述相同问题和材料，brief 必须自包含：给出 `design_doc` 和仓库绝对路径、只读边界、验收标准、禁止修改/commit/push，并要求区分直接证据与假设。
+容量允许时四者并行；并发槽不足时可分批，但后启动者仍只接收同一原始快照，不得看到先完成者的结论。dispatch 状态不明或结果读取失败时，先按共用等待规则核验原任务/实际派发记录，确认未创建、已终止或不存在且无可用结果后才用该 reviewer 的只读 fallback，临时观察失败不重复派发。
 
-容量允许时四者并行；并发槽不足时可分批，但后启动者仍只接收同一原始快照，不得看到先完成者的结论。DSH Crew 不可用、被禁用或确认未创建任务时，用第四个原生 subagent 独立回答同一问题，不减少 reviewer 数量；dispatch 状态不明或结果读取失败时，先按共用等待规则核验原任务/实际派发记录，确认未创建、已终止或不存在且无可用结果后才用该 reviewer 的只读 fallback，临时观察失败不重复派发。不得为运行本节点自动安装、启动或配置 DSH Crew。
-
-汇总时报告 `dsh_crew_status=used|fallback:<reason>`、`reviewer_backend`、`reviewer_model` 和 `independence`。`reviewer_model` 只记录实际结果中可验证的模型身份，否则写 `unknown`；只有证据表明 reviewer 与主 agent 属于不同模型家族时，`independence` 才能写 `verified`，否则写 `unverified`，原生 fallback 写 `native-fallback`。
+汇总时报告 `reviewer_backend`（`native-subagent`，无 subagent 能力退化为 `self-review`）、`reviewer_model` 和 `independence`。`reviewer_model` 只记录实际结果中可验证的模型身份，否则写 `unknown`；只有证据表明 reviewer 与主 agent 属于不同模型家族时，`independence` 才能写 `verified`，否则写 `unverified`。
 
 每个 reviewer 返回建议（或有依据的无建议结论），并说明未覆盖区域；每条建议包含：
 
