@@ -1441,5 +1441,35 @@
     "invocation_policy_preserved": "manual/explicit-only，未更改",
     "readme_update": "not required：devflow 已在 README 链接，清单成员与调用策略未变",
     "limits": "仅文本分工澄清，未在真实 Improve Design 会话验证四路不越界为对抗审查；未改行为语义。"
+  },
+  "devflow_impl_model_routing_removal_20260919": {
+    "date": "2026-09-19",
+    "skill": "devflow",
+    "skill_sha256": "1764758eb43a1d40b0e81554ffb86037e025c28e24c0119b2dd3fbdc99775661",
+    "previous_recorded_sha256": "4e8b09d96cad4d71eddaade03444f02d012cb093e9645b6c1d3bf3e56d9b7e12",
+    "evals_sha256": "daba56295017610664dd267ff72f5393cd35ff4ea56bdb58f24ff8c940e91e9f",
+    "previous_evals_sha256": "f5a926058b42c7d3ed045a62898ea55402ca4eea3f52aba51c9a57e11e947876",
+    "reason": "删除 Impl 的 Implementation Model Routing 段（gpt-5.6-luna 委派）及其 4 条触发条件与 Luna 收回/降标说明：本机未配置 gpt-5.6-luna，路由永远 fallback 到主 agent，属死代码，且主 agent 本就须核对全部 diff/证据。Impl 改为主 agent 直接实现所有 slice（沿用共用派发规则与 slice 纪律）。同步改写 eval #13：由「A 委派 gpt-5.6-luna、B 主 agent 实现」改为「主 agent 直接实现两 slice、不做模型委派」。",
+    "source_and_install_validation": "pass: verify_migration.py --skill skills/devflow",
+    "manifest_update": "migration.json 刷新 devflow/SKILL.md（4e8b09d… → 1764758e…）与 devflow/evals/evals.json（f5a9260… → daba5629…）哈希，并追加 devflow_impl_model_routing_removal 原因记录",
+    "source_only_verification": "pass: 32 source skills; 29 selected (16 manual / 13 automatic)",
+    "global_copy_content_and_permissions": "pass: sync.py --apply 后 verify_migration.py 全量 PASS",
+    "hosts": {
+      "agents_dsh_claude": {
+        "mechanism": "~/.agents/skills 分发目标，~/.claude/skills 符号链接；sync + 全量 verify PASS",
+        "status": "pass"
+      },
+      "pi": {
+        "mechanism": "~/.pi/agent/skills/devflow 符号链接自动跟随",
+        "status": "pass"
+      },
+      "hermes": {
+        "action": "备份 SKILL.md → SKILL.md.bak-20260919-impl-model-routing-removal、evals.json → evals.json.bak-20260919-impl-model-routing-removal 后复制，diff -r（排除 .bak）与源逐字一致",
+        "status": "pass"
+      }
+    },
+    "invocation_policy_preserved": "manual/explicit-only，未更改",
+    "readme_update": "not required：devflow 已在 README 链接，清单成员与调用策略未变",
+    "limits": "仅删除死代码路由段并改写一条 eval 文本；未在真实 Impl 会话验证「主 agent 直接实现所有 slice」的运行时行为。SKILL.md 中已无 gpt-5.6-luna/Luna/模型路由残留。"
   }
 }

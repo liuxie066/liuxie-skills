@@ -75,8 +75,8 @@
     },
     {
       "id": 13,
-      "prompt": "当前为已授权 workflow（非单节点调用）。Implementation 已获批准并有两个冻结 slices：A 在现有纯函数中增加一个明确分支和对应单元测试；B 修改账户账本 schema、并发写入和 migration。当前可使用 gpt-5.6-luna max，请继续实现。",
-      "expected_output": "模型路由不增加确认门。仅把行为、owner、验收和测试命令都明确且可独立验证的 slice A 委派给原生 gpt-5.6-luna subagent，并设置 reasoning_effort=max；brief 包含 design_doc、workspace、review base、slice、文件 ownership、validation 和禁止扩大范围或 commit/push 等边界。涉及 schema、并发、migration 和数据完整性的 slice B 由主 agent 实现。主 agent 核对 Luna 的实际 diff 和测试证据；若未通过或触及排除边界立即收回处理。各 slice 运行针对性测试，最终内容运行一次项目要求的完整 validation，并由 workflow 进入 Review。",
+      "prompt": "当前为已授权 workflow（非单节点调用）。Implementation 已获批准并有两个冻结 slices：A 在现有纯函数中增加一个明确分支和对应单元测试；B 修改账户账本 schema、并发写入和 migration。请继续实现。",
+      "expected_output": "主 agent 直接实现两个 slice，不做模型委派。slice A 局部、可独立验证，先实现并跑针对性测试；slice B 涉及 schema、并发、migration 和数据完整性，由主 agent 按冻结设计的契约与失败语义实现，不扩大范围、不顺手重构。每片完成后落边界快照并核对相对 review_base 的 committed/staged/unstaged/untracked 改动；最终内容运行一次项目要求的完整 validation，并由 workflow 进入 Review。",
       "files": []
     },
     {

@@ -265,23 +265,6 @@ implementation slice 必须是可独立验证的行为增量，不按文件、�
 
 Review finding 不是扩大实现范围的授权。只有阻塞 approved success signal 或证明当前实现存在 correctness/safety 缺陷的 finding 才能进入当前修复循环。
 
-### Implementation Model Routing
-
-模型路由不增加人工确认门；主 agent 始终负责设计一致性、集成及 validation；后续 Review 仅按已授权节点序列执行。
-
-Implementation slice 同时满足以下条件时，若当前原生 subagent 支持目标模型，优先使用
-`model=gpt-5.6-luna`、`reasoning_effort=max`：
-
-- 冻结设计已经明确行为和实现方向，不需要 worker 做新的设计决策；
-- scope、owner、验收标准和测试命令清晰；
-- 改动局部、可独立验证，失败后可以安全回退；
-- 不涉及 public contract、schema、architecture/owner、权限/安全、并发/状态机、migration、数据完整性或不可逆副作用。
-
-Impl 委派沿用共用派发规则，并明确本 slice 的预期行为。
-
-主 agent 必须核对实际 diff 和测试证据。Luna 结果未通过验收、需要跨越上述边界或出现新的策略性选择时，立即收回主 agent
-处理，不让 worker 自主扩大范围。目标模型或 subagent 不可用时直接由主 agent 实现，不阻塞流程。所有改动仍接受相同的完整 validation；执行 Review 时覆盖全部改动，不得因为使用 Luna 降低验收标准。
-
 按冻结设计的 slices 连续实现。slice 是执行和进度报告单位，不是确认门：
 
 - 复用现有 owner、helper、标准库和已安装依赖；
