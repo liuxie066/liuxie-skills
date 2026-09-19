@@ -1532,5 +1532,61 @@
     "invocation_policy_preserved": "manual/explicit-only，未更改",
     "readme_update": "not required：devflow 已在 README 链接，清单成员与调用策略未变",
     "limits": "仅文本重命名 eval prompt 中的旧节点名；未在真实会话运行四条 eval。evals.json 已无「Parallel Design Panel」残留。"
+  },
+  "code_is_cheap_absorption_20260919": {
+    "date": "2026-09-19",
+    "reason": "收编 noho/code-is-cheap（ref fb179d8）进中央仓库并本机激活，结束与中央 sync.py 的双源冲突。",
+    "source": "https://github.com/noho/code-is-cheap/tree/fb179d8",
+    "new_skills": {
+      "sub-agents": {
+        "skill_sha256": "c3c0d869ad567b1d8d8e4715fbca335a569e4422c0863306a85ffa7210448ee7",
+        "invocation": "automatic（allow_implicit_invocation=true，下游派发能力）"
+      },
+      "tmux-agents": {
+        "skill_sha256": "9be892b6134d23b28d61a53da6077141d93b1caf1e71a932778d2f00d91ddc2c",
+        "invocation": "automatic（allow_implicit_invocation=true，下游派发能力）"
+      }
+    },
+    "phaseflow": {
+      "skill_sha256": "a20e46d11f47695b5e8c0cac157d7e26a2bfdc956ebce065570657760f307db9",
+      "previous_recorded_sha256": "879d546c2a2d5b428bcea1056250774f2e58a2d87cfc3f48b28bc08b480763f0",
+      "change": "正文采纳 cic 新版：派发协议优先级（$tmux-agents→$sub-agents→默认 sub-agents runner 子进程）、Agent/provider 选择与派发协议独立、in-flight 守护补「终止子进程/子进程存活/输出文件更新」、删除过时 $init-agents。frontmatter/description/手动策略不变。"
+    },
+    "runner_scripts": "agent-tools.zsh / claude-agent-run / codex-agent-run 收编为 skills/sub-agents/scripts/，被 sync.py 分发与 migration.json 哈希校验；sub-agents SKILL.md 仍引用 ~/.local/bin（激活后成立），上游内容未改。",
+    "source_and_install_validation": "pass: verify_migration.py --skill 分别校验 sub-agents / tmux-agents / phaseflow",
+    "manifest_update": "migration.json：files +7、phaseflow/SKILL.md 哈希 879d546…→a20e46d…、sources +2（noho/code-is-cheap）、invocation_policy.automatic +2，追加 code_is_cheap_absorption 原因记录",
+    "source_only_verification": "pass: 34 source skills; 31 selected (16 manual / 15 automatic)",
+    "global_copy_content_and_permissions": "pass: sync.py --apply 后 verify_migration.py 全量 PASS（31 global skills 与源内容/权限一致）",
+    "hosts": {
+      "agents_dsh_claude": {
+        "mechanism": "~/.agents/skills 分发目标，~/.claude/skills 符号链接；sync + 全量 verify PASS",
+        "status": "pass"
+      },
+      "pi": {
+        "action": "新建 ~/.pi/agent/skills/sub-agents 与 tmux-agents 符号链接 → ~/.agents/skills/<name>（Pi 本就无条件加载 ~/.agents/skills，链接为冗余但一致的登记）",
+        "status": "pass"
+      },
+      "hermes": {
+        "action": "复制 sub-agents、tmux-agents 到 ~/.hermes/skills/imported/<name>（此前无同名），diff -r 与源逐字一致；phaseflow 不在 Hermes imported/ 选集，故无 phaseflow 动作",
+        "status": "pass"
+      }
+    },
+    "activation": {
+      "mechanism": "symlink 单一真源：~/.local/bin/{claude-agent-run,codex-agent-run} 与 ~/.config/zsh/agent-tools.zsh → ~/.agents/skills/sub-agents/scripts/；~/.zshrc 追加 source agent-tools.zsh（幂等）",
+      "smoke": {
+        "claude_list_providers": "pass: ds/mimo/qwen/kimi/glm/local (exit 0)",
+        "codex_list_providers": "pass: +gpt/business (exit 0)",
+        "functions_load": "pass: ds_claude/gpt_codex/business_codex/local_claude 均加载",
+        "help": "pass: 两个 runner --help exit 0"
+      },
+      "blockers": {
+        "provider_keys": "仅 DEEPSEEK_API_KEY 已设；MIMO/QWEN/KIMI/GLM_API_KEY 未设",
+        "codex_profiles": "~/.codex-agent/ 不存在，各 provider 的 config.toml 全缺 → codex runner 无法真正派发",
+        "local_model": "127.0.0.1:8080 本地模型服务未启动",
+        "tmux": "tmux 未安装（仅影响 tmux-agents）"
+      }
+    },
+    "readme_update": "not required：README 为产品向（PRDflow/Devflow）+ to-page 说明，非全量技能清单",
+    "limits": "未跑真实子 Agent 派发（缺 provider key / codex profile / 本地服务）；仅安装、冒烟与文件级内容/原生发现验证。"
   }
 }

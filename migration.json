@@ -43,7 +43,9 @@
     "install-futu-opend": "https://openapi.futunn.com/skills/opend-skills.zip",
     "futuapi": "https://openapi.futunn.com/skills/opend-skills.zip",
     "hithink-finance": "https://github.com/HiThink-Tech/Financial-API/tree/402574a6221d5e255dba47166df8e5abb7149938/skills/hithink-finance",
-    "to-page": "/Volumes/liuxie的硬盘/workspace/agent-skills/skills/to-page"
+    "to-page": "/Volumes/liuxie的硬盘/workspace/agent-skills/skills/to-page",
+    "sub-agents": "https://github.com/noho/code-is-cheap/tree/fb179d8/skills/sub-agents",
+    "tmux-agents": "https://github.com/noho/code-is-cheap/tree/fb179d8/skills/tmux-agents"
   },
   "files": {
     "deepreview/SKILL.md": "cd76556e5ef4d60243bdc15cd565b22df77472038a687fb92b210c94bbe1997b",
@@ -57,7 +59,7 @@
     "playwright/NOTICE.txt": "417d5d3372914ecfd9fe102ac1d7dc2119253209f9718d6c222f616876c1904b",
     "playwright/SKILL.md": "0ffaabcc8e0990627c4725f18bf1c7955534a796c1c199e872909de2013ce6a8",
     "playwright/LICENSE.txt": "9a7110fc2d2f964038e5dc49128f908f29f47a574c961cba16085914e879cbda",
-    "phaseflow/SKILL.md": "879d546c2a2d5b428bcea1056250774f2e58a2d87cfc3f48b28bc08b480763f0",
+    "phaseflow/SKILL.md": "a20e46d11f47695b5e8c0cac157d7e26a2bfdc956ebce065570657760f307db9",
     "prdflow/SKILL.md": "edb4c21813f9ac52c7bc67ce22f81a1ec6dd3e3f082d18bdca73990ce03170ae",
     "herdr/SKILL.md": "3438157bcab39f08624b361cce4995e73e6b227d4dd909b0c1f54a669934546f",
     "eli5/SKILL.md": "b077ab37758ab840146ac8aac39f5b07616b06bc535cc3a6438bcb57301366f8",
@@ -823,7 +825,14 @@
     "hithink-finance/agents/openai.yaml": "3eb9832e2413e025d339551298c016d668f9528a9607f1396d33e9d959a7cb53",
     "to-page/SKILL.md": "b0e733efea67d81609c5660d1caddad929b1c008dbca0031c6dde47d5487eb33",
     "to-page/agents/openai.yaml": "50e82d596461cc9b152ce0ee7ba20de7c796d5267145dc16f926dcd0bdd78fd7",
-    "devflow/scripts/reuse_scan.py": "0f83c16daa57845cb8a7aef5c8bf600397774edf828b41531c7511acaeb8a125"
+    "devflow/scripts/reuse_scan.py": "0f83c16daa57845cb8a7aef5c8bf600397774edf828b41531c7511acaeb8a125",
+    "sub-agents/SKILL.md": "c3c0d869ad567b1d8d8e4715fbca335a569e4422c0863306a85ffa7210448ee7",
+    "sub-agents/agents/openai.yaml": "441192906344a809661fa618e2f48f36e8f35e4ca78c38a1dacc5c0dd842c282",
+    "sub-agents/scripts/agent-tools.zsh": "a444a7ea9765ca0ffcf1a164859a9eed76c5da7b9882df6b6d14cbd112e97dbd",
+    "sub-agents/scripts/claude-agent-run": "817aa8dbea54acc3bbeb9ce5b3e7fd6b5c0c8229be4eee130eab42c4bf2f81ad",
+    "sub-agents/scripts/codex-agent-run": "b5155cfc4b98516fbd0a107cc593a5f413b8a040b0acdfdcd6bf7b04042fe3a4",
+    "tmux-agents/SKILL.md": "9be892b6134d23b28d61a53da6077141d93b1caf1e71a932778d2f00d91ddc2c",
+    "tmux-agents/agents/openai.yaml": "514c9299ffe980e8a5e83dd26212e302994fe9212aa31e48a841764e6de0b21a"
   },
   "kimi_webbridge_version": "2.0.5",
   "config_before_sha256": "d87c96e79a8b33db5c428f1583a4374dfbc1346486310ffe306d85d95c8646d6",
@@ -1171,7 +1180,9 @@
       "install-futu-opend",
       "futuapi",
       "hithink-finance",
-      "to-page"
+      "to-page",
+      "sub-agents",
+      "tmux-agents"
     ]
   },
   "cross_tool_invocation": {
@@ -1424,6 +1435,23 @@
     },
     "updated_hashes": {
       "devflow/evals/evals.json": "aeb429d810bcd27d264f3cd0b43486ac56942df3a25eebadf5d0a694b1332cfb"
+    }
+  },
+  "code_is_cheap_absorption": {
+    "date": "2026-09-19",
+    "reason": "收编 noho/code-is-cheap（ref fb179d8）进中央仓库：新增 sub-agents / tmux-agents 两个下游派发 skill（自动调用），phaseflow 采纳新版正文——派发协议优先级（$tmux-agents→$sub-agents→默认 sub-agents runner 子进程）、Agent/provider 选择与派发协议独立、in-flight 守护补「终止子进程/子进程存活/输出文件更新」、删除过时 $init-agents，frontmatter/description/手动策略不变；并把 agent-tools.zsh / claude-agent-run / codex-agent-run 三个 runner 收编为 skills/sub-agents/scripts/ 版本化。",
+    "original_hashes": {
+      "phaseflow/SKILL.md": "879d546c2a2d5b428bcea1056250774f2e58a2d87cfc3f48b28bc08b480763f0"
+    },
+    "updated_hashes": {
+      "phaseflow/SKILL.md": "a20e46d11f47695b5e8c0cac157d7e26a2bfdc956ebce065570657760f307db9",
+      "sub-agents/SKILL.md": "c3c0d869ad567b1d8d8e4715fbca335a569e4422c0863306a85ffa7210448ee7",
+      "sub-agents/agents/openai.yaml": "441192906344a809661fa618e2f48f36e8f35e4ca78c38a1dacc5c0dd842c282",
+      "sub-agents/scripts/agent-tools.zsh": "a444a7ea9765ca0ffcf1a164859a9eed76c5da7b9882df6b6d14cbd112e97dbd",
+      "sub-agents/scripts/claude-agent-run": "817aa8dbea54acc3bbeb9ce5b3e7fd6b5c0c8229be4eee130eab42c4bf2f81ad",
+      "sub-agents/scripts/codex-agent-run": "b5155cfc4b98516fbd0a107cc593a5f413b8a040b0acdfdcd6bf7b04042fe3a4",
+      "tmux-agents/SKILL.md": "9be892b6134d23b28d61a53da6077141d93b1caf1e71a932778d2f00d91ddc2c",
+      "tmux-agents/agents/openai.yaml": "514c9299ffe980e8a5e83dd26212e302994fe9212aa31e48a841764e6de0b21a"
     }
   }
 }

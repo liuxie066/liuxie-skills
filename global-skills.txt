@@ -28,3 +28,5 @@ install-futu-opend
 futuapi
 hithink-finance
 to-page
+sub-agents
+tmux-agents
