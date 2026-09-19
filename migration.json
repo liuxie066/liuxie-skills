@@ -69,7 +69,7 @@
     "ima-skill/meta.json": "e67163e272e5c4a25467db7654feddfb47134a891e2e494415f0fbbb9d129d6f",
     "doc/SKILL.md": "0a635585817d1ac96e8e512114d08258b70f9e54ce0052078a258291ac13a8ed",
     "doc/LICENSE.txt": "4dd13869245e356246a5b770723247bbb80a8f07a181d1d3d873a1734297cdb9",
-    "devflow/SKILL.md": "5dac14cbba15171ef30bdeebaab1286f5044573395be8a56895e5e2cc8e9f549",
+    "devflow/SKILL.md": "792a00569628b9fc620c093f882f3e6d780f7465dab1fcca94cc794935efc505",
     "kimi-webbridge/SKILL.md": "db1d82b37962a5a7756ca862bc0bea211c6bba46c3608b157a135386d4e9be6f",
     "py-perf-analyzer/README.md": "e3b5a592e5a3b25a639a6656f4102ecae855a7488c3d590ddf6e93b5c28fe49c",
     "py-perf-analyzer/SKILL.md": "26ee753a53de4c321016254dd761ff4d95f2cd9ee925d05115a5e56484ac1efa",
@@ -1340,6 +1340,16 @@
     },
     "updated_hashes": {
       "devflow/SKILL.md": "5dac14cbba15171ef30bdeebaab1286f5044573395be8a56895e5e2cc8e9f549"
+    }
+  },
+  "devflow_reviewer_cross_family_routing": {
+    "date": "2026-09-19",
+    "reason": "Improve Design 四路 reviewer 增加跨模型家族路由提示：宿主暴露多个模型家族的命名 subagent（如 codex ~/.codex/agents/*.toml 的 model 各异）时，把四路派到与主 agent 不同家族的子代理上，作为 independence=verified 的前提；全同家族按 unverified 记录，不伪称跨家族。",
+    "original_hashes": {
+      "devflow/SKILL.md": "5dac14cbba15171ef30bdeebaab1286f5044573395be8a56895e5e2cc8e9f549"
+    },
+    "updated_hashes": {
+      "devflow/SKILL.md": "792a00569628b9fc620c093f882f3e6d780f7465dab1fcca94cc794935efc505"
     }
   }
 }

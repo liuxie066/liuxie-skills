@@ -179,6 +179,8 @@ implementation slice 必须是可独立验证的行为增量，不按文件、�
 
 容量允许时四者并行；并发槽不足时可分批，但后启动者仍只接收同一原始快照，不得看到先完成者的结论。dispatch 状态不明或结果读取失败时，先按共用等待规则核验原任务/实际派发记录，确认未创建、已终止或不存在且无可用结果后才用该 reviewer 的只读 fallback，临时观察失败不重复派发。
 
+派发时若宿主暴露多个模型家族的命名 subagent（如 codex `~/.codex/agents/*.toml` 的 `model` 各异），把四路 reviewer 派到与主 agent 不同模型家族的子代理上；这是 `independence` 能写 `verified` 的前提，全同家族时按 `unverified` 记录，不伪称跨家族。
+
 汇总时报告 `reviewer_backend`（`native-subagent`，无 subagent 能力退化为 `self-review`）、`reviewer_model` 和 `independence`。`reviewer_model` 只记录实际结果中可验证的模型身份，否则写 `unknown`；只有证据表明 reviewer 与主 agent 属于不同模型家族时，`independence` 才能写 `verified`，否则写 `unverified`。
 
 每个 reviewer 返回建议（或有依据的无建议结论），并说明未覆盖区域；每条建议包含：
