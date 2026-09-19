@@ -69,7 +69,7 @@
     "ima-skill/meta.json": "e67163e272e5c4a25467db7654feddfb47134a891e2e494415f0fbbb9d129d6f",
     "doc/SKILL.md": "0a635585817d1ac96e8e512114d08258b70f9e54ce0052078a258291ac13a8ed",
     "doc/LICENSE.txt": "4dd13869245e356246a5b770723247bbb80a8f07a181d1d3d873a1734297cdb9",
-    "devflow/SKILL.md": "1764758eb43a1d40b0e81554ffb86037e025c28e24c0119b2dd3fbdc99775661",
+    "devflow/SKILL.md": "100ac98aaa5dcdadb14adf824bebe01ef4a0a053bc089844450ba5f57f1a9039",
     "kimi-webbridge/SKILL.md": "db1d82b37962a5a7756ca862bc0bea211c6bba46c3608b157a135386d4e9be6f",
     "py-perf-analyzer/README.md": "e3b5a592e5a3b25a639a6656f4102ecae855a7488c3d590ddf6e93b5c28fe49c",
     "py-perf-analyzer/SKILL.md": "26ee753a53de4c321016254dd761ff4d95f2cd9ee925d05115a5e56484ac1efa",
@@ -116,7 +116,7 @@
     "doc/scripts/render_docx.py": "52b3c3158913ebcad2ada7b8193970b70453239e255054aa2d60c1683af08751",
     "doc/assets/doc.png": "7eadf1088e5062f681dba6596173a1df13bbfbcddd8a8a9bb78fd2071947dcf8",
     "doc/assets/doc-small.svg": "bd5415fbbfe72c66c1527411d61625731fdd2f75b25d1542510b6ddef699ebe0",
-    "devflow/evals/evals.json": "daba56295017610664dd267ff72f5393cd35ff4ea56bdb58f24ff8c940e91e9f",
+    "devflow/evals/evals.json": "deb416f00fa7e8740b2dcaf39fe575858b247d9327761d14244cf382e62941c7",
     "kimi-webbridge/references/operations.md": "86855b663649d560a8939c25a7a15d1dba91a58e2e2ed92414848a9a9f8ee6d7",
     "py-perf-analyzer/scripts/perf_profile.py": "8fced3e1f91e9318c67f4e69db89f30fef6963c4f0f135a77276310f5d96030b",
     "grilling/agents/openai.yaml": "3c8415e2bc1bc96ef9cf3a2d0219987af16ca4d522beb7bfcda215533b485dd8",
@@ -1402,6 +1402,18 @@
     "updated_hashes": {
       "devflow/SKILL.md": "1764758eb43a1d40b0e81554ffb86037e025c28e24c0119b2dd3fbdc99775661",
       "devflow/evals/evals.json": "daba56295017610664dd267ff72f5393cd35ff4ea56bdb58f24ff8c940e91e9f"
+    }
+  },
+  "devflow_dead_dispatch_cleanup": {
+    "date": "2026-09-19",
+    "reason": "清理两处不起作用的派发约束：① 去掉 fork_turns=none 死命名（本机无任何宿主定义该参数，只出现在 devflow 自身 prose），仅保留「不复制整段会话/日志」实质约束，同步改 eval #17；② 删掉 v1→v2 旧节点名映射 shim（Parallel Design Panel/Implementation/Deepreview/Closeout → 五节点名，本机已无 v1 记录、workflow_version=2），保留通用恢复安全句。",
+    "original_hashes": {
+      "devflow/SKILL.md": "1764758eb43a1d40b0e81554ffb86037e025c28e24c0119b2dd3fbdc99775661",
+      "devflow/evals/evals.json": "daba56295017610664dd267ff72f5393cd35ff4ea56bdb58f24ff8c940e91e9f"
+    },
+    "updated_hashes": {
+      "devflow/SKILL.md": "100ac98aaa5dcdadb14adf824bebe01ef4a0a053bc089844450ba5f57f1a9039",
+      "devflow/evals/evals.json": "deb416f00fa7e8740b2dcaf39fe575858b247d9327761d14244cf382e62941c7"
     }
   }
 }

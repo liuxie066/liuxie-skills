@@ -100,7 +100,7 @@
     {
       "id": 17,
       "prompt": "准备派发一个已批准的局部 Implementation slice 和四个只读 Panel reviewers。历史对话很长，包含过去几轮评审和测试日志；worker 能读取共享仓库。请说明派发内容和返回要求。如果某个 Panel reviewer 读不到 design_doc 路径该怎么办？",
-      "expected_output": "每个任务只接收当前节点的目标/非目标/success signals、职责与范围、design_doc/workspace/review base或快照、必要文件和证据路径、ownership/只读边界、validation、停止条件、返回/artifact要求和操作权限边界。原生派发支持时使用 fork_turns=none 或等价方式避免继承完整会话，brief 补齐必要约束；Implementation worker 被告知保留其他改动者内容。不得附整段历史、无关阶段报告或重复日志。返回会话用摘要和证据路径，完整 findings 保留在所需 artifact；只读 Panel 返回规定的完整 findings，不互读结论或写文件。路径不可访问时提供必要原文，不让 worker 猜测。精简文本不改变四人覆盖、完整评审范围和主 agent 对实际 diff/证据的裁决义务。",
+      "expected_output": "每个任务只接收当前节点的目标/非目标/success signals、职责与范围、design_doc/workspace/review base或快照、必要文件和证据路径、ownership/只读边界、validation、停止条件、返回/artifact要求和操作权限边界。不复制整段会话/日志，brief 补齐必要约束；Implementation worker 被告知保留其他改动者内容。不得附整段历史、无关阶段报告或重复日志。返回会话用摘要和证据路径，完整 findings 保留在所需 artifact；只读 Panel 返回规定的完整 findings，不互读结论或写文件。路径不可访问时提供必要原文，不让 worker 猜测。精简文本不改变四人覆盖、完整评审范围和主 agent 对实际 diff/证据的裁决义务。",
       "files": []
     },
     {

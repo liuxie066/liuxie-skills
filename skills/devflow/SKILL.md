@@ -129,9 +129,9 @@ residual_risks: []            # [{item, classification, owner, destination}]；c
 
 进度不变量：`next_action` / `current_node` 指向下一个未完成动作，不写刚完成的；不得 invent/skip/collapse/reorder 节点或内部步骤（slice、review 循环）。
 
-恢复旧记录时，把 Parallel Design Panel/Planreview 映射到 Improve Design 的相应内部步骤、Implementation 映射 Impl、Deepreview 映射 Review、Closeout 映射结果报告；保留原授权、计数和未完成动作。已通过的 Panel 不因名称变化重跑；原明确等待的用户决定不能被迁移跳过。mode/路径无法从原记录确定时询问，不猜授权。
+恢复记录时保留原授权、计数和未完成动作；原明确等待的用户决定不能被跳过。mode/路径无法从原记录确定时询问，不猜授权。
 
-派发只带当前节点所需的自包含目标、非目标、scope、success signals、design_ref、workspace/base、证据路径、ownership/只读边界、验收与返回格式。原生支持时用 fork_turns=none；不复制整段会话/日志，不让 reviewer 读其他结论。写入 worker 须知道并保留其他人的改动。主 agent 核对实际 diff/完整 evidence 后裁决。
+派发只带当前节点所需的自包含目标、非目标、scope、success signals、design_ref、workspace/base、证据路径、ownership/只读边界、验收与返回格式。不复制整段会话/日志，不让 reviewer 读其他结论。写入 worker 须知道并保留其他人的改动。主 agent 核对实际 diff/完整 evidence 后裁决。
 
 大量日志保留在已有临时 artifact，会话只返回摘要、真实退出码和证据路径；失败时读取原始堆栈，不能以 tail/tee 的退出码冒充测试成功。长源码/diff 分段完整读取。异步调用优先等待通知或增量输出，无变化约 30–60 秒退避；临时超时不等于终止，不重派，不把运行状态当完成；最终读取完整结果。
 

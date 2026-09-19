@@ -1471,5 +1471,35 @@
     "invocation_policy_preserved": "manual/explicit-only，未更改",
     "readme_update": "not required：devflow 已在 README 链接，清单成员与调用策略未变",
     "limits": "仅删除死代码路由段并改写一条 eval 文本；未在真实 Impl 会话验证「主 agent 直接实现所有 slice」的运行时行为。SKILL.md 中已无 gpt-5.6-luna/Luna/模型路由残留。"
+  },
+  "devflow_dead_dispatch_cleanup_20260919": {
+    "date": "2026-09-19",
+    "skill": "devflow",
+    "skill_sha256": "100ac98aaa5dcdadb14adf824bebe01ef4a0a053bc089844450ba5f57f1a9039",
+    "previous_recorded_sha256": "1764758eb43a1d40b0e81554ffb86037e025c28e24c0119b2dd3fbdc99775661",
+    "evals_sha256": "deb416f00fa7e8740b2dcaf39fe575858b247d9327761d14244cf382e62941c7",
+    "previous_evals_sha256": "daba56295017610664dd267ff72f5393cd35ff4ea56bdb58f24ff8c940e91e9f",
+    "reason": "清理两处不起作用的派发约束：① fork_turns=none 死命名（全机无宿主定义该参数）去掉，保留「不复制整段会话/日志」，同步改 eval #17；② v1→v2 旧节点名映射 shim 删除（本机已无 v1 记录、workflow_version=2），保留通用恢复安全句。",
+    "source_and_install_validation": "pass: verify_migration.py --skill skills/devflow",
+    "manifest_update": "migration.json 刷新 devflow/SKILL.md（1764758e… → 100ac98a…）与 devflow/evals/evals.json（daba5629… → deb416f0…）哈希，并追加 devflow_dead_dispatch_cleanup 原因记录",
+    "source_only_verification": "pass: 32 source skills; 29 selected (16 manual / 13 automatic)",
+    "global_copy_content_and_permissions": "pass: sync.py --apply 后 verify_migration.py 全量 PASS",
+    "hosts": {
+      "agents_dsh_claude": {
+        "mechanism": "~/.agents/skills 分发目标，~/.claude/skills 符号链接；sync + 全量 verify PASS",
+        "status": "pass"
+      },
+      "pi": {
+        "mechanism": "~/.pi/agent/skills/devflow 符号链接自动跟随",
+        "status": "pass"
+      },
+      "hermes": {
+        "action": "备份 SKILL.md → SKILL.md.bak-20260919-dead-dispatch-cleanup、evals.json → evals.json.bak-20260919-dead-dispatch-cleanup 后复制，diff -r（排除 .bak）与源逐字一致",
+        "status": "pass"
+      }
+    },
+    "invocation_policy_preserved": "manual/explicit-only，未更改",
+    "readme_update": "not required：devflow 已在 README 链接，清单成员与调用策略未变",
+    "limits": "删死命名与死 shim，未在真实派发/恢复会话验证；SKILL.md 已无 fork_turns、evals.json 已无 fork_turns 残留。"
   }
 }
