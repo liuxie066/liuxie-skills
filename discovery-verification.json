@@ -1323,5 +1323,33 @@
     "readme_update": "not required：devflow 已在 README 链接，清单成员与调用策略未变",
     "note": "sync 同时发现 ~/.agents/skills 存在非中央仓库成员（sub-agents/、tmux-agents/）及 gateflow/phaseflow 本地改动，被 sync --apply 清除；见用户后续决定是否收编。",
     "limits": "未在真实多家族 subagent 的 Improve Design 会话中验证跨家族路由；仅文件级内容与原生发现验证。"
+  },
+  "devflow_gateflow_alignment_20260919": {
+    "date": "2026-09-19",
+    "skill": "devflow",
+    "skill_sha256": "a504edd831c963f3a4e44e057879588720baadd74e8afc4510c669665ee7cae3",
+    "previous_recorded_sha256": "792a00569628b9fc620c093f882f3e6d780f7465dab1fcca94cc794935efc505",
+    "reason": "收编 gateflow 真正缺口（一大件 + 一小件 + 两个可选小件，不照搬 27 步状态机）+ 原生 subagent → spawn_agent 术语对齐：① residual_risks 字段与关闭判据；② next_action/current_node 状态不变量；③ fix/re-review 状态枚举；④ Save Design code-generation-ready 退出判据。frontmatter、description 与调用策略未变。",
+    "source_and_install_validation": "pass: verify_migration.py --skill skills/devflow",
+    "manifest_update": "migration.json 刷新 devflow/SKILL.md 哈希（792a005… → a504edd…）并追加 devflow_gateflow_alignment 原因记录",
+    "source_only_verification": "pass: 32 source skills; 29 selected (16 manual / 13 automatic)",
+    "global_copy_content_and_permissions": "pass: sync.py --apply 后 verify_migration.py 全量 PASS",
+    "hosts": {
+      "agents_dsh_claude": {
+        "mechanism": "~/.agents/skills 分发目标，~/.claude/skills 符号链接；sync + 全量 verify PASS",
+        "status": "pass"
+      },
+      "pi": {
+        "mechanism": "~/.pi/agent/skills/devflow 符号链接自动跟随",
+        "status": "pass"
+      },
+      "hermes": {
+        "action": "备份 SKILL.md → SKILL.md.bak-20260919-gateflow-alignment 后复制，diff -r（排除 .bak）与源逐字一致",
+        "status": "pass"
+      }
+    },
+    "invocation_policy_preserved": "manual/explicit-only，未更改",
+    "readme_update": "not required：devflow 已在 README 链接，清单成员与调用策略未变",
+    "limits": "未在真实大需求切片会话中验证 residual risk 生命周期与关闭判据的实际效果；仅文件级内容与原生发现验证。"
   }
 }

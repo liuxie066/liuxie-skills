@@ -124,7 +124,10 @@ deepreview_round: 0
 in_flight: []
 evidence_paths: []
 blocking_findings: []
+residual_risks: []            # [{item, classification, owner, destination}]；classification ∈ fixed-in-current-slice / covered-by-later-slice / assigned-to-later-work-unit / tracked-by-existing-issue / needs-new-issue-or-user-decision
 ```
+
+进度不变量：`next_action` / `current_node` 指向下一个未完成动作，不写刚完成的；不得 invent/skip/collapse/reorder 节点或内部步骤（slice、review 循环）。
 
 恢复旧记录时，把 Parallel Design Panel/Planreview 映射到 Improve Design 的相应内部步骤、Implementation 映射 Impl、Deepreview 映射 Review、Closeout 映射结果报告；保留原授权、计数和未完成动作。已通过的 Panel 不因名称变化重跑；原明确等待的用户决定不能被迁移跳过。mode/路径无法从原记录确定时询问，不猜授权。
 
@@ -163,13 +166,15 @@ implementation slice 必须是可独立验证的行为增量，不按文件、�
 
 记录最终 `design_doc` 路径，后续引用同一 owner 及对应版本。
 
+退出判据：`design_doc` 必须 code-generation-ready——可直接指导实现，不要求实现者重新设计方案、发明契约、猜 file ownership 或 state transition。
+
 记录 design_ref，报告文档路径、owner、写入内容及检查结果后，本节点完成。仅 workflow 按已授权序列进入 Improve Design；单独保存不启动 Panel。
 
 ## 3. Improve Design
 
 ### 四路并行优化建议
 
-进入 Improve Design 后，先绑定本轮设计快照，派发四个只读 reviewers，均为原生 subagents。四者使用相同的自包含 brief，读取同一个完整 `design_doc` 快照及目标、约束和事实材料，各自独立回答同一个问题：
+进入 Improve Design 后，先绑定本轮设计快照，派发四个只读 reviewers，均为原生 subagents（宿主内置子代理派发：Codex `spawn_agent` / 命名 subagent、Claude Code 原生 subagent；非 herdr pane、非独立子进程）。四者使用相同的自包含 brief，读取同一个完整 `design_doc` 快照及目标、约束和事实材料，各自独立回答同一个问题：
 
 > Any suggestions to improve this design?
 
@@ -297,10 +302,12 @@ Impl 委派沿用共用派发规则，并明确本 slice 的预期行为。
 
 读取原始批准记录、真实授权变更、绑定的 design_ref 与 prd_doc_ref（无产品合同时记 not-applicable），核验原验收与新增行为的依据；当前设计/代码/测试一致不能掩盖原范围漂移。同一审查上下文的完整参考原文且版本未变时可复用；新 reviewer、压缩丢原文、设计/授权/PRD 变更时重读。代码修改后的每轮仍完整重审，不沿用上轮 verdict。
 
-返回 artifact、verdict、findings、必要下一节点和证据。发现代码问题建议回 Impl；设计缺口回 Improve Design；目标变化回 Brainstorm。是否执行返工由 workflow 和真实授权决定，Review 自身不修复。没有可用 verdict 或仍有 blocking finding 时不得报告通过；有可用失败结论可以完成一次审查任务，但明确研发未通过。
+返回 artifact、verdict、findings、必要下一节点和证据。发现代码问题建议回 Impl；设计缺口回 Improve Design；目标变化回 Brainstorm。是否执行返工由 workflow 和真实授权决定，Review 自身不修复。没有可用 verdict 或仍有 blocking finding 时不得报告通过；有可用失败结论可以完成一次审查任务，但明确研发未通过。每条 finding 的 fix/re-review 状态只用固定枚举 `未修复` / `已修复` / `部分修复` / `证据失效`，重审后回写或列出最终状态，不留含糊的 in-progress。
 
 ## 结果与交付引用
 
 每个节点完成后简报自己的产物、验证、退出状态及限制。单节点到此结束；workflow 完成其授权序列且全部所需检查通过后，报告：design_ref/设计决策依据、四人建议及裁决引用（适用时）、实现范围与验证、Review 结论/风险，以及给 Delivery 的设计附件或固定链接依据。不再创建 Closeout 节点或要求机械“完成”确认。
+
+任何 residual risk 都必须有 owner 与 destination；存在无 owner/destination（unclassified）的 residual risk 时，不得报告节点、slice 或审查循环通过。
 
 产品/范围取舍未决、权威事实或 base/owner 不明、需 destructive/外部/生产新授权、必要验证无可用证据、finding 无法安全修复时暂停并说明具体缺项，不增加无关节点、不猜测通过。
