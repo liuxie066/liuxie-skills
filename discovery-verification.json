@@ -1351,5 +1351,36 @@
     "invocation_policy_preserved": "manual/explicit-only，未更改",
     "readme_update": "not required：devflow 已在 README 链接，清单成员与调用策略未变",
     "limits": "未在真实大需求切片会话中验证 residual risk 生命周期与关闭判据的实际效果；仅文件级内容与原生发现验证。"
+  },
+  "devflow_eval_dsh_cleanup_20260919": {
+    "date": "2026-09-19",
+    "skill": "devflow",
+    "skill_sha256": "a504edd831c963f3a4e44e057879588720baadd74e8afc4510c669665ee7cae3",
+    "previous_recorded_sha256": "a504edd831c963f3a4e44e057879588720baadd74e8afc4510c669665ee7cae3",
+    "changed_file": "devflow/evals/evals.json",
+    "evals_sha256": "385fdcbd667f19b044a45045a2ee7744600ad321763febb2525dd149b86bf84c",
+    "previous_evals_sha256": "33dc32273b0abb76c55ea7579f9a4eb8318824849d05d88999b305dbe1c66c4e",
+    "reason": "同步两条过时的 DSH eval 期望（SKILL.md 不变）：eval 6 与 eval 11 从「主会话直调 DSH Crew / 经 ds-pro/ds-flash 子代理中转、tier=flash、dsh_crew_status」改为「四路均为原生 subagent（Codex spawn_agent / 命名 subagent）并跨模型家族派发（如 reviewer-deepseek-v4-pro），independence 才 verified」。",
+    "source_and_install_validation": "pass: verify_migration.py --skill skills/devflow",
+    "manifest_update": "migration.json 刷新 devflow/evals/evals.json 哈希（33dc322… → 385fdcb…）并追加 devflow_eval_dsh_cleanup 原因记录；devflow/SKILL.md 哈希不变（a504edd…）",
+    "source_only_verification": "pass: 32 source skills; 29 selected (16 manual / 13 automatic)",
+    "global_copy_content_and_permissions": "pass: sync.py --apply 后 verify_migration.py 全量 PASS",
+    "hosts": {
+      "agents_dsh_claude": {
+        "mechanism": "~/.agents/skills 分发目标，~/.claude/skills 符号链接；sync + 全量 verify PASS",
+        "status": "pass"
+      },
+      "pi": {
+        "mechanism": "~/.pi/agent/skills/devflow 符号链接自动跟随",
+        "status": "pass"
+      },
+      "hermes": {
+        "action": "备份 evals.json → evals.json.bak-20260919-eval-dsh-cleanup 后复制，diff -r（排除 .bak）与源逐字一致",
+        "status": "pass"
+      }
+    },
+    "invocation_policy_preserved": "manual/explicit-only，未更改",
+    "readme_update": "not required：devflow 已在 README 链接，清单成员与调用策略未变",
+    "limits": "eval 6/11 仅文本期望；未在真实跨家族 subagent 会话中运行四条 eval。另有 eval 7/17/31/34/37 仍含 DSH 措辞（fallback/直调分支），本轮回合未改动，待用户决定是否一并清理。"
   }
 }

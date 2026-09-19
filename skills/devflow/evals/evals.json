@@ -33,8 +33,8 @@
     },
     {
       "id": 6,
-      "prompt": "设计文档已经保存，开始 Parallel Design Panel；当前 DSH Crew 可用，但并发容量只能同时运行三个 reviewer。",
-      "expected_output": "完成四人评审而不是缩减人数：四个 reviewer 使用相同问题 Any suggestions to improve this design? 和完整输入各自独立提出改进，不预分配专项角色；前三个为原生 subagents，第四个由主会话直接调用 DSH Crew，设置 tier=flash，不先 spawn ds-pro/ds-flash Codex 子代理；并发不足时分批运行，所有 reviewer 只读取同一原始 design_doc 快照且互不读取结论；使用 spawn 时必须再读取最终 worker result；DSH brief 自包含、只读并禁止 commit/push；汇总报告 backend、实际 model 和 independence。",
+      "prompt": "设计文档已经保存，开始 Parallel Design Panel；当前宿主暴露多个模型家族的命名 subagents（含 DeepSeek 家族的 reviewer-deepseek-v4-pro），但并发容量只能同时运行三个 reviewer。",
+      "expected_output": "完成四人评审而不是缩减人数：四个 reviewer 使用相同问题 Any suggestions to improve this design? 和完整输入各自独立提出改进，不预分配专项角色；四者均为原生 subagents（Codex spawn_agent / 命名 subagent），并跨模型家族派发——至少一路派到与主 agent 不同模型家族的 subagent（如 DeepSeek 家族的 reviewer-deepseek-v4-pro），这是 independence 能写 verified 的前提；并发不足时分批运行，所有 reviewer 只读取同一原始 design_doc 快照且互不读取结论；使用 spawn 时必须再读取最终 worker result；brief 自包含、只读并禁止 commit/push；汇总报告 reviewer_backend=native-subagent、可验证的 reviewer_model 和 independence。",
       "files": []
     },
     {
@@ -63,8 +63,8 @@
     },
     {
       "id": 11,
-      "prompt": "当前 DSH Crew 可用。请先启动一个 ds-pro Codex 子代理，让它代替主会话调用 DSH Crew，完成第四个设计 reviewer。",
-      "expected_output": "不通过 ds-pro 或 ds-flash Codex 子代理中转；由主会话直接调用全局 dsh_spawn_worker 或 dsh_run_worker 并设置 tier=flash。只读并行时才设置 allow_concurrent_cwd=true；使用 spawn 后通过 dsh_worker_result 获取最终 review。汇总报告 dsh_crew_status、reviewer_backend、可验证的 reviewer_model 和 independence。",
+      "prompt": "设计已保存，开始四人 Parallel Design Panel。请先启动一个普通 Codex 子代理，让它代替主会话再派发并完成第四个设计 reviewer。",
+      "expected_output": "不通过额外子代理中转；由主会话直接以原生 subagent（Codex spawn_agent / 命名 subagent）派发第四个 reviewer，并优先派到与主 agent 不同模型家族的 subagent（如 reviewer-deepseek-v4-pro），使 independence 可达 verified。只读并行；使用 spawn 后读取最终 worker result。汇总报告 reviewer_backend=native-subagent、可验证的 reviewer_model 和 independence。",
       "files": []
     },
     {
