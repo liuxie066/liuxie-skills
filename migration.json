@@ -69,7 +69,7 @@
     "ima-skill/meta.json": "e67163e272e5c4a25467db7654feddfb47134a891e2e494415f0fbbb9d129d6f",
     "doc/SKILL.md": "0a635585817d1ac96e8e512114d08258b70f9e54ce0052078a258291ac13a8ed",
     "doc/LICENSE.txt": "4dd13869245e356246a5b770723247bbb80a8f07a181d1d3d873a1734297cdb9",
-    "devflow/SKILL.md": "a504edd831c963f3a4e44e057879588720baadd74e8afc4510c669665ee7cae3",
+    "devflow/SKILL.md": "4e8b09d96cad4d71eddaade03444f02d012cb093e9645b6c1d3bf3e56d9b7e12",
     "kimi-webbridge/SKILL.md": "db1d82b37962a5a7756ca862bc0bea211c6bba46c3608b157a135386d4e9be6f",
     "py-perf-analyzer/README.md": "e3b5a592e5a3b25a639a6656f4102ecae855a7488c3d590ddf6e93b5c28fe49c",
     "py-perf-analyzer/SKILL.md": "26ee753a53de4c321016254dd761ff4d95f2cd9ee925d05115a5e56484ac1efa",
@@ -1380,6 +1380,16 @@
     },
     "updated_hashes": {
       "devflow/evals/evals.json": "f5a926058b42c7d3ed045a62898ea55402ca4eea3f52aba51c9a57e11e947876"
+    }
+  },
+  "devflow_reviewer_planreview_division": {
+    "date": "2026-09-19",
+    "reason": "划清 Improve Design 内部四路 reviewer 与按需 Planreview 的分工：四路明确为建设性优化建议（补强/简化/替代/可扩展点），不狩猎失败模式、不找否决理由、不给 pass/fail，对抗门禁只留给按需 Planreview；按需 Planreview 注明「对抗性门禁只在此步骤系统性执行，四路不做、也不各自跑一套」。",
+    "original_hashes": {
+      "devflow/SKILL.md": "a504edd831c963f3a4e44e057879588720baadd74e8afc4510c669665ee7cae3"
+    },
+    "updated_hashes": {
+      "devflow/SKILL.md": "4e8b09d96cad4d71eddaade03444f02d012cb093e9645b6c1d3bf3e56d9b7e12"
     }
   }
 }

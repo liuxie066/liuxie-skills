@@ -1413,5 +1413,33 @@
     "invocation_policy_preserved": "manual/explicit-only，未更改",
     "readme_update": "not required：devflow 已在 README 链接，清单成员与调用策略未变",
     "limits": "eval 全部为文本期望；未在真实跨家族 subagent 会话中运行。evals.json 中已无任何 DSH/ds-pro/ds-flash/dsh_/tier=flash 残留。"
+  },
+  "devflow_reviewer_planreview_division_20260919": {
+    "date": "2026-09-19",
+    "skill": "devflow",
+    "skill_sha256": "4e8b09d96cad4d71eddaade03444f02d012cb093e9645b6c1d3bf3e56d9b7e12",
+    "previous_recorded_sha256": "a504edd831c963f3a4e44e057879588720baadd74e8afc4510c669665ee7cae3",
+    "reason": "划清 Improve Design 内部四路 reviewer 与按需 Planreview 的分工：四路明确为建设性优化建议（补强/简化/找更好的替代/点出可扩展点），不狩猎失败模式、不找否决理由、不给 pass/fail 结论，对抗门禁只留给按需 Planreview；按需 Planreview 注明「对抗性门禁只在此步骤系统性执行，四路不做、也不各自跑一套」。仅改 SKILL.md 两处措辞，frontmatter、description、调用策略与行为语义不变。",
+    "source_and_install_validation": "pass: verify_migration.py --skill skills/devflow",
+    "manifest_update": "migration.json 刷新 devflow/SKILL.md 哈希（a504edd… → 4e8b09d…）并追加 devflow_reviewer_planreview_division 原因记录",
+    "source_only_verification": "pass: 32 source skills; 29 selected (16 manual / 13 automatic)",
+    "global_copy_content_and_permissions": "pass: sync.py --apply 后 verify_migration.py 全量 PASS",
+    "hosts": {
+      "agents_dsh_claude": {
+        "mechanism": "~/.agents/skills 分发目标，~/.claude/skills 符号链接；sync + 全量 verify PASS",
+        "status": "pass"
+      },
+      "pi": {
+        "mechanism": "~/.pi/agent/skills/devflow 符号链接自动跟随",
+        "status": "pass"
+      },
+      "hermes": {
+        "action": "备份 SKILL.md → SKILL.md.bak-20260919-reviewer-planreview-division 后复制，diff -r（排除 .bak）与源逐字一致",
+        "status": "pass"
+      }
+    },
+    "invocation_policy_preserved": "manual/explicit-only，未更改",
+    "readme_update": "not required：devflow 已在 README 链接，清单成员与调用策略未变",
+    "limits": "仅文本分工澄清，未在真实 Improve Design 会话验证四路不越界为对抗审查；未改行为语义。"
   }
 }

@@ -178,7 +178,7 @@ implementation slice 必须是可独立验证的行为增量，不按文件、�
 
 > Any suggestions to improve this design?
 
-不预分配架构、安全、简化或对抗角色，也不预设额外的找茬目标。每位 reviewer 自行判断整份设计最值得改进之处；不得读取其他 reviewer 的结论、主 agent 的预设改法或继承含这些内容的会话，不得编辑文件。建议须遵守已批准 scope contract；没有有价值的改进时可以明确回答无建议并说明依据，不为凑数制造问题。
+不预分配架构、安全、简化或对抗角色，也不预设额外的找茬目标；四路是建设性的优化建议，不是对抗审查。每位 reviewer 自行判断整份设计最值得改进之处——补强、简化、找更好的替代、点出可扩展点，不狩猎失败模式、不找否决理由、不给 pass/fail 结论（对抗门禁只留给按需 Planreview）；不得读取其他 reviewer 的结论、主 agent 的预设改法或继承含这些内容的会话，不得编辑文件。建议须遵守已批准 scope contract；没有有价值的改进时可以明确回答无建议并说明依据，不为凑数制造问题。
 
 四者的 brief 必须自包含：给出 `design_doc` 和仓库绝对路径、只读边界、验收标准、禁止修改/commit/push，并要求区分直接证据与假设。
 
@@ -213,7 +213,7 @@ implementation slice 必须是可独立验证的行为增量，不按文件、�
 
 ### 按需 Planreview
 
-仅项目/用户要求，或剩余重要设计风险需要对抗性检查时，由主 agent 对最终完整 design_doc 使用 planreview（缺失则同等 fallback），说明具体原因；否则记 not-applicable。检查 goal alignment、切片是否按可验证行为拆分、失败语义及验收缺口。按五次预算合批修订后完整重审，不按每条建议加一轮。策略、scope、安全或新权限决定立即暂停。
+仅项目/用户要求，或剩余重要设计风险需要对抗性检查时，由主 agent 对最终完整 design_doc 使用 planreview（缺失则同等 fallback），说明具体原因；否则记 not-applicable。检查 goal alignment、切片是否按可验证行为拆分、失败语义及验收缺口。对抗性门禁只在此步骤系统性执行，四路 reviewer 不做、也不各自跑一套 Planreview。按五次预算合批修订后完整重审，不按每条建议加一轮。策略、scope、安全或新权限决定立即暂停。
 
 完成修订及适用检查后冻结设计并报告 design_ref、重要决策、建议裁决、验证和风险，结束 Improve Design。单节点不启动实现；workflow 按实现授权和输入有效性决定是否继续。
 
