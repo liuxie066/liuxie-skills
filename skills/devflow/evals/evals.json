@@ -33,13 +33,13 @@
     },
     {
       "id": 6,
-      "prompt": "设计文档已经保存，开始 Parallel Design Panel；当前宿主暴露多个模型家族的命名 subagents（含 DeepSeek 家族的 reviewer-deepseek-v4-pro），但并发容量只能同时运行三个 reviewer。",
+      "prompt": "设计文档已经保存，开始四人 Panel；当前宿主暴露多个模型家族的命名 subagents（含 DeepSeek 家族的 reviewer-deepseek-v4-pro），但并发容量只能同时运行三个 reviewer。",
       "expected_output": "完成四人评审而不是缩减人数：四个 reviewer 使用相同问题 Any suggestions to improve this design? 和完整输入各自独立提出改进，不预分配专项角色；四者均为原生 subagents（Codex spawn_agent / 命名 subagent），并跨模型家族派发——至少一路派到与主 agent 不同模型家族的 subagent（如 DeepSeek 家族的 reviewer-deepseek-v4-pro），这是 independence 能写 verified 的前提；并发不足时分批运行，所有 reviewer 只读取同一原始 design_doc 快照且互不读取结论；使用 spawn 时必须再读取最终 worker result；brief 自包含、只读并禁止 commit/push；汇总报告 reviewer_backend=native-subagent、可验证的 reviewer_model 和 independence。",
       "files": []
     },
     {
       "id": 7,
-      "prompt": "开始四人 Parallel Design Panel，但当前宿主没有配置任何跨模型家族的命名 subagent（只有与主 agent 同家族的普通 subagent）。",
+      "prompt": "开始四人 Panel，但当前宿主没有配置任何跨模型家族的命名 subagent（只有与主 agent 同家族的普通 subagent）。",
       "expected_output": "不安装、不启动也不配置外部审查工具；四位 reviewer 仍全部用原生 subagent 独立回答同一问题，不缩减人数、不伪称跨家族。没有跨家族 subagent 时 independence 记 unverified，并在汇总中明确报告 reviewer_backend=native-subagent、可验证的 reviewer_model 和 independence=unverified。",
       "files": []
     },
@@ -63,13 +63,13 @@
     },
     {
       "id": 11,
-      "prompt": "设计已保存，开始四人 Parallel Design Panel。请先启动一个普通 Codex 子代理，让它代替主会话再派发并完成第四个设计 reviewer。",
+      "prompt": "设计已保存，开始四人 Panel。请先启动一个普通 Codex 子代理，让它代替主会话再派发并完成第四个设计 reviewer。",
       "expected_output": "不通过额外子代理中转；由主会话直接以原生 subagent（Codex spawn_agent / 命名 subagent）派发第四个 reviewer，并优先派到与主 agent 不同模型家族的 subagent（如 reviewer-deepseek-v4-pro），使 independence 可达 verified。只读并行；使用 spawn 后读取最终 worker result。汇总报告 reviewer_backend=native-subagent、可验证的 reviewer_model 和 independence。",
       "files": []
     },
     {
       "id": 12,
-      "prompt": "Brainstorm 已确认本次只实现单账户只读查询。设计按 controller、service、repository、CLI、docs 拆成 5 个 slices；Parallel Design Panel 还建议顺便增加多账户权限和监控告警。继续 Improve Design 和 Planreview。",
+      "prompt": "Brainstorm 已确认本次只实现单账户只读查询。设计按 controller、service、repository、CLI、docs 拆成 5 个 slices；四人 Panel 还建议顺便增加多账户权限和监控告警。继续 Improve Design 和 Planreview。",
       "expected_output": "保持原scope，额外多账户权限及告警无必要性证据则deferred-with-owner；在Improve Design内部将模块机械切片合并为可验证行为切片，默认不超过3或说明理由。用户明确要求的Planreview在内部检查goal alignment与验收；不自动扩范围。",
       "files": []
     },

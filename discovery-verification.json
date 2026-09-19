@@ -1501,5 +1501,36 @@
     "invocation_policy_preserved": "manual/explicit-only，未更改",
     "readme_update": "not required：devflow 已在 README 链接，清单成员与调用策略未变",
     "limits": "删死命名与死 shim，未在真实派发/恢复会话验证；SKILL.md 已无 fork_turns、evals.json 已无 fork_turns 残留。"
+  },
+  "devflow_eval_panel_naming_cleanup_20260919": {
+    "date": "2026-09-19",
+    "skill": "devflow",
+    "skill_sha256": "100ac98aaa5dcdadb14adf824bebe01ef4a0a053bc089844450ba5f57f1a9039",
+    "previous_recorded_sha256": "100ac98aaa5dcdadb14adf824bebe01ef4a0a053bc089844450ba5f57f1a9039",
+    "changed_file": "devflow/evals/evals.json",
+    "evals_sha256": "aeb429d810bcd27d264f3cd0b43486ac56942df3a25eebadf5d0a694b1332cfb",
+    "previous_evals_sha256": "deb416f00fa7e8740b2dcaf39fe575858b247d9327761d14244cf382e62941c7",
+    "reason": "把 eval #6/7/11/12 prompt 里的旧节点名「Parallel Design Panel」统一改为现用「四人 Panel」，与 SKILL.md 当前口径（Improve Design 内四路 Panel）一致；SKILL.md 不变。",
+    "source_and_install_validation": "pass: verify_migration.py --skill skills/devflow",
+    "manifest_update": "migration.json 刷新 devflow/evals/evals.json 哈希（deb416f… → aeb429d…）并追加 devflow_eval_panel_naming_cleanup 原因记录；devflow/SKILL.md 哈希不变（100ac98a…）",
+    "source_only_verification": "pass: 32 source skills; 29 selected (16 manual / 13 automatic)",
+    "global_copy_content_and_permissions": "pass: sync.py --apply 后 verify_migration.py 全量 PASS",
+    "hosts": {
+      "agents_dsh_claude": {
+        "mechanism": "~/.agents/skills 分发目标，~/.claude/skills 符号链接；sync + 全量 verify PASS",
+        "status": "pass"
+      },
+      "pi": {
+        "mechanism": "~/.pi/agent/skills/devflow 符号链接自动跟随",
+        "status": "pass"
+      },
+      "hermes": {
+        "action": "备份 evals.json → evals.json.bak-20260919-eval-panel-naming-cleanup 后复制，diff -r（排除 .bak）与源逐字一致",
+        "status": "pass"
+      }
+    },
+    "invocation_policy_preserved": "manual/explicit-only，未更改",
+    "readme_update": "not required：devflow 已在 README 链接，清单成员与调用策略未变",
+    "limits": "仅文本重命名 eval prompt 中的旧节点名；未在真实会话运行四条 eval。evals.json 已无「Parallel Design Panel」残留。"
   }
 }

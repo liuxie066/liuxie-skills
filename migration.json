@@ -116,7 +116,7 @@
     "doc/scripts/render_docx.py": "52b3c3158913ebcad2ada7b8193970b70453239e255054aa2d60c1683af08751",
     "doc/assets/doc.png": "7eadf1088e5062f681dba6596173a1df13bbfbcddd8a8a9bb78fd2071947dcf8",
     "doc/assets/doc-small.svg": "bd5415fbbfe72c66c1527411d61625731fdd2f75b25d1542510b6ddef699ebe0",
-    "devflow/evals/evals.json": "deb416f00fa7e8740b2dcaf39fe575858b247d9327761d14244cf382e62941c7",
+    "devflow/evals/evals.json": "aeb429d810bcd27d264f3cd0b43486ac56942df3a25eebadf5d0a694b1332cfb",
     "kimi-webbridge/references/operations.md": "86855b663649d560a8939c25a7a15d1dba91a58e2e2ed92414848a9a9f8ee6d7",
     "py-perf-analyzer/scripts/perf_profile.py": "8fced3e1f91e9318c67f4e69db89f30fef6963c4f0f135a77276310f5d96030b",
     "grilling/agents/openai.yaml": "3c8415e2bc1bc96ef9cf3a2d0219987af16ca4d522beb7bfcda215533b485dd8",
@@ -1414,6 +1414,16 @@
     "updated_hashes": {
       "devflow/SKILL.md": "100ac98aaa5dcdadb14adf824bebe01ef4a0a053bc089844450ba5f57f1a9039",
       "devflow/evals/evals.json": "deb416f00fa7e8740b2dcaf39fe575858b247d9327761d14244cf382e62941c7"
+    }
+  },
+  "devflow_eval_panel_naming_cleanup": {
+    "date": "2026-09-19",
+    "reason": "把 eval #6/7/11/12 prompt 里的旧节点名「Parallel Design Panel」统一改为现用「四人 Panel」，与 SKILL.md 当前口径（Improve Design 内四路 Panel）一致；SKILL.md 不变。",
+    "original_hashes": {
+      "devflow/evals/evals.json": "deb416f00fa7e8740b2dcaf39fe575858b247d9327761d14244cf382e62941c7"
+    },
+    "updated_hashes": {
+      "devflow/evals/evals.json": "aeb429d810bcd27d264f3cd0b43486ac56942df3a25eebadf5d0a694b1332cfb"
     }
   }
 }
