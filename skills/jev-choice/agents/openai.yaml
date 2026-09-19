@@ -1,0 +1,4 @@
+interface:
+  display_name: "Jev Choice · 类型化决策"
+  short_description: "向 TypeSafe Jev 提交多问题决策请求，并在本地校验答案、概率与置信度"
+  default_prompt: "使用 $jev-choice 把下面这组判断整理成 Jev 请求，先 dry-run 核对形状，再执行并按契约解读答案与置信度。"

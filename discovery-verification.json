@@ -1588,5 +1588,106 @@
     },
     "readme_update": "not required：README 为产品向（PRDflow/Devflow）+ to-page 说明，非全量技能清单",
     "limits": "未跑真实子 Agent 派发（缺 provider key / codex profile / 本地服务）；仅安装、冒烟与文件级内容/原生发现验证。"
+  },
+  "jev_choice_creation_20260919": {
+    "date": "2026-09-19",
+    "skill_sha256": "5aafcd00b8c277cecccddcbb340bda416ced9a20341eedf5ea21d947458e6e96",
+    "invocation": "automatic, explicit $jev-choice also available",
+    "purpose": "Executable local client for TypeSafe Jev typed decisions, generalizing the questions/criteria + fail-closed validation contract observed in browser-use/jev-ultrafast. Complements the vendor's documentation-only typesafe-ai skill.",
+    "source_and_install_validation": "passed; 35 source, 32 selected, 16 manual, 16 automatic",
+    "script_checks": {
+      "compile": "py_compile under CPython 3.12.13 and 3.9.6 (/usr/bin/python3)",
+      "local_rejection_matrix": "12/12 non-zero exit with a specific kind and no traceback",
+      "fixture_matrix": "17/17 against a local http.server via TYPESAFE_BASE_URL: happy, auth 401/403, 422 list detail, 429 with Retry-After, 529, 503, 307 downgrade refused by name, html 502, NaN body, duplicate JSON keys, non-argmax choice, score sum drift, bool as probability, choice outside criteria, missing answer, absent usage",
+      "gate_semantics": "a --min-confidence miss returns ok:true with gate.passed false and exit 0; only --fail-below-threshold makes it non-zero",
+      "secret_handling": "no key is passed as an argument and none is echoed in output"
+    },
+    "host_links": {
+      "claude": {
+        "path": "~/.claude/skills/jev-choice",
+        "mechanism": "symlink to ~/.agents/skills",
+        "status": "loaded; confirmed present in the live skill list of a running session"
+      },
+      "codex": {
+        "path": "~/.agents/skills/jev-choice",
+        "mechanism": "native source",
+        "status": "file present; skills/list discovery not re-run"
+      },
+      "pi": {
+        "path": "~/.pi/agent/skills/jev-choice",
+        "mechanism": "symlink to ~/.agents/skills/jev-choice",
+        "status": "file present; Pi load not verified"
+      },
+      "hermes": {
+        "path": "~/.hermes/skills/imported/jev-choice",
+        "mechanism": "full copy",
+        "status": "file present; Hermes load not verified"
+      }
+    },
+    "not_verified": [
+      "Whether the harness injects ~/.claude/settings.json's env block into Bash subprocesses remains untested, because the key was configured in the credentials file instead. The script does not read settings.json itself, so if that route is used later it needs its own confirmation.",
+      "The installed fast-jev-compaction plugin is still dormant: it reads only the process environment, settings.json's env block, and its own userConfig -- not the credentials file.",
+      "Pi and Hermes were not exercised; only file placement is confirmed for them.",
+      "No failure-path call was made against the real endpoint (401/403/422/429/529 were exercised only against local fixtures)."
+    ],
+    "credential_note": "Key resolution order: TYPESAFE_API_KEY, then the platform credentials file (macOS ~/Library/Application Support/typesafe/credentials.env). Putting the key in ~/.claude/settings.json under env also revives the installed fast-jev-compaction plugin, which currently fails silently.",
+    "forward_test": {
+      "method": "An independent subagent was given a realistic triage request and the skill only — no intended answer, no suspected bug. It was additionally told not to obtain or configure credentials.",
+      "outcome": "It built a validated 7-question spec over three tickets, dry-ran it (704 state bytes, zero warnings), then got kind=missing_key with exit 1 and nothing transmitted. It declined to invent judgments, and independently negative-tested the local validator with a deliberately illegal spec to prove the dry-run was not vacuous.",
+      "defects_found_and_fixed": [
+        "The credential section instructed the agent to search for credentials, which collided with the caller's 'do not touch credentials' constraint and was denied as credential exploration. Now it says not to search at all: run the script and read credential_source.",
+        "The credential precondition was buried in the error table. It is now stated up front, next to the documentation/navigation split.",
+        "The description advertised 排序 (ranking) while only choice/score/noul exist and none of them produces a full ordering. Removed from the description and named as out of scope.",
+        "No guidance existed for N-item batches, where 'batch into one request' pulls against 'trim irrelevant state'. Added: shared material in state, per-item material in that item's instructions, plus the cost-vs-accuracy trade-off."
+      ],
+      "not_changed": "The subagent's own reading of the three tickets was explicitly labelled as its own, not the tool's, and was not promoted into the skill."
+    },
+    "live_call_verification": {
+      "date": "2026-09-19",
+      "endpoint": "https://api.typesafe.ai/v1/systemone",
+      "credential_source": "~/.claude/settings.json was NOT used; the user configured the 0600 credentials file, which the script resolved on its own.",
+      "runs": [
+        {
+          "purpose": "connectivity check",
+          "question_types": [
+            "noul"
+          ],
+          "ok": true,
+          "model_requested": "jev-latest",
+          "model": "jev-1.13.0",
+          "attempts": 1,
+          "latency_ms": 1118,
+          "usage": {
+            "input_tokens": 276,
+            "output_tokens": 20
+          }
+        },
+        {
+          "purpose": "realistic triage, 7 questions over three tickets",
+          "question_types": [
+            "choice",
+            "score",
+            "noul"
+          ],
+          "ok": true,
+          "model_requested": "jev-latest",
+          "model": "jev-1.13.0",
+          "attempts": 1,
+          "latency_ms": 1127,
+          "usage": {
+            "input_tokens": 1758,
+            "output_tokens": 237
+          },
+          "fatal_errors": 0,
+          "advisory_warnings": 0
+        }
+      ],
+      "findings": [
+        "All three question types are now confirmed against real responses, not only synthetic fixtures: choice returned choice/confidence/probabilities, score returned score/confidence/legend/string-indexed probabilities, noul returned its scalar.",
+        "The resolved model id is 'jev-1.13.0' with NO vendor prefix. The 'typesafe/jev-1.13-20260917' form quoted in third-party gateway documentation is that gateway's shape, not this endpoint's. Corrected in SKILL.md and references/contract.md.",
+        "The --min-confidence gate behaved as designed on real data: the genuinely undecided answer (0.53/0.47 split, certainty 0.52) was listed under below_threshold while ok stayed true and the exit code stayed 0.",
+        "No advisory warning fired on real probabilities, so the widened sum and argmax tolerances neither false-rejected nor hid anything here. One score came back 0.01 off its probability-weighted position, inside the 0.05 advisory band."
+      ]
+    }
   }
 }

@@ -45,7 +45,8 @@
     "hithink-finance": "https://github.com/HiThink-Tech/Financial-API/tree/402574a6221d5e255dba47166df8e5abb7149938/skills/hithink-finance",
     "to-page": "/Volumes/liuxie的硬盘/workspace/agent-skills/skills/to-page",
     "sub-agents": "https://github.com/noho/code-is-cheap/tree/fb179d8/skills/sub-agents",
-    "tmux-agents": "https://github.com/noho/code-is-cheap/tree/fb179d8/skills/tmux-agents"
+    "tmux-agents": "https://github.com/noho/code-is-cheap/tree/fb179d8/skills/tmux-agents",
+    "jev-choice": "/Volumes/liuxie的硬盘/workspace/agent-skills/skills/jev-choice"
   },
   "files": {
     "deepreview/SKILL.md": "cd76556e5ef4d60243bdc15cd565b22df77472038a687fb92b210c94bbe1997b",
@@ -832,7 +833,11 @@
     "sub-agents/scripts/claude-agent-run": "817aa8dbea54acc3bbeb9ce5b3e7fd6b5c0c8229be4eee130eab42c4bf2f81ad",
     "sub-agents/scripts/codex-agent-run": "b5155cfc4b98516fbd0a107cc593a5f413b8a040b0acdfdcd6bf7b04042fe3a4",
     "tmux-agents/SKILL.md": "9be892b6134d23b28d61a53da6077141d93b1caf1e71a932778d2f00d91ddc2c",
-    "tmux-agents/agents/openai.yaml": "514c9299ffe980e8a5e83dd26212e302994fe9212aa31e48a841764e6de0b21a"
+    "tmux-agents/agents/openai.yaml": "514c9299ffe980e8a5e83dd26212e302994fe9212aa31e48a841764e6de0b21a",
+    "jev-choice/SKILL.md": "5aafcd00b8c277cecccddcbb340bda416ced9a20341eedf5ea21d947458e6e96",
+    "jev-choice/references/contract.md": "70aa8c8e44ef1744d3b3a3c27773793ec160f637d1ab715e67d4137a4f700581",
+    "jev-choice/agents/openai.yaml": "b78c024d07212d99e20762f5e6a63571958393e601969eb1d0d3b6ec4316f2b3",
+    "jev-choice/scripts/jev_choose.py": "59f1cf567c5d92c20c4439059d74f2f4da8c02de23be85a1f9de4229ecd1a1f9"
   },
   "kimi_webbridge_version": "2.0.5",
   "config_before_sha256": "d87c96e79a8b33db5c428f1583a4374dfbc1346486310ffe306d85d95c8646d6",
@@ -1182,7 +1187,8 @@
       "hithink-finance",
       "to-page",
       "sub-agents",
-      "tmux-agents"
+      "tmux-agents",
+      "jev-choice"
     ]
   },
   "cross_tool_invocation": {
@@ -1453,5 +1459,12 @@
       "tmux-agents/SKILL.md": "9be892b6134d23b28d61a53da6077141d93b1caf1e71a932778d2f00d91ddc2c",
       "tmux-agents/agents/openai.yaml": "514c9299ffe980e8a5e83dd26212e302994fe9212aa31e48a841764e6de0b21a"
     }
+  },
+  "jev_choice_creation": {
+    "date": "2026-09-19",
+    "reason": "User requested a standalone Claude Code capability for TypeSafe Jev typed decisions, generalizing the questions/criteria + fail-closed validation contract observed in browser-use/jev-ultrafast, outside the options-monitor repository.",
+    "source": "/Volumes/liuxie的硬盘/workspace/agent-skills/skills/jev-choice",
+    "invocation": "automatic",
+    "source_count": 35
   }
 }
