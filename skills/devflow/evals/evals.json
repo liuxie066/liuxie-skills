@@ -39,8 +39,8 @@
     },
     {
       "id": 7,
-      "prompt": "开始四人 Parallel Design Panel，但当前主会话没有可调用的 DSH Crew tools。",
-      "expected_output": "不安装、不启动也不配置 DSH Crew；使用第四个原生 subagent 独立回答同一设计改进问题，仍完成四个 reviewer，并在汇总中明确报告 dsh_crew_status 及 fallback 原因、reviewer_backend=native-subagent、reviewer_model 和 independence=native-fallback。",
+      "prompt": "开始四人 Parallel Design Panel，但当前宿主没有配置任何跨模型家族的命名 subagent（只有与主 agent 同家族的普通 subagent）。",
+      "expected_output": "不安装、不启动也不配置外部审查工具；四位 reviewer 仍全部用原生 subagent 独立回答同一问题，不缩减人数、不伪称跨家族。没有跨家族 subagent 时 independence 记 unverified，并在汇总中明确报告 reviewer_backend=native-subagent、可验证的 reviewer_model 和 independence=unverified。",
       "files": []
     },
     {
@@ -99,7 +99,7 @@
     },
     {
       "id": 17,
-      "prompt": "准备派发一个已批准的局部 Implementation slice 和四个只读 Panel reviewers。历史对话很长，包含过去几轮评审和测试日志；worker 能读取共享仓库。请说明派发内容和返回要求。如果 DSH worker 读不到 design_doc 路径该怎么办？",
+      "prompt": "准备派发一个已批准的局部 Implementation slice 和四个只读 Panel reviewers。历史对话很长，包含过去几轮评审和测试日志；worker 能读取共享仓库。请说明派发内容和返回要求。如果某个 Panel reviewer 读不到 design_doc 路径该怎么办？",
       "expected_output": "每个任务只接收当前节点的目标/非目标/success signals、职责与范围、design_doc/workspace/review base或快照、必要文件和证据路径、ownership/只读边界、validation、停止条件、返回/artifact要求和操作权限边界。原生派发支持时使用 fork_turns=none 或等价方式避免继承完整会话，brief 补齐必要约束；Implementation worker 被告知保留其他改动者内容。不得附整段历史、无关阶段报告或重复日志。返回会话用摘要和证据路径，完整 findings 保留在所需 artifact；只读 Panel 返回规定的完整 findings，不互读结论或写文件。路径不可访问时提供必要原文，不让 worker 猜测。精简文本不改变四人覆盖、完整评审范围和主 agent 对实际 diff/证据的裁决义务。",
       "files": []
     },
@@ -183,8 +183,8 @@
     },
     {
       "id": 31,
-      "prompt": "当前为已授权 workflow（非单节点调用）。已启动 Deepreview 第 2 次调用，handle=r2 确認仍运行，连续查询无新增输出。等待接口一次观察超时，随后查询临时失败。应如何继续？ 四人 Panel 的 DSH reviewer 也仍在运行，但读取 result 暂时报错，是否启动第四个原生 fallback？",
-      "expected_output": "继续原 r2 句柄，以原生等待/增量输出优先，无变化约30到60秒退避并遵守工具限制，避免紧密查询循环；观察超时不重启、不新增 review attempt。终态仍取完整结果且实际失败计预算；只有确认终止/不存在后才考虑重试。及时回应用户并按宿主要求更新。 Panel 同样先核验原任务，临时 result 读取失败不启动原生 fallback；派发状态不明也先核验实际记录。",
+      "prompt": "当前为已授权 workflow（非单节点调用）。已启动 Deepreview 第 2 次调用，handle=r2 确認仍运行，连续查询无新增输出。等待接口一次观察超时，随后查询临时失败。应如何继续？ 四人 Panel 的某个 reviewer subagent 也仍在运行，但读取 result 暂时报错，是否另派一个替代 reviewer？",
+      "expected_output": "继续原 r2 句柄，以原生等待/增量输出优先，无变化约30到60秒退避并遵守工具限制，避免紧密查询循环；观察超时不重启、不新增 review attempt。终态仍取完整结果且实际失败计预算；只有确认终止/不存在后才考虑重试。及时回应用户并按宿主要求更新。 Panel 同样先核验原任务，临时 result 读取失败不另派替代 reviewer；派发状态不明也先核验实际记录。",
       "files": []
     },
     {
@@ -201,8 +201,8 @@
     },
     {
       "id": 34,
-      "prompt": "设计已保存，开始 Panel。主 agent 已有偏好的改法，打算让前三人分别只看架构、安全和简化，让 DSH 专门找反例，并把第一个完成者的建议交给后启动者以避免重复。四人返回后：三人建议增加 scope 外的监控，一人提出有代码证据的范围内简化；另一场景有 reviewer 明确无建议且给出完整依据。应如何派发和裁决？",
-      "expected_output": "Improve Design内部四路以相同自包含brief和设计快照独立回答Any suggestions to improve this design?；不预分配角色、读他人结果或注入主agent偏好，亦不各自调用Planreview。前三原生、第四主会话直调DSH Flash（不可用则原生fallback）。主agent核证裁决，不以多数票扩scope；授权范围内合批更新同一设计，重大取舍先确认；只读请求则只返回建议并明确未完成修订。",
+      "prompt": "设计已保存，开始 Panel。主 agent 已有偏好的改法，打算让前三人分别只看架构、安全和简化，让第四人专门找反例，并把第一个完成者的建议交给后启动者以避免重复。四人返回后：三人建议增加 scope 外的监控，一人提出有代码证据的范围内简化；另一场景有 reviewer 明确无建议且给出完整依据。应如何派发和裁决？",
+      "expected_output": "Improve Design内部四路以相同自包含brief和设计快照独立回答Any suggestions to improve this design?；不预分配角色、读他人结果或注入主agent偏好，亦不各自调用Planreview。四者均为原生 subagent 并跨模型家族派发（如至少一路派到 reviewer-deepseek-v4-pro）。主agent核证裁决，不以多数票扩scope；授权范围内合批更新同一设计，重大取舍先确认；只读请求则只返回建议并明确未完成修订。",
       "files": []
     },
     {
@@ -219,8 +219,8 @@
     },
     {
       "id": 37,
-      "prompt": "用户已选 simple 并批准 scope。设计已保存。DSH 不可用，三位原生 reviewer 已完成，第四位尚未派发。能否省略第四位，直接实现？",
-      "expected_output": "仍需第四位原生fallback独立回答同一问题，不得看他人结论。四份可用后主agent在授权范围裁决并修订同一设计；重大决定先确认。设计完成、workspace核验及实现授权充分后才可由workflow进入Impl；路径选择本身不是实现授权。",
+      "prompt": "用户已选 simple 并批准 scope。设计已保存。三位原生 reviewer 已完成，第四位（跨家族 reviewer）尚未派发。能否省略第四位，直接实现？",
+      "expected_output": "仍需第四位 reviewer 独立回答同一问题，不得看他人结论。四份可用后主agent在授权范围裁决并修订同一设计；重大决定先确认。设计完成、workspace核验及实现授权充分后才可由workflow进入Impl；路径选择本身不是实现授权。",
       "files": []
     },
     {

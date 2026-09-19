@@ -116,7 +116,7 @@
     "doc/scripts/render_docx.py": "52b3c3158913ebcad2ada7b8193970b70453239e255054aa2d60c1683af08751",
     "doc/assets/doc.png": "7eadf1088e5062f681dba6596173a1df13bbfbcddd8a8a9bb78fd2071947dcf8",
     "doc/assets/doc-small.svg": "bd5415fbbfe72c66c1527411d61625731fdd2f75b25d1542510b6ddef699ebe0",
-    "devflow/evals/evals.json": "385fdcbd667f19b044a45045a2ee7744600ad321763febb2525dd149b86bf84c",
+    "devflow/evals/evals.json": "f5a926058b42c7d3ed045a62898ea55402ca4eea3f52aba51c9a57e11e947876",
     "kimi-webbridge/references/operations.md": "86855b663649d560a8939c25a7a15d1dba91a58e2e2ed92414848a9a9f8ee6d7",
     "py-perf-analyzer/scripts/perf_profile.py": "8fced3e1f91e9318c67f4e69db89f30fef6963c4f0f135a77276310f5d96030b",
     "grilling/agents/openai.yaml": "3c8415e2bc1bc96ef9cf3a2d0219987af16ca4d522beb7bfcda215533b485dd8",
@@ -1370,6 +1370,16 @@
     },
     "updated_hashes": {
       "devflow/evals/evals.json": "385fdcbd667f19b044a45045a2ee7744600ad321763febb2525dd149b86bf84c"
+    }
+  },
+  "devflow_eval_dsh_residual_cleanup": {
+    "date": "2026-09-19",
+    "reason": "清理剩余 5 条 DSH 措辞 eval（7/17/31/34/37）：移除 DSH Crew/ds-pro/ds-flash/tier=flash/dsh_crew_status 与「原生 fallback」残余，统一为原生 subagent + 跨模型家族派发口径（无跨家族 subagent 时 independence 记 unverified；临时 result 读取失败不另派替代 reviewer；不预分配角色）。SKILL.md 不变。",
+    "original_hashes": {
+      "devflow/evals/evals.json": "385fdcbd667f19b044a45045a2ee7744600ad321763febb2525dd149b86bf84c"
+    },
+    "updated_hashes": {
+      "devflow/evals/evals.json": "f5a926058b42c7d3ed045a62898ea55402ca4eea3f52aba51c9a57e11e947876"
     }
   }
 }
