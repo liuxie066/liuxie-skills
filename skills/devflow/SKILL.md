@@ -49,7 +49,7 @@ Review 可检查已有改动，即使尚无正式设计文档；以真实需求/
 
 ## 共用边界与证据
 
-- 读取适用 AGENTS.md 和当前节点相关源码、配置、测试及文档；只加载当前节点需要的 companion skill。Impl 使用可用 ponytail（已激活不重复初始化）；Improve Design 仅在内部检查适用时加载 planreview；Review 使用 deepreview。OM 设计/实现涉及文档时使用可用 om-doc-hygiene，其余按仓库 owner 约定。
+- 读取适用 AGENTS.md 和当前节点相关源码、配置、测试及文档；只加载当前节点需要的 companion skill。Save Design 与 Improve Design 的主 agent 使用可用 ponytail（已激活不重复初始化）：在已确认目标和验收内，先核对拟新增的概念、抽象与依赖是否必要，优先复用现有 owner、标准库和平台能力，收敛为最小可交付设计；四路 Panel 保持独立，不强制使用 ponytail。Impl 继续使用 ponytail 约束具体代码；Improve Design 仅在内部检查适用时加载 planreview；Review 使用 deepreview。OM 设计/实现涉及文档时使用可用 om-doc-hygiene，其余按仓库 owner 约定。
 - companion 缺失记 `fallback:unavailable`，主 agent 执行同等必要检查和 artifact 要求；不适用记 `not-applicable`，不得伪称 pass。不自动安装或配置工具。
 - 原始 goal、non-goals、scope、success signals、本次授权的实现范围（对应 design_doc 中本次实际授权的 slice/块及各自成功标准）和用户确认依据构成 scope contract，只落盘一处：`<worktree>/.devflow/scope.md`（git 跟踪，随提交同步）。已有 `codex/<task>-devflow-handoff.md`、`docs/gateflow/<task>/scope.md` 或 prdflow 交接的 `prd_doc` 只作为交接输入，进入时把仍有效的授权、范围、产品决定与 design_ref 迁入该文件，不并行维护两份。产品合同（prd_doc）与实现设计（design_doc）各自用 `prd_doc_ref` / `design_ref` 绑定路径加内容 hash；无产品合同的纯实现任务记 `not-applicable`。后续真实授权在该文件追加差异和引用，不能用新版设计或新版 PRD 覆盖原始批准。建议本身不是范围授权；范围外建议记 `deferred-with-owner`。
 - 设计与实现绑定 `design_ref`：仓库路径加实际内容 hash，已有固定 commit/permalink 时一并引用；Impl 和 Review 核对同一版本。不得仅引用可变 main 链接。方案决策、理由及相关验收留在唯一设计 owner，避免 v2/final 副本。

@@ -71,7 +71,7 @@
     "ima-skill/meta.json": "e67163e272e5c4a25467db7654feddfb47134a891e2e494415f0fbbb9d129d6f",
     "doc/SKILL.md": "0a635585817d1ac96e8e512114d08258b70f9e54ce0052078a258291ac13a8ed",
     "doc/LICENSE.txt": "4dd13869245e356246a5b770723247bbb80a8f07a181d1d3d873a1734297cdb9",
-    "devflow/SKILL.md": "100ac98aaa5dcdadb14adf824bebe01ef4a0a053bc089844450ba5f57f1a9039",
+    "devflow/SKILL.md": "111a2e99a098a716b9d2a5172141d4024433b6e5257ccfa9bdf9adce16ddb209",
     "kimi-webbridge/SKILL.md": "db1d82b37962a5a7756ca862bc0bea211c6bba46c3608b157a135386d4e9be6f",
     "py-perf-analyzer/README.md": "e3b5a592e5a3b25a639a6656f4102ecae855a7488c3d590ddf6e93b5c28fe49c",
     "py-perf-analyzer/SKILL.md": "26ee753a53de4c321016254dd761ff4d95f2cd9ee925d05115a5e56484ac1efa",
@@ -1453,5 +1453,14 @@
       "tmux-agents/SKILL.md": "9be892b6134d23b28d61a53da6077141d93b1caf1e71a932778d2f00d91ddc2c",
       "tmux-agents/agents/openai.yaml": "514c9299ffe980e8a5e83dd26212e302994fe9212aa31e48a841764e6de0b21a"
     }
+  },
+  "devflow_ponytail_design_20260928": {
+    "date": "2026-09-28",
+    "reason": "在 Save Design 和 Improve Design 主 agent 的方案取舍中应用 Ponytail；保留四路 Panel 独立性及 Impl 约束。",
+    "changed_file": "devflow/SKILL.md",
+    "original_hash": "100ac98aaa5dcdadb14adf824bebe01ef4a0a053bc089844450ba5f57f1a9039",
+    "updated_hash": "111a2e99a098a716b9d2a5172141d4024433b6e5257ccfa9bdf9adce16ddb209",
+    "invocation_policy": "unchanged: manual",
+    "selected_count": 31
   }
 }

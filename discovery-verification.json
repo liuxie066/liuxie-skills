@@ -1588,5 +1588,22 @@
     },
     "readme_update": "not required：README 为产品向（PRDflow/Devflow）+ to-page 说明，非全量技能清单",
     "limits": "未跑真实子 Agent 派发（缺 provider key / codex profile / 本地服务）；仅安装、冒烟与文件级内容/原生发现验证。"
+  },
+  "devflow_ponytail_design_20260928": {
+    "date": "2026-09-28",
+    "skill": "devflow",
+    "source_sha256": "111a2e99a098a716b9d2a5172141d4024433b6e5257ccfa9bdf9adce16ddb209",
+    "source_validation": "pass: verify_migration.py --skill skills/devflow; --source-only 34 source, 31 selected (16 manual / 15 automatic)",
+    "distribution": "installed ~/.agents/skills/devflow and Hermes SKILL.md hashes match this source; Claude and Pi links follow ~/.agents/skills",
+    "native_discovery": {
+      "codex": "pass: app-server skills/list forceReload errors=[]; devflow enabled at ~/.agents/skills/devflow/SKILL.md",
+      "hermes": "pass: hermes skills list shows imported devflow enabled",
+      "dsh": "shared ~/.agents/skills path verified; native loader not run",
+      "pi": "devflow link to ~/.agents/skills/devflow verified; native loader not run"
+    },
+    "full_global_verify": "not run from this isolated branch: installed global directory includes newer selected skills and seven unrelated PA skills; central sync.py --apply preview would delete the PA skills, so only Devflow was synchronized",
+    "readme_update": "Devflow section describes reuse and minimum design scope",
+    "behavioral_eval": "not run; narrow instruction change, no live Devflow design session",
+    "invocation_policy": "unchanged: manual/explicit-only"
   }
 }
