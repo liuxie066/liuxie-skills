@@ -1723,5 +1723,15 @@
     "readme_update": "Devflow section now describes reuse and minimum design scope",
     "behavioral_eval": "not run; this was a narrow instruction change, not a live Devflow design session",
     "invocation_policy": "unchanged: manual/explicit-only"
+  },
+  "delivery_readme_impact_20260928": {
+    "date": "2026-09-28",
+    "source_sha256": "75dd1721d92464812eab199cdcc8b6f863b4e9402ab14948657bf1a9066b7529",
+    "evals_sha256": "587bf1f833644ee27c9a08cf592eea6a3d9bf459cabb787ff604874e1736e911",
+    "source_validation": "pass: verify_migration.py --skill skills/delivery and --source-only",
+    "distribution": "pass: sync.py --apply and full verify_migration.py; 34 selected global skills match source",
+    "host_checks": "Codex/Claude share ~/.agents/skills; DSH reads that directory. Native host reload not rerun; Pi and Hermes have no installed delivery entry.",
+    "readme_update": "not needed: public README presents PRDflow and Devflow; this update changes the internal Delivery workflow",
+    "invocation_policy": "unchanged: manual/explicit-only"
   }
 }
