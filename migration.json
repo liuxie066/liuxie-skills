@@ -563,8 +563,8 @@
     "prdflow/references/gates.md": "59f108f7c03335f3fc486b6168dd8ee562f53a33fdf2734a5af65cee6a0162aa",
     "prdflow/scripts/check_gates.py": "04e09daf8f2aede790b27b13d562c81a68ec0a956e8028ffe6a17859a02cf1ca",
     "prdflow/evals/test_check_gates.py": "170e0bddf7574e2a4618bd1309d69c0a134a0118a527e2b450147cc158821e20",
-    "delivery/SKILL.md": "efd697e8c1cfbdeced6e3af0f64db84069f2b5eab53eccfe7613a62723a98a99",
-    "delivery/evals/evals.json": "33386a19bc61efb5ed7df93b56742c943476cbae74eba232da4d048c3536fab2",
+    "delivery/SKILL.md": "75dd1721d92464812eab199cdcc8b6f863b4e9402ab14948657bf1a9066b7529",
+    "delivery/evals/evals.json": "587bf1f833644ee27c9a08cf592eea6a3d9bf459cabb787ff604874e1736e911",
     "delivery/references/projects.md": "bc188c76e8d418fbfe7ba4d0da05c9baa4f944d576054da66a271a9868ef4a1b",
     "delivery/agents/openai.yaml": "5afb1193e5f7379e448dce401be30689d068a21a8d58f277ca0a286740772e65",
     "dayu/SKILL.md": "a6bb9150accab850090c1c6b6df6d5798413f29a24296f46256dfa246e3490c3",
@@ -1239,6 +1239,15 @@
     "source": "/Volumes/liuxie的硬盘/workspace/agent-skills/skills/delivery",
     "invocation": "manual",
     "source_count": 27
+  },
+  "delivery_readme_impact_update": {
+    "date": "2026-09-28",
+    "reason": "Check whether delivered changes affect README positioning, boundaries, core capabilities, workflow, quick start, or document navigation.",
+    "changed_files": [
+      "delivery/SKILL.md",
+      "delivery/evals/evals.json"
+    ],
+    "invocation_policy": "unchanged: manual"
   },
   "prdflow_synthesis_update": {
     "date": "2026-09-12",
