@@ -46,7 +46,9 @@
     "to-page": "/Volumes/liuxie的硬盘/workspace/agent-skills/skills/to-page",
     "sub-agents": "https://github.com/noho/code-is-cheap/tree/fb179d8/skills/sub-agents",
     "tmux-agents": "https://github.com/noho/code-is-cheap/tree/fb179d8/skills/tmux-agents",
-    "jev-choice": "/Volumes/liuxie的硬盘/workspace/agent-skills/skills/jev-choice"
+    "jev-choice": "/Volumes/liuxie的硬盘/workspace/agent-skills/skills/jev-choice",
+    "repo-doc-hygiene": "/Volumes/liuxie的硬盘/workspace/agent-skills/skills/repo-doc-hygiene",
+    "pre-push-checks": "/Volumes/liuxie的硬盘/workspace/agent-skills/skills/pre-push-checks"
   },
   "files": {
     "deepreview/SKILL.md": "cd76556e5ef4d60243bdc15cd565b22df77472038a687fb92b210c94bbe1997b",
@@ -62,7 +64,7 @@
     "playwright/LICENSE.txt": "9a7110fc2d2f964038e5dc49128f908f29f47a574c961cba16085914e879cbda",
     "phaseflow/SKILL.md": "a20e46d11f47695b5e8c0cac157d7e26a2bfdc956ebce065570657760f307db9",
     "prdflow/SKILL.md": "edb4c21813f9ac52c7bc67ce22f81a1ec6dd3e3f082d18bdca73990ce03170ae",
-    "herdr/SKILL.md": "3438157bcab39f08624b361cce4995e73e6b227d4dd909b0c1f54a669934546f",
+    "herdr/SKILL.md": "237ad2ab2d8123e2bb37956d3a41eed141f2d22a7c36e415b7876c0397679099",
     "eli5/SKILL.md": "b077ab37758ab840146ac8aac39f5b07616b06bc535cc3a6438bcb57301366f8",
     "gateflow/SKILL.md": "f640791f2f065cb112cfd7079c8c9f3d13c16e7ebe7560be228093b29698c3f7",
     "gh-fix-ci/SKILL.md": "7b326b4a2f0f5f85122144628ec02077e48841e0e0e82efce88b3415bcfb7c26",
@@ -72,7 +74,7 @@
     "ima-skill/meta.json": "e67163e272e5c4a25467db7654feddfb47134a891e2e494415f0fbbb9d129d6f",
     "doc/SKILL.md": "0a635585817d1ac96e8e512114d08258b70f9e54ce0052078a258291ac13a8ed",
     "doc/LICENSE.txt": "4dd13869245e356246a5b770723247bbb80a8f07a181d1d3d873a1734297cdb9",
-    "devflow/SKILL.md": "100ac98aaa5dcdadb14adf824bebe01ef4a0a053bc089844450ba5f57f1a9039",
+    "devflow/SKILL.md": "111a2e99a098a716b9d2a5172141d4024433b6e5257ccfa9bdf9adce16ddb209",
     "kimi-webbridge/SKILL.md": "db1d82b37962a5a7756ca862bc0bea211c6bba46c3608b157a135386d4e9be6f",
     "py-perf-analyzer/README.md": "e3b5a592e5a3b25a639a6656f4102ecae855a7488c3d590ddf6e93b5c28fe49c",
     "py-perf-analyzer/SKILL.md": "26ee753a53de4c321016254dd761ff4d95f2cd9ee925d05115a5e56484ac1efa",
@@ -133,7 +135,7 @@
     "eli5/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
     "show-me/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
     "find-skills/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
-    "herdr/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
+    "herdr/agents/openai.yaml": "8619a54e8c098122a7f3881394f84ca89b684366e848233a29ad18b6ec363935",
     "kimi-webbridge/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
     "create-skill/SKILL.md": "c6e8401c59c57d72fb597c09b9e2ecefaeecbce14e98a925c141297c38d2b843",
     "create-skill/agents/openai.yaml": "676bd097069178c34a8bca02e0eda3b99d6863a7b5a86e402854be41776146dc",
@@ -561,9 +563,9 @@
     "prdflow/references/gates.md": "59f108f7c03335f3fc486b6168dd8ee562f53a33fdf2734a5af65cee6a0162aa",
     "prdflow/scripts/check_gates.py": "04e09daf8f2aede790b27b13d562c81a68ec0a956e8028ffe6a17859a02cf1ca",
     "prdflow/evals/test_check_gates.py": "170e0bddf7574e2a4618bd1309d69c0a134a0118a527e2b450147cc158821e20",
-    "delivery/SKILL.md": "4ba81a16dc467c7419a76c6184a031a8a199985f1dbafe2b5a5fc1be83e7267e",
+    "delivery/SKILL.md": "efd697e8c1cfbdeced6e3af0f64db84069f2b5eab53eccfe7613a62723a98a99",
     "delivery/evals/evals.json": "33386a19bc61efb5ed7df93b56742c943476cbae74eba232da4d048c3536fab2",
-    "delivery/references/projects.md": "1d5d81273d0a08a2c336d65d0c0a9db7eb0326601eea22fce45332ac66ca0206",
+    "delivery/references/projects.md": "bc188c76e8d418fbfe7ba4d0da05c9baa4f944d576054da66a271a9868ef4a1b",
     "delivery/agents/openai.yaml": "5afb1193e5f7379e448dce401be30689d068a21a8d58f277ca0a286740772e65",
     "dayu/SKILL.md": "a6bb9150accab850090c1c6b6df6d5798413f29a24296f46256dfa246e3490c3",
     "dayu/agents/openai.yaml": "f3b698145e3699a84a9c6f4d859b8b5c4d63e9278401529a0ac5d9cde6efa41a",
@@ -837,7 +839,11 @@
     "jev-choice/SKILL.md": "5aafcd00b8c277cecccddcbb340bda416ced9a20341eedf5ea21d947458e6e96",
     "jev-choice/references/contract.md": "70aa8c8e44ef1744d3b3a3c27773793ec160f637d1ab715e67d4137a4f700581",
     "jev-choice/agents/openai.yaml": "b78c024d07212d99e20762f5e6a63571958393e601969eb1d0d3b6ec4316f2b3",
-    "jev-choice/scripts/jev_choose.py": "59f1cf567c5d92c20c4439059d74f2f4da8c02de23be85a1f9de4229ecd1a1f9"
+    "jev-choice/scripts/jev_choose.py": "59f1cf567c5d92c20c4439059d74f2f4da8c02de23be85a1f9de4229ecd1a1f9",
+    "repo-doc-hygiene/SKILL.md": "fdfb0a07691a3a3777b36d1a031ee0ae0d2514c81920f503a3a8fd89badf42ed",
+    "repo-doc-hygiene/agents/openai.yaml": "8619a54e8c098122a7f3881394f84ca89b684366e848233a29ad18b6ec363935",
+    "pre-push-checks/SKILL.md": "320f28e5ca88e35c53d807d3b493b8d0ce5ccc7d3761ef0e2286669ceee1b4b2",
+    "pre-push-checks/agents/openai.yaml": "8619a54e8c098122a7f3881394f84ca89b684366e848233a29ad18b6ec363935"
   },
   "kimi_webbridge_version": "2.0.5",
   "config_before_sha256": "d87c96e79a8b33db5c428f1583a4374dfbc1346486310ffe306d85d95c8646d6",
@@ -1151,6 +1157,20 @@
       "date": "2026-09-13",
       "skill": "to-page",
       "reason": "Remove non-executable method-source section at user request; do not relocate to README"
+    },
+    {
+      "date": "2026-09-28",
+      "reason": "User requested that the herdr Skill be agent-triggerable: removed disable-model-invocation: true from SKILL.md and set agents/openai.yaml policy.allow_implicit_invocation: true. Upstream body and description unchanged.",
+      "original_hashes": {
+        "herdr/SKILL.md": "3438157bcab39f08624b361cce4995e73e6b227d4dd909b0c1f54a669934546f",
+        "herdr/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94"
+      },
+      "updated_hashes": {
+        "herdr/SKILL.md": "237ad2ab2d8123e2bb37956d3a41eed141f2d22a7c36e415b7876c0397679099",
+        "herdr/agents/openai.yaml": "8619a54e8c098122a7f3881394f84ca89b684366e848233a29ad18b6ec363935"
+      },
+      "invocation_policy": "manual -> automatic",
+      "selected_count": 34
     }
   ],
   "invocation_policy": {
@@ -1164,7 +1184,6 @@
       "show-me",
       "find-skills",
       "hatch-pet",
-      "herdr",
       "kimi-webbridge",
       "create-skill",
       "baoyu-design",
@@ -1188,11 +1207,14 @@
       "to-page",
       "sub-agents",
       "tmux-agents",
-      "jev-choice"
+      "jev-choice",
+      "repo-doc-hygiene",
+      "pre-push-checks",
+      "herdr"
     ]
   },
   "cross_tool_invocation": {
-    "local_adjustment": "Use existing Codex policy as authority; add disable-model-invocation: true to 14 selected manual Skills. Preserve upstream bodies except create-skill maintenance instructions. wait-what unchanged.",
+    "local_adjustment": "Use existing Codex policy as authority; add disable-model-invocation: true to 14 selected manual Skills. Preserve upstream bodies except create-skill maintenance instructions. wait-what unchanged. 2026-09-28: herdr moved from manual to automatic at the user's request; its entry in adjusted_skills is superseded (see post_migration_adjustments).",
     "adjusted_skills": [
       "devflow",
       "prdflow",
@@ -1466,5 +1488,24 @@
     "source": "/Volumes/liuxie的硬盘/workspace/agent-skills/skills/jev-choice",
     "invocation": "automatic",
     "source_count": 35
+  },
+  "om_skill_generalization_20260923": {
+    "date": "2026-09-23",
+    "reason": "Extract reusable repository documentation hygiene and pre-push verification from OM project skills; OM-specific facts and commands remain in that project.",
+    "new_skills": [
+      "repo-doc-hygiene",
+      "pre-push-checks"
+    ],
+    "invocation": "automatic",
+    "source_count": 37
+  },
+  "devflow_ponytail_design_20260928": {
+    "date": "2026-09-28",
+    "reason": "在 Save Design 和 Improve Design 主 agent 的方案取舍中应用 Ponytail；保留四路 Panel 独立性及 Impl 约束。",
+    "changed_file": "devflow/SKILL.md",
+    "original_hash": "100ac98aaa5dcdadb14adf824bebe01ef4a0a053bc089844450ba5f57f1a9039",
+    "updated_hash": "111a2e99a098a716b9d2a5172141d4024433b6e5257ccfa9bdf9adce16ddb209",
+    "invocation_policy": "unchanged: manual",
+    "selected_count": 34
   }
 }

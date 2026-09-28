@@ -31,3 +31,5 @@ to-page
 sub-agents
 tmux-agents
 jev-choice
+repo-doc-hygiene
+pre-push-checks
