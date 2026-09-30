@@ -3,26 +3,8 @@
   "evals": [
     {
       "id": 1,
-      "prompt": "在 options-monitor 里为新的候选策略评分机制走完整设计开发流程：先 brainstorm，落设计文档，并行让多个 agent 提升方案，通过 planreview 后实现，最后 deepreview。",
-      "expected_output": "用户明确选完整workflow并要求Planreview，保留该选择。Brainstorm确认目标/scope后进入Save Design；保存后由workflow进入Improve Design，其内部四位reviewer独立回答相同问题。主agent裁决、在授权范围内更新原设计，再按用户要求进行内部Planreview。展示设计版本和workspace，取得尚缺的实现授权；Impl验证后workflow进入Review，报告结果即收尾，不另建Panel/Planreview/Closeout外部节点。",
-      "files": []
-    },
-    {
-      "id": 2,
-      "prompt": "用户已明确选择完整链路。已有 docs/ARCHITECTURE.md 中的一节设计，请不要新建文档。改进这份设计并完成实现和审查。",
-      "expected_output": "复用现有设计owner，不建平行版本；核验现有范围/授权输入，完整workflow的Improve Design包含四路独立建议与主agent修订。Planreview仅在用户/项目要求或具体重大风险需要时执行，不因full标签固定调用。有效设计及实现授权具备后Impl和Review；报告结果完成，无机械最终确认。",
-      "files": []
-    },
-    {
-      "id": 3,
-      "prompt": "用户已明确选择完整链路。在一个非 options-monitor 仓库里，从一个架构想法推进到已审查实现；当前没有 ponytail、planreview、deepreview 和 om-doc-hygiene。",
-      "expected_output": "不安装companion。只在当前节点需要时检查并披露fallback，OM文档能力不适用。完整workflow中Improve Design仍需四份独立结果；适用Planreview缺失则主agent做同等检查；Review缺失deepreview则主agent审全部实际改动和证据。保留相同完整覆盖、五次预算与fail-closed，不强制加载未来节点能力或增加Closeout确认。",
-      "files": []
-    },
-    {
-      "id": 4,
-      "prompt": "这个方案 planreview 已经 pass，继续走完整研发流程。",
-      "expected_output": "核验内部Planreview证据、设计版本及workspace/base；检查现有实现授权是否覆盖实际设计与工作区。若只有走完整流程的笼统要求，展示具体结果并请求实现授权；若原记录已明确授权则继续，不重复确认。",
+      "prompt": "用户一开始要求 Devflow 走完整链路并一直做完。Brainstorm 已展示并获确认；Save Design 刚展示当前设计版本，用户尚未回复。能否直接进入 Improve Design？",
+      "expected_output": "不能。完整链路只授权节点序列，不替代对当前结果的确认。保持 Save Design 为 awaiting_user_confirmation，等待用户看到并确认当前设计版本后，才进入 Improve Design。",
       "files": []
     },
     {
@@ -32,99 +14,9 @@
       "files": []
     },
     {
-      "id": 6,
-      "prompt": "设计文档已经保存，开始四人 Panel；当前宿主暴露多个模型家族的命名 subagents（含 DeepSeek 家族的 reviewer-deepseek-v4-pro），但并发容量只能同时运行三个 reviewer。",
-      "expected_output": "完成四人评审而不是缩减人数：四个 reviewer 使用相同问题 Any suggestions to improve this design? 和完整输入各自独立提出改进，不预分配专项角色；四者均为原生 subagents（Codex spawn_agent / 命名 subagent），并跨模型家族派发——至少一路派到与主 agent 不同模型家族的 subagent（如 DeepSeek 家族的 reviewer-deepseek-v4-pro），这是 independence 能写 verified 的前提；并发不足时分批运行，所有 reviewer 只读取同一原始 design_doc 快照且互不读取结论；使用 spawn 时必须再读取最终 worker result；brief 自包含、只读并禁止 commit/push；汇总报告 reviewer_backend=native-subagent、可验证的 reviewer_model 和 independence。",
-      "files": []
-    },
-    {
-      "id": 7,
-      "prompt": "开始四人 Panel，但当前宿主没有配置任何跨模型家族的命名 subagent（只有与主 agent 同家族的普通 subagent）。",
-      "expected_output": "不安装、不启动也不配置外部审查工具；四位 reviewer 仍全部用原生 subagent 独立回答同一问题，不缩减人数、不伪称跨家族。没有跨家族 subagent 时 independence 记 unverified，并在汇总中明确报告 reviewer_backend=native-subagent、可验证的 reviewer_model 和 independence=unverified。",
-      "files": []
-    },
-    {
-      "id": 8,
-      "prompt": "当前为已授权 workflow（非单节点调用）。Implementation 有三个 slices。第一个 slice 完成，第二个 slice 出现可修复的单元测试失败，但冻结设计、契约和权限边界都没有变化。",
-      "expected_output": "workflow中Impl的slice间不暂停；修复原范围内测试失败继续，针对性验证后最终完整validation。之后仅由包含Review的已授权workflow进入Review，若是单节点Impl则报告后停止，不调用deepreview。新策略/权限/scope决定先暂停。",
-      "files": []
-    },
-    {
-      "id": 9,
-      "prompt": "当前为已授权 workflow（非单节点调用）。Deepreview 第 1 轮发现一个严重、一个高风险和两个中风险问题，修复后第 2 轮仍剩一个中风险问题；低风险问题还有三个。",
-      "expected_output": "Review只输出有证据的blocking findings；已授权workflow将普通实现缺陷合批交回Impl修复并验证，再完整Review；单节点Review不自动改代码。五次尝试含失败且返回Impl不重置。低风险记录owner/影响/去向，第5次仍未通过停下，新策略权限决定先确认。",
-      "files": []
-    },
-    {
-      "id": 10,
-      "prompt": "Planreview 第 1 轮发现一个严重、一个高风险和两个中风险设计问题；修订后第 2 轮还剩一个中风险问题，并有两个低风险 residual risks。",
-      "expected_output": "在Improve Design内部执行适用Planreview；主agent在原授权范围合批修订同一设计，再完整重审。最多五次含失败，低风险保留owner/影响/去向；策略/范围/权限改变先询问。不得把四位优化建议reviewer各自变成Planreview运行器。",
-      "files": []
-    },
-    {
-      "id": 11,
-      "prompt": "设计已保存，开始四人 Panel。请先启动一个普通 Codex 子代理，让它代替主会话再派发并完成第四个设计 reviewer。",
-      "expected_output": "不通过额外子代理中转；由主会话直接以原生 subagent（Codex spawn_agent / 命名 subagent）派发第四个 reviewer，并优先派到与主 agent 不同模型家族的 subagent（如 reviewer-deepseek-v4-pro），使 independence 可达 verified。只读并行；使用 spawn 后读取最终 worker result。汇总报告 reviewer_backend=native-subagent、可验证的 reviewer_model 和 independence。",
-      "files": []
-    },
-    {
-      "id": 12,
-      "prompt": "Brainstorm 已确认本次只实现单账户只读查询。设计按 controller、service、repository、CLI、docs 拆成 5 个 slices；四人 Panel 还建议顺便增加多账户权限和监控告警。继续 Improve Design 和 Planreview。",
-      "expected_output": "保持原scope，额外多账户权限及告警无必要性证据则deferred-with-owner；在Improve Design内部将模块机械切片合并为可验证行为切片，默认不超过3或说明理由。用户明确要求的Planreview在内部检查goal alignment与验收；不自动扩范围。",
-      "files": []
-    },
-    {
-      "id": 13,
-      "prompt": "当前为已授权 workflow（非单节点调用）。Implementation 已获批准并有两个冻结 slices：A 在现有纯函数中增加一个明确分支和对应单元测试；B 修改账户账本 schema、并发写入和 migration。请继续实现。",
-      "expected_output": "主 agent 直接实现两个 slice，不做模型委派。slice A 局部、可独立验证，先实现并跑针对性测试；slice B 涉及 schema、并发、migration 和数据完整性，由主 agent 按冻结设计的契约与失败语义实现，不扩大范围、不顺手重构。每片完成后落边界快照并核对相对 review_base 的 committed/staged/unstaged/untracked 改动；最终内容运行一次项目要求的完整 validation，并由 workflow 进入 Review。",
-      "files": []
-    },
-    {
-      "id": 14,
-      "prompt": "当前为已授权 workflow（非单节点调用）。Implementation 已获批准，开始前已有 staged、unstaged 和 untracked 文件；当前 slice 只需新增单账户只读查询。实现时又产生了越界的 untracked debug 文件，reviewer 还建议顺便重构缓存并增加监控告警。继续实现。",
-      "expected_output": "进入实现时记录冻结 design_doc、workspace、review_base、HEAD、git status，以及每个既有 staged index、unstaged working-tree 和 untracked 内容各自的 hash 和 size，不新建 repository 状态文件；slice 开始前明确 success signal、交付行为、expected owners/files 和 validation。slice 后检查 git diff --cached、git diff 和 git ls-files --others --exclude-standard 返回文件的实际内容，识别新增的越界 debug 文件且不误删开始前已有改动。每项修改只允许归类为 planned 或有具体 failure path 的 required-correctness/safety；缓存重构和监控告警记为 deferred-with-owner。仅移除明确属于本 agent 的越界改动；归属不明或必须改变 scope contract 时暂停。",
-      "files": []
-    },
-    {
       "id": 15,
-      "prompt": "一个 review 调用失败；另一个输出因截断缺少 scope 和最终 verdict；第三个声称 pass，却同时列出一个未关闭的严重 finding。可以继续下一节点吗？这些失败尝试如何计入最多五轮？",
-      "expected_output": "不可用结果fail-closed，Panel不足四份不能完成Improve Design。对缺失reviewer最多一次重试或独立fallback，仍失败则停下。内部Planreview和Review分别计最多五次调用含失败，未完成责任节点修复和必要验证不重派；单节点Review不能自行修复。",
-      "files": []
-    },
-    {
-      "id": 16,
-      "prompt": "当前为已授权 workflow（非单节点调用）。上下文压缩后继续 devflow。已有 workflow artifact 的 Devflow Progress 记录：Implementation 已获用户批准，全部 slices 和最终 validation 已完成，内容版本未变；Deepreview 第 1 次调用失败，第 2 次已派发且为 in-flight，任务 id 和证据路径已记录。请继续。另一个任务还停在 Brainstorm，尚未生成任何 artifact，它如何保存进度？",
-      "expected_output": "恢复旧记录：Implementation映射Impl，Deepreview映射Review；保留原授权、版本和已用两次预算，先查询原in-flight第2次，不重跑有效设计/实现/validation、不重派。没有artifact的Brainstorm在交接摘要保存短checkpoint。mode/路径不明读原始依据或询问，不借迁移获得授权。",
-      "files": []
-    },
-    {
-      "id": 17,
-      "prompt": "准备派发一个已批准的局部 Implementation slice 和四个只读 Panel reviewers。历史对话很长，包含过去几轮评审和测试日志；worker 能读取共享仓库。请说明派发内容和返回要求。如果某个 Panel reviewer 读不到 design_doc 路径该怎么办？",
-      "expected_output": "每个任务只接收当前节点的目标/非目标/success signals、职责与范围、design_doc/workspace/review base或快照、必要文件和证据路径、ownership/只读边界、validation、停止条件、返回/artifact要求和操作权限边界。不复制整段会话/日志，brief 补齐必要约束；Implementation worker 被告知保留其他改动者内容。不得附整段历史、无关阶段报告或重复日志。返回会话用摘要和证据路径，完整 findings 保留在所需 artifact；只读 Panel 返回规定的完整 findings，不互读结论或写文件。路径不可访问时提供必要原文，不让 worker 猜测。精简文本不改变四人覆盖、完整评审范围和主 agent 对实际 diff/证据的裁决义务。",
-      "files": []
-    },
-    {
-      "id": 18,
-      "prompt": "当前为用户已确认的完整链路。Deepreview 已完成第 2 轮，artifact 和 verdict 可用，没有严重、高或中 finding，但仍有两个低风险 residual risks，均有 owner 和后续去向。当前应如何推进？",
-      "expected_output": "核验Review通过，保留低风险owner/影响/去向；最终报告设计版本、改动、验证、review和Delivery引用，结束已授权workflow。不增加Closeout节点或机械完成确认；原始记录另有明确未决用户决定时仍须处理。",
-      "files": []
-    },
-    {
-      "id": 19,
-      "prompt": "Planreview 已通过，准备做 Workspace Isolation Check。当前 checkout 在受保护 main，工作区干净且没有其他使用者；没有匹配的现有专用 worktree。用户尚未批准 Implementation。另一个场景中已有满足隔离条件且 base、任务范围匹配的专用 worktree。分别如何选择？",
-      "expected_output": "隔离要求优先，受保护main即使干净也不实现；优先复用适合的专用worktree，否则拟定新隔离workspace。仅只读检查，设计节点不创建worktree；进入Impl时核验/补齐授权后执行。",
-      "files": []
-    },
-    {
-      "id": 20,
-      "prompt": "当前为已授权 workflow（非单节点调用）。准备进行第 2 轮 Deepreview。Scope Drift Guard 已确认本任务包含 committed、staged、unstaged 改动，以及 untracked 的 src/new_rule.py 和 tests/test_new_rule.py；文件状态刚有变化。本机 deepreview 的推荐命令只有普通 Git diffs。该如何派发和验收本轮 review？",
-      "expected_output": "核对并刷新当前 inventory，显式传递包含四类改动的完整本任务文件清单；要求读取两个 untracked 新文件的实际内容，不以普通 Git diffs 代替，也不自动 stage。重审全部当前改动，artifact 记录覆盖范围及未覆盖文件/原因。companion skill 和 fallback 均遵守同一覆盖要求；新文件未覆盖且影响结论时结果为 review-unusable，不得算通过或宣称研发通过或完成。",
-      "files": []
-    },
-    {
-      "id": 21,
-      "prompt": "Improve Design 已按用户批准的 Panel 建议完成，发生了结构性修改，但没有明确的未覆盖专项问题。另一个场景中还存在已批准范围内的恢复语义问题，现有评审没有覆盖，需要专项证据。下一步分别做什么？",
-      "expected_output": "仍在Improve Design：结构性修改不重开四路Panel。仅有具体尚未覆盖风险才补专项证据；用户明确要求Planreview或风险需要时在内部执行，否则不因修改结构固定加审查。核对修订落实并更新design_ref，单节点结束，workflow按授权衔接。",
+      "prompt": "一次 Review 调用失败；另一次输出被截断且未覆盖新增文件；第三次声称通过但同时保留一个未关闭的高风险 finding。可以把其中一次算作通过吗？",
+      "expected_output": "不能。调用失败、材料截断、重要覆盖缺口和矛盾 verdict 都不可算通过，实际调用仍计入最多五次尝试。补齐材料并处理全部阻塞项后完整重审；第五次仍无可用通过结果则停止。",
       "files": []
     },
     {
@@ -134,207 +26,39 @@
       "files": []
     },
     {
-      "id": 23,
-      "prompt": "当前为已授权 workflow（非单节点调用）。Implementation 连续推进中，原始验收要求空查询返回空列表。实现者发现 list(None) 会抛异常，有明确入口和复现；同时建议加缓存和监控，理由是以后可能有用。还有一个完全在冻结计划内的普通 slice。如何处理这三类工作并控制流程成本？",
-      "expected_output": "Impl按原范围修复明确空输入失败路径，记录必要性证据；缓存监控无必要性则deferred。计划内工作不重复论证。完整Review核对原授权与验收，但不为每slice增设审查或重复读有效材料。单节点Impl不自动调用Review。",
-      "files": []
-    },
-    {
-      "id": 24,
-      "prompt": "当前为已授权 workflow（非单节点调用）。Implementation 已完成 slice 1，开始后的初始 baseline 已保存。slice 2 检查时：A.py 与上次成功检查完全一致，原文和证据仍在当前上下文；B.py 大小不变但 hash 改变；出现新的 untracked debug.py；C.py 被删除；D.py 权限模式改变，E.py 从 staged 变为 committed。之后上下文压缩，只剩 A.py 的摘要与 hash。分别如何检查这些文件并准备 Deepreview？",
-      "expected_output": "每次完整枚举 committed/staged/unstaged/untracked，发现新增、删除、重命名及状态或模式变化，不只检查旧清单。初始 baseline 不变，最近成功检查记录单独保存在已有 workflow context。A.py 仅在原文、证据、相关 base/scope/依赖语义和各层指纹仍有效时免重复读取；B.py 同尺寸仍因 hash 变化重读；新 debug.py 读取并判定范围，不把新增文件加入 baseline 掩盖漂移。核对 C.py 删除前后、D.py 模式和 E.py 状态变化。压缩后原文丢失则重新读取。Deepreview 仍完整走读全部当前改动，不能用指纹或增量检查替代；证据不足 fail closed。",
-      "files": []
-    },
-    {
-      "id": 25,
-      "prompt": "当前为已授权 workflow（非单节点调用）。Planreview 本轮给出三个有效中风险设计问题，均在已选方向内。另一个任务的 Deepreview 本轮给出两个不同 root owner 的有效高/中问题和两个低风险项，均不需要新授权。说明修复、验证和下一轮 review 的安排。如果修复中发现必须修改 public contract，或第 5 次 review 后仍有 blocking finding，怎么办？",
-      "expected_output": "内部Planreview问题由Improve Design合批修订后完整重审。Review问题由workflow交回Impl完成共同root修复、针对性及最终validation，再完整Review；单节点Review只交回建议，不修代码。两个检查各五次含失败，返回责任节点不清零。新contract策略先暂停，低风险不为清零扩范围。",
-      "files": []
-    },
-    {
-      "id": 26,
-      "prompt": "当前为已授权 workflow（非单节点调用）。Deepreview 第 2 轮代码已修改。场景 A：同一 reviewer 上下文仍有完整原始批准记录、授权变更记录和冻结设计原文，版本均未变。场景 B：新 reviewer 只有这些文件的摘要、路径和 hash。场景 C：旧 reviewer 经上下文压缩丢失原文，或用户新批准了一项范围变更并更新了记录。各场景读取哪些材料，能否复用上轮 pass 或省略未修文件？",
-      "expected_output": "A 可以直接用仍完整可用且版本未变的参考原文重新核对，免重复工具读取，但代码改动仍完整重审。B/C 重新读取相关完整原文并核对有效授权；新 hash、摘要或上一轮结论不能替代原始依据。真实用户授权变更可纳入核对，但不以最新版设计覆盖原始批准记录。任何场景都不沿用上一轮 pass，不只审修复文件，不改变覆盖、fail-closed 或轮次预算。",
-      "files": []
-    },
-    {
-      "id": 27,
-      "prompt": "当前为已授权 workflow（非单节点调用）。本轮 Deepreview 已返回两个有效 blocking findings；只修好其中一个，另一个仍未处理，完整 validation 也还没跑。上次 reviewer 曾因输入路径不可读失败。现在准备派发下一轮，如何处理与计数？",
-      "expected_output": "先处理全部范围内有效 blockers、跑完所需 validation，核对完整材料可读及快照/base/授权一致后才调用；不对已知未就绪快照派发，也不把此核对升级为新 review。未调用不占轮次，先前已发生的失败调用仍占预算；准备完成后全量复审，不能用 preflight 替代。",
-      "files": []
-    },
-    {
       "id": 28,
-      "prompt": "Devflow 的 Deepreview 和最终 validation 已完成，Closeout 尚待用户确认。用户随后要求提交推送、创建 PR、合并 main 并发布升级。应如何划分 Devflow 的完成条件、节点和后续请求？如果之后用户只要求升级一个已发布版本，是否需要重新启动 Devflow？",
-      "expected_output": "旧Closeout映射结果报告，保留原明确等待的完成决定而非借迁移跳过。新workflow不增设Closeout节点。提交PR合并发布升级属于独立Delivery授权，不能当五节点研发的自动后续。单独升级已发布版本不重新启动研发；新研发问题另行明确范围。",
-      "files": []
-    },
-    {
-      "id": 29,
-      "prompt": "当前为已授权 workflow（非单节点调用）。恢复 Deepreview 时，摘要说 pass，但原 artifact 已丢失且一个新增文件的覆盖不明；本地测试曾通过，验证环境和依赖近期变更。用户要求省 token。能否沿用完成证据并进入 Closeout？",
-      "expected_output": "不能仅凭摘要/hash或旧测试成功沿用 review；补足原始证据与完整覆盖，必要时完整复审且不可重置预算。核对研发验证环境与依赖变更，重跑失效检查，证据完整有效后才按节点退出条件推进。精简日志不削减质量。",
-      "files": []
-    },
-    {
-      "id": 30,
-      "prompt": "当前为已授权 workflow（非单节点调用）。一个测试命令输出了三万行日志，最早有失败堆栈，最后十行都是成功信息；命令经过 tee/tail 后 shell 显示 0。另一个 reviewer 读取长 diff 时工具提示截断。如何记录与判断？",
-      "expected_output": "保留原始 stdout/stderr 路径、内容版本/环境和各检查项结果，获取被测命令的真实退出码，不能信任 tail 的 0。摘要保留失败和跳过计数，按线索读取最早堆栈及必要上下文；不重复回传全量日志。审查 diff 必须分段完整读取，截断不能当覆盖或通过。",
-      "files": []
-    },
-    {
-      "id": 31,
-      "prompt": "当前为已授权 workflow（非单节点调用）。已启动 Deepreview 第 2 次调用，handle=r2 确認仍运行，连续查询无新增输出。等待接口一次观察超时，随后查询临时失败。应如何继续？ 四人 Panel 的某个 reviewer subagent 也仍在运行，但读取 result 暂时报错，是否另派一个替代 reviewer？",
-      "expected_output": "继续原 r2 句柄，以原生等待/增量输出优先，无变化约30到60秒退避并遵守工具限制，避免紧密查询循环；观察超时不重启、不新增 review attempt。终态仍取完整结果且实际失败计预算；只有确认终止/不存在后才考虑重试。及时回应用户并按宿主要求更新。 Panel 同样先核验原任务，临时 result 读取失败不另派替代 reviewer；派发状态不明也先核验实际记录。",
+      "prompt": "Devflow 的 Review 与最终验证刚完成，结果尚未展示给用户。用户随后要求提交推送、创建 PR、合并 main、发布并升级生产。Devflow 是否自动执行这些动作？",
+      "expected_output": "不自动执行。Devflow 先展示研发结果并等待最终确认；commit、push、PR、merge、release、upgrade 和生产变更分别按用户授权及项目 Delivery 流程执行，前一阶段授权不自动覆盖后一阶段。",
       "files": []
     },
     {
       "id": 32,
-      "prompt": "当前为已授权 workflow（非单节点调用）。四人 Panel 中三人已给完整结果，第四人任务终止且结果缺失。为了省 token，是否可以据三人一致 pass 进入 Improve Design？另一个任务 Deepreview 已到第5次且输出不可用。",
-      "expected_output": "Panel 仍须四个 reviewer 结果可用，对缺失 reviewer 最多一次重试或回答同一问题的只读 fallback，不能降低人数或独立性且不得查看其它结论；仍缺结果停下。Deepreview 第5次无可用结果停下并请求用户，不自行第6次或用摘要补pass，失败尝试不归零。",
-      "files": []
-    },
-    {
-      "id": 33,
-      "prompt": "设计已保存并获准进入 Panel，尚未有实现 workspace、baseline 或代码测试；reviewer 1 已完成，其它三个 reviewer 尚未启动。可以复用该结果跳过其它职责或 Planreview 吗？之后实现代码和依赖文件未变，但验证环境从 Linux 换到 macOS。如何判断前置条件与证据有效性？",
-      "expected_output": "Improve Design的Panel只要求本步设计/事实，不要求未来实现工作区测试。四位reviewer独立读同一快照，不能复用第一份结论代替其它三份，不替代适用Planreview或Review。环境变化核验失效证据；单节点只完成Improve Design，不自动实现。",
+      "prompt": "Improve Design 要求四份独立建议。三位 reviewer 已返回，第四位任务终止且重试仍不可用；主 Agent 已自行补了一份建议。能否把它算作四份并继续？",
+      "expected_output": "不能把自审算作独立 reviewer。报告实际独立覆盖 3/4、缺口和未覆盖风险并停止；只有用户明确接受降低覆盖后才能按 3/4 的实际范围继续，且后续结果确认仍照常。",
       "files": []
     },
     {
       "id": 34,
       "prompt": "设计已保存，开始 Panel。主 agent 已有偏好的改法，打算让前三人分别只看架构、安全和简化，让第四人专门找反例，并把第一个完成者的建议交给后启动者以避免重复。四人返回后：三人建议增加 scope 外的监控，一人提出有代码证据的范围内简化；另一场景有 reviewer 明确无建议且给出完整依据。应如何派发和裁决？",
-      "expected_output": "Improve Design内部四路以相同自包含brief和设计快照独立回答Any suggestions to improve this design?；不预分配角色、读他人结果或注入主agent偏好，亦不各自调用Planreview。四者均为原生 subagent 并跨模型家族派发（如至少一路派到 reviewer-deepseek-v4-pro）。主agent核证裁决，不以多数票扩scope；授权范围内合批更新同一设计，重大取舍先确认；只读请求则只返回建议并明确未完成修订。",
-      "files": []
-    },
-    {
-      "id": 35,
-      "prompt": "用户调用 devflow 修复一个纯函数在空输入时的返回值。已读源码，根因局部，验收清晰，不改变契约或状态语义。用户尚未选择链路。下一步做什么？",
-      "expected_output": "处于workflow入口，依据局部明确行为推荐simple，解释两预设都保留四路优化建议和完整验证Review，设计深度按风险；Planreview按需而非full固定。请求确认范围和路径，未选择不进入保存或实现。若用户只请求单节点，不强制选路径。",
-      "files": []
-    },
-    {
-      "id": 36,
-      "prompt": "已建议 simple，同时列出了 full。用户只回复“继续”，没有其它选择依据；另一个任务用户明确说“选简单链路，按上述范围做”。分别如何推进？",
-      "expected_output": "无明确选择依据的继续仍需澄清simple/full；明确选simple且scope已批准则记录依据，由workflow进入Save Design再Improve Design。此时Panel是Improve Design内部步骤，不重复询问已确认选择、不提前实现。",
-      "files": []
-    },
-    {
-      "id": 37,
-      "prompt": "用户已选 simple 并批准 scope。设计已保存。三位原生 reviewer 已完成，第四位（跨家族 reviewer）尚未派发。能否省略第四位，直接实现？",
-      "expected_output": "仍需第四位 reviewer 独立回答同一问题，不得看他人结论。四份可用后主agent在授权范围裁决并修订同一设计；重大决定先确认。设计完成、workspace核验及实现授权充分后才可由workflow进入Impl；路径选择本身不是实现授权。",
-      "files": []
-    },
-    {
-      "id": 38,
-      "prompt": "simple 的四人 Panel 已完成，workspace/base已只读核验，无策略歧义，项目没有强制 Planreview。用户在看到拟采纳改法、验收、workspace和连续执行范围后明确说“确认建议并继续实现”。接下来如何走？",
-      "expected_output": "Improve Design内核验并落实已授权建议、冻结design_ref，无适用Planreview则记not-applicable。合并授权覆盖实际设计/workspace时workflow进入Impl，再完整验证、Review和结果报告；不重新确认同一动作，不设Closeout。未决缺陷/新范围不能绕过。",
-      "files": []
-    },
-    {
-      "id": 39,
-      "prompt": "simple Panel汇总时用户只说“采纳这两条建议，先更新设计，我看完再决定是否实现”。应如何推进？",
-      "expected_output": "只在Improve Design内部更新设计与版本，报告后停下；用户明确保留实现决定，不自动Impl、不创建实现worktree。不是要求重新选择完整链路。",
-      "files": []
-    },
-    {
-      "id": 40,
-      "prompt": "Brainstorm发现涉及账本schema及恢复语义变更，skill推荐full，但用户明确选择simple。项目AGENTS要求schema变更必须Planreview，恢复后的产品行为还未决定。怎么办？",
-      "expected_output": "保留simple选择，但适用强制Planreview在Improve Design内部照常完成。未决恢复行为须用户决定，成稿/选路径不替代产品授权。四路建议、完整验证和Review保留，不自动转full或改账本。",
-      "files": []
-    },
-    {
-      "id": 41,
-      "prompt": "simple 已批准实施。发现修复需要改变持久化状态机语义，skill建议转full。用户尚未回复。此前Panel可用、Deepreview已经用过两次尝试。如何处理？",
-      "expected_output": "暂停改变状态机，展示新证据、设计/scope决定及路径建议，等待用户选择；不能自动切路径。批准后返回责任节点，保留仍有效四路Panel证据但不假称覆盖新快照，补失效检查及适用Planreview。两次Review预算保留，不重跑全流程。",
-      "files": []
-    },
-    {
-      "id": 42,
-      "prompt": "恢复一个checkpoint：workflow_path=simple，path_approval_ref可读，Deepreview已通过且验证有效，尚未Closeout。另一个旧checkpoint无路径字段，只能找到推荐simple，找不到用户选择。如何继续？",
-      "expected_output": "有可回读simple/授权及Review通过证据时，旧Closeout映射结果报告并完成，但若原记录明确等待用户决定则保持等待。路径只记录推荐但无用户选择时读原依据，无法确定则询问，不静默补填或清零计数。",
-      "files": []
-    },
-    {
-      "id": 43,
-      "prompt": "只调用 $devflow Save Design，将已确认方案保存到指定设计文件。本次只保存，之后我再决定。",
-      "expected_output": "核验必要输入后只写唯一设计并记录design_ref，报告后完成单节点；不选择simple/full，不派Panel、不实现、不自动Planreview。",
-      "files": []
-    },
-    {
-      "id": 44,
-      "prompt": "只调用 $devflow Improve Design，已有完整设计和明确范围；允许在该设计范围内修订，重大行为选择由我决定。",
-      "expected_output": "直接核验输入并进入Improve Design，四路同问题独立建议、主agent核证裁决后合批修订；重大取舍先确认。不重跑Brainstorm/Save Design、不让四人各跑Planreview、不自动Impl。",
-      "files": []
-    },
-    {
-      "id": 45,
-      "prompt": "只调用 $devflow Impl，设计版本、实现授权和隔离workspace均已明确，完成后不要审查或提交。",
-      "expected_output": "核验输入有效后实现与必要测试，记录scope/baseline/design_ref，完成后停止；不再问相同授权，不调用Review/deepreview，不提交。",
-      "files": []
-    },
-    {
-      "id": 46,
-      "prompt": "只调用 $devflow Review --base main。已有明确需求和全部改动，但没有正式设计文档，审查发现一个空输入崩溃。",
-      "expected_output": "可审实际改动，以真实需求核对并报告设计证据缺口；输出缺陷证据及建议回Impl，不自动补写设计、不改代码、不自动进入其它节点或整条workflow。缺口影响结论时不能pass。",
+      "expected_output": "四位原生 reviewer 使用相同完整设计和同一改进问题，不预分配专项角色、共享结论或注入主 agent 偏好，不各自跑 Planreview。有跨家族能力时使用并如实披露。主 agent 据证据而非票数裁决，范围外监控延期；展示拟采纳项及影响，等待用户确认后才修订同一设计。无建议但有依据可用；只读请求仅交建议。",
       "files": []
     },
     {
       "id": 47,
-      "prompt": "已授权Impl与Review的workflow：Review发现两个范围内代码错误及一个设计缺口，需要改变已批准失败行为。",
-      "expected_output": "代码问题归Impl、设计缺口归Improve Design，涉及已批准行为变化先等用户决定，不让Review直接编辑、不重启Brainstorm等无关节点。必要修复合批验证后完整Review，已有预算/有效证据保留。",
+      "prompt": "workflow 的 Review 已返回一个有复现证据的范围内高风险代码缺陷，用户尚未看到该结果。缺陷不改变产品契约或权限。接下来能否直接修复并重审？",
+      "expected_output": "不能直接修复。顺序必须是 Review 结果展示、用户确认、回 Impl 修复与验证、展示 Impl 结果并再次等待用户确认、然后完整 Review。单独 Review 只交付报告和建议。",
       "files": []
     },
     {
-      "id": 48,
-      "prompt": "Improve Design已改设计，Impl完成后准备交给Delivery。设计路径在main上持续变化，PR还没创建。",
-      "expected_output": "交接实际design_ref：文件路径和内容hash及可用固定commit引用，说明随实现提交设计或PR使用对应版本固定链接；不编造未存在的PR URL、不仅链接可变main，不自行commit/push。",
+      "id": 59,
+      "prompt": "workflow 的 Impl 有两片。第一片已完成且测试通过，用户尚未看到本片结果；第二片预计只改几行代码。能否继续第二片或先启动 Review？",
+      "expected_output": "不能。报告第一片行为增量、改动、验证和偏差，记awaiting_user_confirmation并停下；用户看到并确认后才开始第二片。最后一片与最终validation完成后展示Impl结果，用户一次确认后才能启动Review。",
       "files": []
     },
     {
-      "id": 49,
-      "prompt": "只调用Improve Design做只读四路建议，禁止改设计。四位都给出可用结果。",
-      "expected_output": "按明确只读范围执行四路和裁决，只报告建议；不改设计、不调用会写artifact的Planreview，不冒称包含修订的完整Improve Design已经完成，不启动Impl。",
-      "files": []
-    },
-    {
-      "id": 50,
-      "prompt": "用户选full，但已核验设计局部且无剩余重大风险，没有项目或用户强制Planreview。是否再固定做Planreview？",
-      "expected_output": "不因full标签固定加Planreview；四路优化及主agent核证修订后记该内部检查not-applicable，完成设计，workflow仅按实现授权继续。",
-      "files": []
-    },
-    {
-      "id": 51,
-      "prompt": "Save Design 保存一份已批准设计：在新的报告模块里加一个 `net_income` 字段，方案理由是「这样读起来更直观」。保存时怎么处理？",
-      "expected_output": "按同一 owner-first 口径核对复用：指出该语义在既有 owner 上是否已有名称，给出 `复用 <owner 符号>` 行，或说明为何不能复用；不接受无具名 owner 的复用声明，也不把「读起来更直观」当作新增名称的理由。检索只产证据，归属判断由主 agent 做出并写入复用清单。",
-      "files": []
-    },
-    {
-      "id": 52,
-      "prompt": "已确认方案只调整止盈触发阈值、重试次数和日志级别，不新增或修改任何字段、实体、枚举值、主键或单位约定。Save Design 还需要做结构检索吗？",
-      "expected_output": "记结构归属清单 `not-applicable` 并说明未向领域词汇表引入新名字，不执行开放式检索；其余必需文档内容照常保存，四位 reviewer 仍获得完整事实。",
-      "files": []
-    },
-    {
-      "id": 53,
-      "prompt": "只调用 $devflow Review，改动是一个尚无设计文档的新分支代码。Review 是否要把新增的领域结构名与 design_doc 的复用清单核对？",
-      "expected_output": "记该检查 `not-applicable` 并说明没有 design_doc/design_ref 依据；不因缺少设计文档就判缺口或 finding，不替用户补写设计，按真实需求与授权核对已知行为并报告设计一致性及验证的覆盖缺口。",
-      "files": []
-    },
-    {
-      "id": 54,
-      "prompt": "已批准设计里，新的扫描模块准备自己写一段「期权张数 × 乘数 = 股数」的换算，以及一段成交数量校验。Save Design 应如何记录？",
-      "expected_output": "识别为同一计算或校验的重复实现，给出 `复用 <既有 owner 符号>` 或说明为何不能复用，并记录实际检索范围；不以「新模块需要」当作新建平行实现的自证理由。既有实现确实不足时标 `新增` 并说明既有 owner 为何覆盖不了。",
-      "files": []
-    },
-    {
-      "id": 55,
-      "prompt": "已批准设计只新增一个配置键 `scan_retry_limit`，不新增任何领域字段、实体或枚举值。Save Design 是否记 `not-applicable`？",
-      "expected_output": "不记 `not-applicable`：复用范围不限于领域结构，新配置键同样要给 owner 归属（`复用 <既有 owner>` 或 `新增` + 理由）并写入复用清单；`not-applicable` 只用于完全没有新增概念、名称或实现的设计。",
-      "files": []
-    },
-    {
-      "id": 56,
-      "prompt": "Save Design 用 skill 自带的 `scripts/reuse_scan.py` 扫了一遍，输出里 `structure_truncated: true`（有 12 个 Python 文件没读），`text_truncated: true`，并且候选清单里没有目标名字。能否据此写「现库中不存在该语义，记为新增」？",
-      "expected_output": "不能：截断是覆盖缺口，不是「不存在」的结论。要么提高预算/用 --include 缩小范围重跑，要么在复用清单里把该项标 `unresolved` 并记录实际检索范围、关键词与未读文件；脚本输出只作证据，`新增` 或 `复用` 的归属判断由主 agent 做出。",
+      "id": 61,
+      "prompt": "准备为一个配置开关写设计。文档声称开关会改变查询结果，搜索命中了可能的计算模块，但尚未打开真实查询入口、配置消费者或相关测试。可以直接按文档落设计吗？",
+      "expected_output": "不能。先从真实入口读取代码、配置和测试，沿数据流确认开关的实际消费者及当前行为。设计写清入口、输入、观察位置和预期；Impl 从真实入口留下预期与实测证据，Review 对照同一验收。搜索命中和文档不能代替代码事实。",
       "files": []
     }
   ]

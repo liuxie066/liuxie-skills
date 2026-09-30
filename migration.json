@@ -74,7 +74,7 @@
     "ima-skill/meta.json": "e67163e272e5c4a25467db7654feddfb47134a891e2e494415f0fbbb9d129d6f",
     "doc/SKILL.md": "0a635585817d1ac96e8e512114d08258b70f9e54ce0052078a258291ac13a8ed",
     "doc/LICENSE.txt": "4dd13869245e356246a5b770723247bbb80a8f07a181d1d3d873a1734297cdb9",
-    "devflow/SKILL.md": "111a2e99a098a716b9d2a5172141d4024433b6e5257ccfa9bdf9adce16ddb209",
+    "devflow/SKILL.md": "e5c6ea62c1089b09f58f9b722aadbf521b9cc46bdd3a21ee7ef979a0618ac94d",
     "kimi-webbridge/SKILL.md": "db1d82b37962a5a7756ca862bc0bea211c6bba46c3608b157a135386d4e9be6f",
     "py-perf-analyzer/README.md": "e3b5a592e5a3b25a639a6656f4102ecae855a7488c3d590ddf6e93b5c28fe49c",
     "py-perf-analyzer/SKILL.md": "26ee753a53de4c321016254dd761ff4d95f2cd9ee925d05115a5e56484ac1efa",
@@ -121,7 +121,7 @@
     "doc/scripts/render_docx.py": "52b3c3158913ebcad2ada7b8193970b70453239e255054aa2d60c1683af08751",
     "doc/assets/doc.png": "7eadf1088e5062f681dba6596173a1df13bbfbcddd8a8a9bb78fd2071947dcf8",
     "doc/assets/doc-small.svg": "bd5415fbbfe72c66c1527411d61625731fdd2f75b25d1542510b6ddef699ebe0",
-    "devflow/evals/evals.json": "aeb429d810bcd27d264f3cd0b43486ac56942df3a25eebadf5d0a694b1332cfb",
+    "devflow/evals/evals.json": "fa3cbcb1f49e902e58ac1ccf6911d4cd184ab964a85513262276aeec762ae667",
     "kimi-webbridge/references/operations.md": "86855b663649d560a8939c25a7a15d1dba91a58e2e2ed92414848a9a9f8ee6d7",
     "py-perf-analyzer/scripts/perf_profile.py": "8fced3e1f91e9318c67f4e69db89f30fef6963c4f0f135a77276310f5d96030b",
     "grilling/agents/openai.yaml": "3c8415e2bc1bc96ef9cf3a2d0219987af16ca4d522beb7bfcda215533b485dd8",
@@ -131,13 +131,13 @@
     "gh-address-comments/assets/github.png": "d55a9baa41798d8b5108e3058df3a5bda09914ea9fd73b49929cc38a8832424f",
     "ima-skill/notes/GUIDE.md": "0e57115fd6d9a6df437ee202bf7c37548645be7005d3768334c2162fb15bd608",
     "ima-skill/knowledge-base/GUIDE.md": "39ee19712d791eda10f14f316718856b1aca0339590512bc5c0a0f650932c619",
-    "devflow/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
+    "devflow/agents/openai.yaml": "8619a54e8c098122a7f3881394f84ca89b684366e848233a29ad18b6ec363935",
     "eli5/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
     "show-me/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
     "find-skills/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
     "herdr/agents/openai.yaml": "8619a54e8c098122a7f3881394f84ca89b684366e848233a29ad18b6ec363935",
     "kimi-webbridge/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
-    "create-skill/SKILL.md": "c6e8401c59c57d72fb597c09b9e2ecefaeecbce14e98a925c141297c38d2b843",
+    "create-skill/SKILL.md": "8fd9ef8880a07e8bea6bb00d467c986a5ab99a955dbcb747ea6403ddc5c66838",
     "create-skill/agents/openai.yaml": "676bd097069178c34a8bca02e0eda3b99d6863a7b5a86e402854be41776146dc",
     "baoyu-design/LICENSE": "50426a43964d21a284c1f248a2b86aa239274d6e7619947ff166e0c8842d5fef",
     "baoyu-design/project-types.json": "6128936023862d86d80be01f544854e2a5c3e0db50db4f0fd1bd182e5c1ee080",
@@ -563,8 +563,8 @@
     "prdflow/references/gates.md": "59f108f7c03335f3fc486b6168dd8ee562f53a33fdf2734a5af65cee6a0162aa",
     "prdflow/scripts/check_gates.py": "04e09daf8f2aede790b27b13d562c81a68ec0a956e8028ffe6a17859a02cf1ca",
     "prdflow/evals/test_check_gates.py": "170e0bddf7574e2a4618bd1309d69c0a134a0118a527e2b450147cc158821e20",
-    "delivery/SKILL.md": "75dd1721d92464812eab199cdcc8b6f863b4e9402ab14948657bf1a9066b7529",
-    "delivery/evals/evals.json": "587bf1f833644ee27c9a08cf592eea6a3d9bf459cabb787ff604874e1736e911",
+    "delivery/SKILL.md": "2a323fd2696e67a91fcbfa151997b40840a961d13590d436dce2834cc19188d5",
+    "delivery/evals/evals.json": "937847a3c1a3dfb06363bcc8c13c0a37a064813cb3fc54c448f27af254fbd630",
     "delivery/references/projects.md": "bc188c76e8d418fbfe7ba4d0da05c9baa4f944d576054da66a271a9868ef4a1b",
     "delivery/agents/openai.yaml": "5afb1193e5f7379e448dce401be30689d068a21a8d58f277ca0a286740772e65",
     "dayu/SKILL.md": "a6bb9150accab850090c1c6b6df6d5798413f29a24296f46256dfa246e3490c3",
@@ -1171,11 +1171,133 @@
       },
       "invocation_policy": "manual -> automatic",
       "selected_count": 34
+    },
+    {
+      "date": "2026-09-30",
+      "reason": "User requested that the devflow Skill be agent-triggerable: removed disable-model-invocation: true from SKILL.md and set agents/openai.yaml policy.allow_implicit_invocation: true. Body and description unchanged.",
+      "original_hashes": {
+        "devflow/SKILL.md": "111a2e99a098a716b9d2a5172141d4024433b6e5257ccfa9bdf9adce16ddb209",
+        "devflow/agents/openai.yaml": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94"
+      },
+      "updated_hashes": {
+        "devflow/SKILL.md": "2ad8295d5c1e16792ec02c37b52e7aa2d0fe8b6de8ed3bd88a5fe7f0c7c00a9b",
+        "devflow/agents/openai.yaml": "8619a54e8c098122a7f3881394f84ca89b684366e848233a29ad18b6ec363935"
+      },
+      "invocation_policy": "manual -> automatic",
+      "selected_count": 34
+    },
+    {
+      "date": "2026-09-30",
+      "skill": "delivery",
+      "reason": "Bind one release request to one target version and environment; stop new source PR and version chaining after post-upgrade business recovery reveals a new defect. Preserve same-target gate repair and add regression scenarios.",
+      "original_hashes": {
+        "delivery/SKILL.md": "75dd1721d92464812eab199cdcc8b6f863b4e9402ab14948657bf1a9066b7529",
+        "delivery/evals/evals.json": "587bf1f833644ee27c9a08cf592eea6a3d9bf459cabb787ff604874e1736e911"
+      },
+      "updated_hashes": {
+        "delivery/SKILL.md": "2a323fd2696e67a91fcbfa151997b40840a961d13590d436dce2834cc19188d5",
+        "delivery/evals/evals.json": "937847a3c1a3dfb06363bcc8c13c0a37a064813cb3fc54c448f27af254fbd630"
+      },
+      "invocation_policy": "unchanged: manual",
+      "selected_count": 34
+    },
+    {
+      "date": "2026-09-30",
+      "reason": "Restore mandatory human confirmation after each Devflow node and implementation slice; require explicit acceptance of staged scope consequences before design, and update affected eval expectations. Preserve existing automatic invocation policy.",
+      "original_hashes": {
+        "devflow/SKILL.md": "2ad8295d5c1e16792ec02c37b52e7aa2d0fe8b6de8ed3bd88a5fe7f0c7c00a9b",
+        "devflow/evals/evals.json": "aeb429d810bcd27d264f3cd0b43486ac56942df3a25eebadf5d0a694b1332cfb"
+      },
+      "updated_hashes": {
+        "devflow/SKILL.md": "fe840ac83af338c2960167d463a23780290d271c84ea746bc52bef130f43a33e",
+        "devflow/evals/evals.json": "fe9f0befe09fddd18bcb220b52740954432c867ec4640cfe9d7c1bcbb6c0882c"
+      },
+      "invocation_policy": "unchanged: automatic",
+      "selected_count": 34
+    },
+    {
+      "date": "2026-09-30",
+      "reason": "Require design-stage code reading at Brainstorm, Save Design, and Improve Design before deriving current behavior, data flow, and acceptance from the repository; add a Holdings regression scenario.",
+      "original_hashes": {
+        "devflow/SKILL.md": "fe840ac83af338c2960167d463a23780290d271c84ea746bc52bef130f43a33e",
+        "devflow/evals/evals.json": "fe9f0befe09fddd18bcb220b52740954432c867ec4640cfe9d7c1bcbb6c0882c"
+      },
+      "updated_hashes": {
+        "devflow/SKILL.md": "85763d480b8da0b59478e04abf90eb924003c6ab8f3913007201c074dc76d0fb",
+        "devflow/evals/evals.json": "a14669866de32f742d5f2dd41458d8929ee7db807708a0e74784a32c98ed248f"
+      },
+      "invocation_policy": "unchanged: automatic",
+      "selected_count": 34
+    },
+    {
+      "date": "2026-09-30",
+      "reason": "Consolidate Devflow into six core rules and concise stage guidance; remove repeated constraints, fixed progress schema and mandatory per-file records. Preserve user result confirmations, code-based design, four independent suggestions, business-entry acceptance and delivery boundaries. Align existing eval expectations for rework and explicit coverage degradation.",
+      "original_hashes": {
+        "devflow/SKILL.md": "85763d480b8da0b59478e04abf90eb924003c6ab8f3913007201c074dc76d0fb",
+        "devflow/evals/evals.json": "a14669866de32f742d5f2dd41458d8929ee7db807708a0e74784a32c98ed248f"
+      },
+      "updated_hashes": {
+        "devflow/SKILL.md": "a4f24cc384f185e9aa2255a77916af94aca2e468aad9c67292c9da680e6c93f5",
+        "devflow/evals/evals.json": "55eed13326388f5427112bb9ae8cffe7ae788d50cac4cb4007711dea5604ed65"
+      },
+      "invocation_policy": "unchanged: automatic",
+      "selected_count": 34
+    },
+    {
+      "date": "2026-09-30",
+      "reason": "User selected optimizations 1, 3 and 4: state the explicit Review-to-Impl confirmation sequence, disclose actual independent coverage after an authorized downgrade, and connect design acceptance to public-entry observed evidence in Impl and Review. No new rule sections or eval changes.",
+      "original_hashes": {
+        "devflow/SKILL.md": "a4f24cc384f185e9aa2255a77916af94aca2e468aad9c67292c9da680e6c93f5"
+      },
+      "updated_hashes": {
+        "devflow/SKILL.md": "a310c484ec02edb01f8560c0c23f38399499af8612f471f2f4edbcc8374961bb"
+      },
+      "invocation_policy": "unchanged: automatic",
+      "selected_count": 34
+    },
+    {
+      "date": "2026-09-30",
+      "reason": "Remove the user-identified config-only special case from Devflow rule 1 and remove its dedicated eval case 57. Retain the general requirement to agree on delivered outcomes, uncovered acceptance criteria and follow-up when splitting scope. Preserve all other eval IDs and rules.",
+      "original_hashes": {
+        "devflow/SKILL.md": "a310c484ec02edb01f8560c0c23f38399499af8612f471f2f4edbcc8374961bb",
+        "devflow/evals/evals.json": "55eed13326388f5427112bb9ae8cffe7ae788d50cac4cb4007711dea5604ed65"
+      },
+      "updated_hashes": {
+        "devflow/SKILL.md": "e5c6ea62c1089b09f58f9b722aadbf521b9cc46bdd3a21ee7ef979a0618ac94d",
+        "devflow/evals/evals.json": "ab8c81d5f23f120135a86039162678d5261bc3458ca097708425a757f1ecee5f"
+      },
+      "invocation_policy": "unchanged: automatic",
+      "selected_count": 34
+    },
+    {
+      "date": "2026-09-30",
+      "reason": "Reduce Devflow evals from 60 static scenarios to 10 distinct failure mechanisms and require skill maintenance to execute every retained scenario directly affected by a rule change. Expected text remains a rubric, not proof of execution.",
+      "original_hashes": {
+        "devflow/evals/evals.json": "ab8c81d5f23f120135a86039162678d5261bc3458ca097708425a757f1ecee5f",
+        "create-skill/SKILL.md": "c6e8401c59c57d72fb597c09b9e2ecefaeecbce14e98a925c141297c38d2b843"
+      },
+      "updated_hashes": {
+        "devflow/evals/evals.json": "9ad7180baaf0509923a2887c045201237c5a2674f4a29d007872dbc1dfa98bf4",
+        "create-skill/SKILL.md": "8fd9ef8880a07e8bea6bb00d467c986a5ab99a955dbcb747ea6403ddc5c66838"
+      },
+      "invocation_policy": "unchanged: devflow automatic; create-skill manual",
+      "selected_count": 34
+    },
+    {
+      "date": "2026-09-30",
+      "reason": "Clarify retained delivery-boundary eval 28 after its first independent execution exposed ambiguity about whether the Review result had already been shown to the user.",
+      "original_hashes": {
+        "devflow/evals/evals.json": "9ad7180baaf0509923a2887c045201237c5a2674f4a29d007872dbc1dfa98bf4"
+      },
+      "updated_hashes": {
+        "devflow/evals/evals.json": "fa3cbcb1f49e902e58ac1ccf6911d4cd184ab964a85513262276aeec762ae667"
+      },
+      "invocation_policy": "unchanged: automatic",
+      "selected_count": 34
     }
   ],
   "invocation_policy": {
     "manual": [
-      "devflow",
       "prdflow",
       "phaseflow",
       "gateflow",
@@ -1210,11 +1332,12 @@
       "jev-choice",
       "repo-doc-hygiene",
       "pre-push-checks",
-      "herdr"
+      "herdr",
+      "devflow"
     ]
   },
   "cross_tool_invocation": {
-    "local_adjustment": "Use existing Codex policy as authority; add disable-model-invocation: true to 14 selected manual Skills. Preserve upstream bodies except create-skill maintenance instructions. wait-what unchanged. 2026-09-28: herdr moved from manual to automatic at the user's request; its entry in adjusted_skills is superseded (see post_migration_adjustments).",
+    "local_adjustment": "Use existing Codex policy as authority; add disable-model-invocation: true to 14 selected manual Skills. Preserve upstream bodies except create-skill maintenance instructions. wait-what unchanged. 2026-09-28: herdr moved from manual to automatic at the user's request; its entry in adjusted_skills is superseded (see post_migration_adjustments). 2026-09-30: devflow likewise moved from manual to automatic at the user's request; its entry in adjusted_skills is superseded (see post_migration_adjustments).",
     "adjusted_skills": [
       "devflow",
       "prdflow",

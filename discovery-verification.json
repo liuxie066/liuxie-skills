@@ -1733,5 +1733,140 @@
     "host_checks": "Codex/Claude share ~/.agents/skills; DSH reads that directory. Native host reload not rerun; Pi and Hermes have no installed delivery entry.",
     "readme_update": "not needed: public README presents PRDflow and Devflow; this update changes the internal Delivery workflow",
     "invocation_policy": "unchanged: manual/explicit-only"
+  },
+  "delivery_release_boundary_20260930": {
+    "date": "2026-09-30",
+    "skill": "delivery",
+    "source_sha256": "2a323fd2696e67a91fcbfa151997b40840a961d13590d436dce2834cc19188d5",
+    "evals_sha256": "937847a3c1a3dfb06363bcc8c13c0a37a064813cb3fc54c448f27af254fbd630",
+    "source_validation": "pass: verify_migration.py --skill skills/delivery; --source-only; evals JSON parses",
+    "distribution": "pass: sync.py --apply updated only delivery/SKILL.md and delivery/evals/evals.json; full verify_migration.py passed, 37 source, 34 selected (14 manual / 20 automatic)",
+    "native_codex_discovery": "pass: app-server skills/list forceReload, 1 group, 53 visible skills, errors=[], delivery enabled at /Users/liuxie/.agents/skills/delivery/SKILL.md",
+    "host_scope": "Codex/Claude/DSH use updated ~/.agents/skills copy; Pi and Hermes have no installed delivery entry; their native loaders were not run",
+    "manual_load": "invocation policy unchanged; prior explicit Codex and DSH load evidence is historical; current live-session reload was not run",
+    "behavioral_evaluation": "two new scenarios added for post-upgrade source defect and same-version release PR failure; no live agent behavioral run",
+    "readme_update": "not needed: README presents PRDflow/Devflow products; Delivery internal process is not described there",
+    "invocation_policy": "unchanged: manual/explicit-only"
+  },
+  "devflow_human_stage_confirmation_20260930": {
+    "verified_at": "2026-09-30T18:01:48+08:00",
+    "source": "/Volumes/liuxie的硬盘/workspace/agent-skills/skills/devflow",
+    "skill_sha256": "fe840ac83af338c2960167d463a23780290d271c84ea746bc52bef130f43a33e",
+    "evals_sha256": "fe9f0befe09fddd18bcb220b52740954432c867ec4640cfe9d7c1bcbb6c0882c",
+    "source_validation": "pass: verify_migration.py --skill skills/devflow; --source-only",
+    "distribution": "pass: sync.py --apply; verify_migration.py full (34 selected global skills match source)",
+    "native_codex_discovery": "pass: app-server skills/list forceReload; errors=0, devflow enabled at ~/.agents/skills/devflow/SKILL.md",
+    "host_readback": "pass: central source matches ~/.agents/skills, Claude, Pi link, and backed-up Hermes installed files",
+    "native_hermes_discovery": "pass: hermes skills list --source local --enabled-only lists devflow",
+    "native_dsh_loader": "not run; shared ~/.agents/skills path readback verified",
+    "native_pi_loader": "not run; Pi link target content readback verified",
+    "behavioral_model_eval": "not run; evals.json updated with stage-gate, Holdings scope, and resume scenarios (60 cases total)",
+    "invocation_policy": "preserved pre-existing automatic policy change; no new policy change from this task",
+    "git_delivery": "source changes uncommitted and unpushed; no release or remote sync"
+  },
+  "devflow_design_code_read_20260930": {
+    "date": "2026-09-30",
+    "skill_sha256": "85763d480b8da0b59478e04abf90eb924003c6ab8f3913007201c074dc76d0fb",
+    "evals_sha256": "a14669866de32f742d5f2dd41458d8929ee7db807708a0e74784a32c98ed248f",
+    "source_validation": "pass: verify_migration.py --skill skills/devflow; --source-only (37 source, 34 selected); git diff --check",
+    "distribution": "pass: sync.py --apply updated only devflow/SKILL.md and devflow/evals/evals.json; full verify_migration.py passed",
+    "host_readback": "pass: Codex/Claude/Pi shared copies and backed-up Hermes copy match source Devflow files",
+    "native_codex_discovery": "pass: app-server skills/list forceReload; errors=0; devflow enabled",
+    "native_hermes_discovery": "pass: hermes skills list --source local --enabled-only lists devflow",
+    "native_dsh_loader": "not run; shared path readback verified",
+    "native_pi_loader": "not run; shared path readback verified",
+    "behavioral_model_eval": "not run; evals.json case 61 added for design code-reading regression",
+    "invocation_policy": "unchanged: automatic",
+    "git_delivery": "source changes uncommitted and unpushed; no release or remote sync"
+  },
+  "devflow_rule_simplification_20260930": {
+    "verified_at": "2026-09-30T20:43:55+08:00",
+    "source": "/Volumes/liuxie的硬盘/workspace/agent-skills/skills/devflow",
+    "skill_sha256": "a4f24cc384f185e9aa2255a77916af94aca2e468aad9c67292c9da680e6c93f5",
+    "evals_sha256": "55eed13326388f5427112bb9ae8cffe7ae788d50cac4cb4007711dea5604ed65",
+    "simplification": {
+      "lines_before": 305,
+      "lines_after": 73,
+      "characters_before": 19152,
+      "characters_after": 4205,
+      "core_rules": 6,
+      "existing_eval_cases": 61,
+      "existing_expectations_aligned": 27
+    },
+    "source_validation": "pass: verify_migration.py --skill skills/devflow; --source-only; git diff --check",
+    "distribution": "pass: sync.py preview and --apply changed only devflow/SKILL.md and devflow/evals/evals.json; full verify_migration.py passed",
+    "host_readback": "pass: Codex/Claude/Pi shared content and backed-up Hermes copy match all four source Devflow files",
+    "native_codex_discovery": "pass: app-server skills/list forceReload; errors=0; devflow enabled",
+    "native_hermes_discovery": "pass: hermes skills list --source local --enabled-only lists devflow",
+    "native_dsh_loader": "not run; shared path content verified",
+    "native_pi_loader": "not run; link target content verified",
+    "behavioral_validation": {
+      "reviewer": "independent native subagent /root/devflow_simplified_probe; did not receive expected outputs or read evals",
+      "report": "/private/tmp/devflow-independent-probe-d4dss4s2/report.md",
+      "scope": "four supplied workflow-state decisions plus one actual isolated code review; not a full workflow execution or a run of all 61 evals",
+      "observed_decisions": [
+        "A: ambiguous configuration-only scope held for Brainstorm confirmation",
+        "B: displayed Save Design without reply held before Panel",
+        "C: failed Review held before repair; retained later Impl confirmation",
+        "D: self-review disclosed as 0/4 independent coverage and held for user decision"
+      ],
+      "actual_code_review": "existing config tests: 2 passed, exit 0; public query two-state check: exit 1 because false still includes holdings; correctly returned blocking finding without editing source/tests",
+      "business_fixture": "/private/tmp/devflow-query-probe-qokj69xq",
+      "result": "pass for tested workflow decisions and defect detection; failing business assertion is the intended fixture defect, not a passing business implementation"
+    },
+    "invocation_policy": "unchanged: automatic",
+    "git_delivery": "uncommitted and unpushed; no release or remote sync"
+  },
+  "devflow_selected_items_134_20260930": {
+    "verified_at": "2026-09-30T20:47:38+08:00",
+    "skill_sha256": "a310c484ec02edb01f8560c0c23f38399499af8612f471f2f4edbcc8374961bb",
+    "scope": "Clarified three existing passages for user-selected items 1, 3 and 4; still 73 lines and six core rules; evals and invocation policy unchanged in this turn.",
+    "source_validation": "pass: verify_migration.py --skill skills/devflow; --source-only; three-passage meaning/diff review; git diff --check",
+    "distribution": "pass: sync.py preview and apply changed only devflow/SKILL.md; full verify_migration.py passed; installed Devflow files match source via Codex/Claude/Pi and backed-up Hermes copy",
+    "native_codex_discovery": "pass: skills/list forceReload; errors=0; devflow enabled",
+    "native_hermes_discovery": "pass: local enabled skill discovery lists devflow",
+    "native_dsh_pi_loaders": "not run; shared paths and file contents verified",
+    "behavioral_validation": "No new behavioral execution for these wording clarifications. Prior independent probe remains evidence for its earlier source hash, recorded under devflow_rule_simplification_20260930; no claim of executing all 61 scenarios.",
+    "git_delivery": "uncommitted and unpushed; no release or remote sync"
+  },
+  "devflow_remove_config_only_case_20260930": {
+    "verified_at": "2026-09-30T20:50:56+08:00",
+    "skill_sha256": "e5c6ea62c1089b09f58f9b722aadbf521b9cc46bdd3a21ee7ef979a0618ac94d",
+    "evals_sha256": "ab8c81d5f23f120135a86039162678d5261bc3458ca097708425a757f1ecee5f",
+    "change": "Removed the config-only phrase from rule 1 and its dedicated eval case 57. General staged-delivery outcome/acceptance requirement remains; 60 evals retain their existing IDs.",
+    "source_validation": "pass: skill validation, source-only validation, one-clause diff and exact eval removal check, git diff --check",
+    "distribution": "pass: sync preview/apply changed only devflow/SKILL.md and devflow/evals/evals.json; full migration check and installed file readback passed; Hermes changed files backed up",
+    "native_codex_discovery": "pass: skills/list forceReload; errors=0; devflow enabled",
+    "native_hermes_discovery": "pass: local enabled skill list contains devflow",
+    "native_dsh_pi_loaders": "not run; shared paths and content verified",
+    "behavioral_validation": "not rerun for this removal of a special-case clause and duplicate scenario; no claim of a full eval run",
+    "git_delivery": "uncommitted and unpushed; no release or remote sync"
+  },
+  "devflow_eval_minimization_20260930": {
+    "verified_at": "2026-09-30T21:22:11+08:00",
+    "devflow_skill_sha256": "e5c6ea62c1089b09f58f9b722aadbf521b9cc46bdd3a21ee7ef979a0618ac94d",
+    "devflow_evals_sha256": "fa3cbcb1f49e902e58ac1ccf6911d4cd184ab964a85513262276aeec762ae667",
+    "create_skill_sha256": "8fd9ef8880a07e8bea6bb00d467c986a5ab99a955dbcb747ea6403ddc5c66838",
+    "change": "Reduced Devflow evals from 60 to 10 distinct failure mechanisms. Added the create-skill rule that retained scenarios affected by a rule change must be actually executed; expected_output is a rubric, not execution evidence.",
+    "retained_eval_ids": [1, 5, 15, 22, 28, 32, 34, 47, 59, 61],
+    "source_validation": "pass: verify_migration.py --skill skills/devflow; --skill skills/create-skill; --source-only; full verify_migration.py; git diff --check",
+    "distribution": "pass: sync.py --apply updated create-skill/SKILL.md and devflow/evals/evals.json; 34 selected global skills match source",
+    "host_readback": "pass: source, ~/.agents/skills and backed-up Hermes changed files have matching SHA-256 hashes",
+    "native_codex_discovery": "pass: app-server skills/list forceReload; errors=[]; create-skill and devflow enabled at ~/.agents/skills",
+    "native_hermes_discovery": "pass: hermes skills list --source local --enabled-only lists create-skill and devflow",
+    "native_dsh_pi_loaders": "not run; shared path and installed content were verified",
+    "behavioral_validation": {
+      "runner": "independent native agents received the installed Devflow skill and prompts-only inputs without expected outputs",
+      "initial": "9/10 matched; eval 28 exposed an ambiguous prompt because the response omitted the final Review result confirmation gate",
+      "correction": "clarified that Review results had not yet been shown; expected behavior was not weakened",
+      "retest": "fresh independent eval 28 run passed the Review display, user confirmation, stop, and delivery-boundary requirements",
+      "final": "10/10 retained scenarios passed",
+      "reports": [
+        "/private/tmp/devflow-retained-evals-result-20260930.md",
+        "/private/tmp/devflow-retained-eval-28-prompt-20260930.json"
+      ]
+    },
+    "readme_update": "not needed: public invocation and workflow interface did not change",
+    "git_delivery": "uncommitted and unpushed; no release or remote sync"
   }
 }
